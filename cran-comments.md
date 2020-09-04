@@ -5,6 +5,8 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 notes
+
+The note that time verification is impossible is owing to http://worldclockapi.com/api/json/utc/now being down
 
 * This is a new release.

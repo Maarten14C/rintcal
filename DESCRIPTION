@@ -1,7 +1,7 @@
 Package: IntCal
 Type: Package
 Title: IntCal radiocarbon calibration curves
-Version: 0.1
+Version: 0.1.0
 Date: 2020-09-04
 Authors@R: c(
     person("Maarten", "Blaauw", email = "maarten.blaauw@qub.ac.uk", role = c("aut", "cre")))
