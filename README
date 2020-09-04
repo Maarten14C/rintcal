@@ -1,4 +1,4 @@
-This is a data compilation of the IntCal radiocarbon calibration curves as downloadable from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. The folllowing curves are included:
+This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. The folllowing curves are included:
 
 filename					calibration curve
 3Col_intcal20.14C		IntCal20 (Reimer et al. 2020)
@@ -16,6 +16,8 @@ intcal98.14c				IntCal98 (Stuiver et al. 1998a)
 marine98.14c			Marine98 (Stuiver et al. 1998b)
 
 The formats of the IntCal20 curves were adapted to plain-text files with three columns separated by spaces: cal BP, and 14C BP sigma. The values are ordered according to increasing cal BP age, and any commented lines were removed. See TranslateCal20.R for details. The other files were left as downloaded from intcal.org.
+
+Professor Paula Reimer, head of the IntCal steering group, kindly gave permission to include the IntCal curves into a single package.
 
 Additionally, the following postbomb curves were downloaded from calib.org/CALIBomb/ and are included in this data package:
 
@@ -39,7 +41,7 @@ Hammer S, Levin I, 2017, Monthly mean atmospheric D14CO2 at Jungfraujoch and Sch
 
 Heaton TJ, Kohler P, Butzin M, Bard E, Reimer RW, Austin WEN, Bronk Ramsey C, Grootes PM, Hughen KA, Kromer B, Reimer PJ, Adkins J, Burke A, Cook MS, Olsen J, Skinner LC. 2020. Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62. doi:10.1017/RDC.2020.68
 
-Hogg AG, Hua Q, Blackwell, PG Buck CE, Guilderson TP, Heaton TJ, Niu M, Palmer JG, Reimer PJ, Reimer RW, Turney CSM, Zimmerman SRH, 2013. SHCal13 southern hemisphere calibration, 0–50,000 years cal BP. Radiocarbon 55(4). DOI:10.2458/azu_js_rc.55.16783
+Hogg AG, Hua Q, Blackwell, PG Buck CE, Guilderson TP, Heaton TJ, Niu M, Palmer JG, Reimer PJ, Reimer RW, Turney CSM, Zimmerman SRH, 2013. SHCal13 southern hemisphere calibration, 0–50,000 years cal BP. Radiocarbon 55(4). doi:10.2458/azu_js_rc.55.16783
 
 Hogg AG, Heaton TJ, Hua Q, Palmer JG, Turney CSM, Southon J, Bayliss A, Blackwell PG, Boswijk G, Bronk Ramsey C, Pearson C, Petchey F, Reimer PJ, Reimer R, Wacker L.  2020. SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62. doi:10.1017/RDC.2020.59
 
