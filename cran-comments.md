@@ -9,4 +9,6 @@
 
 The note that time verification is impossible is owing to http://worldclockapi.com/api/json/utc/now being down
 
-* This is a new release.
+* This is a new release. 
+
+* Errors in the title case were corrected.
