@@ -12,18 +12,6 @@ NULL
 
 
 
-### The files were made by reading the files of the calibration curves as distributed in http://intcal.org/curves:
-#cc.terr <- read.csv( "intcal20.14c", header=FALSE, skip=11, sep=",")
-#cc.marine <- read.csv( "marine20.14c", header=FALSE, skip=11)
-#cc.south <- read.csv( "shcal20.14c", header=FALSE, skip=11, sep=",")
-
-### ... and were then written in the desired format (increasing cal BP ages, 3 columns, tab separator):
-#write.table( cc.terr[nrow(cc.terr):1,1:3], file="3Col_intcal20.14C", row.names=FALSE, col.names=FALSE)
-#write.table( cc.marine[nrow(cc.marine):1,1:3], file="3Col_marine20.14C", row.names=FALSE, col.names=FALSE)
-#write.table( cc.south[nrow(cc.south):1,1:3], file="3Col_shcal20.14C", row.names=FALSE, col.names=FALSE)
-
-
-
 #' @name copyCalibrationCurve
 #' @title Copy a calibration curve.
 #' @description Copy one of the the calibration curves into memory.
@@ -83,7 +71,7 @@ mix.curves <- function(proportion=.5, cc1="3Col_intcal20.14C", cc2="3Col_marine2
   cc2.error <- sqrt(cc2.error^2 + offset[2]^2)
   mu <- proportion * cc1[,2] + (1-proportion) * cc2.mu
   error <- proportion * cc1[,3] + (1-proportion) * cc2.error
-  write.table(cbind(cc1[,1], mu, error), paste0(dirname, name), row.names=FALSE, col.names=FALSE, sep=sep)
+  write.table(cbind(cc1[,1], mu, error), paste0(dirname, "/", name), row.names=FALSE, col.names=FALSE, sep=sep)
 }
 
 
