@@ -7,10 +7,8 @@
 
 0 errors | 0 warnings | 2 notes
 
-The note that time verification is impossible is owing to http://worldclockapi.com/api/json/utc/now being down
+* hecked the possibly mis-spelled words in DESCRIPTION, and these are correctly spelled.
 
-I checked the possibly mis-spelled words in DESCRIPTION, and these are correctly spelled.
+* No more detritus should be left over in the tmp directory.
 
 * This is a new release. 
-
-* Added Rd files (through roxygen2)
