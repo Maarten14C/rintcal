@@ -11,5 +11,4 @@ The note that time verification is impossible is owing to http://worldclockapi.c
 
 * This is a new release. 
 
-* Errors in the title case were corrected.
-* added <> to the dois.
+* Added Rd files (through roxygen2)
