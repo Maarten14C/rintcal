@@ -7,7 +7,7 @@
 
 0 errors | 0 warnings | 2 notes
 
-* hecked the possibly mis-spelled words in DESCRIPTION, and these are correctly spelled.
+* Checked the possibly mis-spelled words in DESCRIPTION, and these are correctly spelled.
 
 * No more detritus should be left over in the tmp directory.
 
