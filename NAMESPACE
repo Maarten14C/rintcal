@@ -2,6 +2,7 @@
 
 export(age.pMC)
 export(copyCalibrationCurve)
+export(intcal.data)
 export(mix.curves)
 export(pMC.age)
 importFrom(stats,approx)
