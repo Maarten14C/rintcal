@@ -1,5 +1,6 @@
 # IntCal 0.2.0
 * added a function intcal.data to plot the data underlying the IntCal curves.
+* copyCalibrationCurve can now copy more of the curves.
 * to add another function to quickly plot the curves (1 or 2, or to add a curve to an existing plot)
 
 # IntCal 0.1.3

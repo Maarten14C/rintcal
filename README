@@ -15,7 +15,7 @@ shcal04.14c				SHCal04 (McCormac et al. 2004)
 intcal98.14c				IntCal98 (Stuiver et al. 1998a)
 marine98.14c			Marine98 (Stuiver et al. 1998b)
 
-The formats of the IntCal20 curves were adapted to plain-text files with three columns separated by spaces: cal BP, and 14C BP sigma. The values are ordered according to increasing cal BP age, and any commented lines were removed. See TranslateCal20.R for details. The other files were left as downloaded from intcal.org.
+The formats of the curves were adapted to plain-text files with three columns separated by spaces: cal BP, and 14C BP sigma. The values are ordered according to increasing cal BP age, and any commented lines were removed. See TranslateCal20.R for details. 
 
 Professor Paula Reimer, head of the IntCal steering group, kindly gave permission to include the IntCal curves into a single package.
 
@@ -31,7 +31,7 @@ Kure.14c						Hawaiian coral (Andrews et al. 2016)
 Levin-Kromer_2004.14c	A concatenation of Levin & Kromer (2004) and Hammer & Levin (2017)
 Santos.14c					Brazilian tree rings (Santos et al. 2015)
 
-For NHZ1, NHZ2, NHZ3, SHZ1-2 and SHZ3 (Hua et al. 2013), F14C ages in the postbomb files were translated to (negative) 14C ages. The other postbomb files were left as F14C. Additional postbomb datasets are included but will have to be translated to 14C ages and put in the correct format to be used in, e.g., rbacon, rplum or clam. 
+F14C ages in the postbomb files were translated to (negative) 14C ages.
 
 References
 

@@ -8,19 +8,44 @@ copyCalibrationCurve(cc = 1, postbomb = FALSE)
 }
 \arguments{
 \item{cc}{Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
-\code{cc=3} for SHCal20 (southern hemisphere terrestrial).}
+\code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13".}
 
-\item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbbomb=FALSE}).}
+\item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}).}
 }
 \value{
 The calibration curve (invisible).
 }
 \description{
-Copy one of the the calibration curves into memory.
+Copy one of the calibration curves into memory.
 }
 \details{
 Copy the radiocarbon calibration curve defined by cc into memory.
 }
 \examples{
 intcal20 <- copyCalibrationCurve(1)
+marine98 <- copyCalibrationCurve("Marine98")
+pb.sh3 <- copyCalibrationCurve("sh3", postbomb=TRUE)
+}
+\references{
+Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \url{http://dx.doi.org/10.11588/data/10100} 
+
+Hogg et al. 2013 SHCal13 Southern Hemisphere Calibration, 0–50,000 Years cal BP. Radiocarbon 55, 1889-1903. \doi{10.2458/azu_js_rc.55.16783}
+
+Hogg et al. 2020 SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62. \doi{0.1017/RDC.2020.59}
+
+Hua et al. 2013 Atmospheric radiocarbon for the period 1950-2010. Radiocarbon 55(4), \doi{10.2458/azu_js_rc.v55i2.16177}
+
+Hughen et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62. \doi{10.1017/RDC.2020.68}
+
+Levin and Kromer 2004 "The tropospheric 14CO2 level in mid latitudes of the Northern Hemisphere" Radiocarbon 46, 1261-1272
+
+Reimer et al. 2004 IntCal04 terrestrial radiocarbon age calibration, 0–26 cal kyr BP. Radiocarbon 46, 1029–1058. \doi{10.1017/S0033822200032999}
+
+Reimer et al. 2009 IntCal09 and Marine09 radiocarbon age calibration curves, 0–50,000 years cal BP. Radiocarbon 51, 1111–1150. \doi{10.1017/S0033822200034202}
+
+Reimer et al. 2013 IntCal13 and Marine13 radiocarbon age calibration curves 0–50,000 years cal BP. Radiocarbon 55, 1869–1887. \doi{10.2458/azu_js_rc.55.16947}
+
+Reimer et al. 2020 The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0–55 cal kBP). Radiocarbon 62, 725-757. \doi{10.1017/RDC.2020.41}
+
+Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000–0 cal BP. Radiocarbon 40, 1041-1083. \doi{10.1017/S0033822200019123}
 }

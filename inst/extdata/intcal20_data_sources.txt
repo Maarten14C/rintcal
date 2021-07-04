@@ -1,69 +1,69 @@
-1,QL
-2,UB
-3,WK
-4,GRN
-5,HD
-6,PTA
-8,UCIAMS
-59,Galimberti
-60,MAMS
-61,AIX
-62,AAR
-63,ManningKromer
-64,VERA
-65,Sakamoto
-66,Debrecen
-67,Miyake
-68,Pearson
-69,ETH
-98,Adolphi
-99,Turney
-109,Suigetsu
-110,Bard
-111,Fairbanks
-114,Cutler
-115,Cariaco
-117,Durand
-120,Cariaco
-121,Bard1
-122,Bard2
-124,Southon
-125,Hoffman
-126,Beck
+1,tSeattle
+2,tBelfast
+3,tWaikato
+4,tGroningen
+5,tHeidelberg
+6,tPretoria
+8,tIrvine
+59,tGalimberti
+60,tMannheim
+61,tAix
+62,tAarhus
+63,tManningKromer
+64,tVienna
+65,tTokyo
+66,tArizona
+67,tMiyake
+68,tPearson
+69,tZurich
+98,tAdolphi # floating
+99,tTurney # floating
+109,lSuigetsu
+110,cBard
+111,cFairbanks
+114,cCutler
+115,mCariaco
+117,cDurand
+120,mCariaco
+121,mBard1
+122,mBard2
+124,sSouthon
+125,sHoffman
+126,sBeck
 
-dataset,    original name,  origin,         references
-1,          QL,             atmospheric,    1-2
-2,          UB,             atmospheric,    3-5
-3,          WK,             atmospheric,    4-7
-4,          GRN,            atmospheric,    8-10
-5,          HD,             atmospheric,    11-14
-6,          PTA,            atmospheric,    16
-8,          UCIAMS,         atmospheric,    17-20
-59,         Galimberti,     atmospheric,    21
-60,         MAMS,           atmospheric,    22-25
-61,         AIX,            atmospheric,    26-27
-62,         AAR,            atmospheric,    22, 28-30
-63,         ManningKromer,  atmospheric,    31-32
-64,         VERA,           atmospheric,    33-34
-65,         Sakamoto,       atmospheric,    35-39
-66,         Debrecen,       atmospheric,    40
-67,         Miyake,         atmospheric,    41
-68,         Pearson,        atmospheric,    22, 41-45
-69,         ETH,            atmospheric,    22-23, 25, 41, 43, 46-49
-98,         Adolphi,        atmospheric,    50
-99,         Turney,         atmospheric,    51-52
-109,        BronkRamsey,    atmospheric,    53-54
-110,        Bard,           marine,         55-56
-111,        Fairbanks,      marine,         57
-114,        Cutler,         marine,         58
-115,        Hughen,         marine,         59-60
-117,        Durand,         marine,         61
-120,        Hughen,         marine,         62-63
-121,        Bard,           marine,         64-65
-122,        Bard,           marine,         64-65
-124,        Southon,        speleothem,     66-67
-125,        Hoffman,        speleothem,     68
-126,        Beck,           speleothem,     69
+dataset,    name,     original name,  origin,         references
+1,          tSeattle, QL,             atmospheric,    1-2
+2,          tBelfast, UB,             atmospheric,    3-5
+3,          tWaikato, WK,             atmospheric,    4-7
+4,          tGroningen, GRN,          atmospheric,    8-10
+5,          tHeidelberg, HD,          atmospheric,    11-14
+6,          tPretoria, PTA,           atmospheric,    16
+8,          tIrvine, UCIAMS,          atmospheric,    17-20
+59,         tGalimberti, Galimberti,  atmospheric,    21
+60,         tMannheim, MAMS,          atmospheric,    22-25
+61,         tAix,    AIX,            atmospheric,    26-27
+62,         tAarhus,  AAR,            atmospheric,    22, 28-30
+63,         tManningKromer, ManningKromer,  atmospheric,    31-32
+64,         tVienna,  VERA,           atmospheric,    33-34
+65,         tTokyo, Sakamoto,         atmospheric,    35-39
+66,         tArizona, Debrecen,       atmospheric,    40
+67,         tMiyake, Miyake,          atmospheric,    41
+68,         tPearson, Pearson,        atmospheric,    22, 41-45
+69,         tZurich, ETH,             atmospheric,    22-23, 25, 41, 43, 46-49
+98,         tAdolphi, Adolphi,        atmospheric,    50
+99,         tTurney, Turney,          atmospheric,    51-52
+109,        lSuigetsu, BronkRamsey,   atmospheric,    53-54
+110,        cBard, Bard,              marine,         55-56
+111,        cFairbanks, Fairbanks,    marine,         57
+114,        cCutler, Cutler,          marine,         58
+115,        mCariaco, Hughen,         marine,         59-60
+117,        cDurand, Durand,          marine,         61
+120,        mCariaco, Hughen,         marine,         62-63
+121,        mBard, Bard,              marine,         64-65
+122,        mBard, Bard,              marine,         64-65
+124,        sSouthon, Southon,        speleothem,     66-67
+125,        sHoffman, Hoffman,        speleothem,     68
+126,        sBeck, Beck,              speleothem,     69
 
 References:
 [1]Stuiver, M, and Braziunas, TF. 1993. Sun, ocean, climate and atmospheric 14CO2: an evaluation of causal and spectral relationships. Holocene 3: 289-305.
@@ -98,7 +98,7 @@ References:
 [30]S. Kudsk, B. Philippsen, C. Baittinger, A. Fogtmann-Schulz, M. Knudsen, C. Karoff, J. Olsen, 'New single-year radiocarbon measurements based on Danish oak covering the periods AD 692-790 and 966-1057 AD', (in press), Radiocarbon.
 [31]Manning, S. W. and B. Kromer (2012). 'Considerations of the Scale of Radiocarbon Offsets in the East Mediterranean, and Considering a Case for the Latest (Most Recent) Likely Date for the Santorini Eruption.' Radiocarbon 54(3-4): 449-474.
 [32]Manning, S.W., Griggs, C., Lorentzen, B., Bronk Ramsey, C., Chivall, D., Jull, A.J.T., Lange, T.E. 2018. Fluctuating Radiocarbon Offsets Observed in the Southern Levant and Implications for Archaeological Chronology Debates. Proceedings of the National Academy of Sciences of the United States of America 115:6141-6146.
-[33]Dellinger, F, Kutschera, W, Nicolussi, K, Schiessling, P, Steier, P, and Wild, E M, 2004 A 14C calibration with AMS from 3500 to 3000 BC, derived from a new high-elevation stone-pine tree-ring chronology, Radiocarbon, 46, 969-83
+[33]Dellinger, F, Kutschera, W, Nicolussi, K, Schiessling, P, Steier, P, and Wild, E M, 2004 A 14C calibration with AMS from 3500 to 3000 BC, derived from a new high-elevation stone-pine tree-ring chronology. Radiocarbon, 46, 969-83
 [34]Steier, P, Dellinger, F, Kutschera, W, Priller, A, Rom, W, and Wild, E M, 2004 Pushing the precision limit of 14C AMS, Radiocarbon, 46, 5-17
 [35]Ozaki, H, Imamura, M, Matsuzaki, H, Mitsutani, T, 2007. Radiocarbon in 9th to 5th century BC tree-ring samples from the Ouban 1 archaeological site, Hiroshima, Japan. Radiocarbon 49, 473-479.
 [36]The origin of the farming in the Yayoi Period and East Asia: Establishment of High-Precision Chronology by carbon 14 age analysis.  National Museum of Japanese History Edited by Toyohiro Nishimoto, 524p, 2009. (in Japanese, final progress report of JSPS Grant-in-Aids (16GS0118))
