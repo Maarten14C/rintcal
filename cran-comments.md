@@ -1,14 +1,11 @@
 ## Test environments
 * local Fedora install, R 4.0.2
-* local Mac OS, R 4.0.2
+* local Mac OS, R 4.1.0
 * rhub win-builder (devel and release)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 0 notes
 
-* Checked the possibly mis-spelled words in DESCRIPTION, and these are correctly spelled.
+* No issues with reverse dependencies (packages rbacon, clam, rplum)
 
-* No more detritus should be left over in the tmp directory.
-
-* This is a new release. 
