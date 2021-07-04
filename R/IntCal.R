@@ -7,6 +7,8 @@
 #' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk> 
 #' @importFrom utils read.csv read.table write.table packageName
 #' @importFrom stats approx
+#' @importFrom grDevices rgb
+#' @importFrom graphics legend lines points polygon segments
 #' @name IntCal
 NULL
 
@@ -26,11 +28,11 @@ NULL
 #' marine98 <- copyCalibrationCurve("Marine98")
 #' pb.sh3 <- copyCalibrationCurve("sh3", postbomb=TRUE)
 #' @references
-#' Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \url{http://dx.doi.org/10.11588/data/10100} 
+#' Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100} 
 #'
 #' Hogg et al. 2013 SHCal13 Southern Hemisphere Calibration, 0–50,000 Years cal BP. Radiocarbon 55, 1889-1903. \doi{10.2458/azu_js_rc.55.16783}
 #'
-#' Hogg et al. 2020 SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62. \doi{0.1017/RDC.2020.59}
+#' Hogg et al. 2020 SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62. \doi{10.1017/RDC.2020.59}
 #'
 #' Hua et al. 2013 Atmospheric radiocarbon for the period 1950-2010. Radiocarbon 55(4), \doi{10.2458/azu_js_rc.v55i2.16177}
 #'
@@ -109,6 +111,8 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13".
 #' @param cc2 Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.
 #' @param BCAD The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.
+#' @param cal.lab The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.
+#' @param cal.rev Reverse the calendar axis. 
 #' @param c14.lab Label for the C-14 axis. Defaults to 14C BP (or 14C kBP if ka=TRUE).
 #' @param c14.lim Axis limits for the C-14 axis. Calculated automatically by default. 
 #' @param c14.rev Reverse the C-14 axis.
@@ -119,6 +123,7 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 #' @param cc2.fill Colour of the calibration curve (fill), if activated (default cc2=NA).
 #' @param add Whether or not to add the curve(s) to an existing plot. Defaults to FALSE, which draws a new plot
 #' @param bty Draw a box around a box of a certain shape. Defaults to \code{bty="l"}.
+#' @param ... Any additional optional plotting parameters. 
 #' @examples 
 #' draw.calibrationcurve()
 #' draw.calibrationcurve(1000, 3000, cc2="Marine20")

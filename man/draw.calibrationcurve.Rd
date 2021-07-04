@@ -36,6 +36,10 @@ draw.calibrationcurve(
 
 \item{BCAD}{The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.}
 
+\item{cal.lab}{The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.}
+
+\item{cal.rev}{Reverse the calendar axis.}
+
 \item{c14.lab}{Label for the C-14 axis. Defaults to 14C BP (or 14C kBP if ka=TRUE).}
 
 \item{c14.lim}{Axis limits for the C-14 axis. Calculated automatically by default.}
@@ -55,6 +59,8 @@ draw.calibrationcurve(
 \item{add}{Whether or not to add the curve(s) to an existing plot. Defaults to FALSE, which draws a new plot}
 
 \item{bty}{Draw a box around a box of a certain shape. Defaults to \code{bty="l"}.}
+
+\item{...}{Any additional optional plotting parameters.}
 }
 \value{
 The calibration curve (invisible).
