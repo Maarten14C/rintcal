@@ -1,3 +1,10 @@
+# IntCal 0.2.1
+* added new function list.curves
+* Shortened the functions copyCalibrationCurve and draw.CalibrationCurves to the shorter and more consistent ccurve and draw.ccurve
+* ccurve is now more flexible with the names of the calibration curves
+* draw.ccurve can now plot another curve on its own righthand axis scale (handy when mixing pre- and postbomb curves).
+* new functions caldist and hpd, copied and modified from the clam R package
+
 # IntCal 0.2.0
 * added a function intcal.data to plot the data underlying the IntCal curves.
 * copyCalibrationCurve can now copy more of the curves.

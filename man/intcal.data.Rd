@@ -116,7 +116,7 @@ The southern hemisphere calibration curve SHCal20 is mostly modelled on IntCal20
 
 [9] de Jong, AFM, Becker, B, Mook, WG, 1989. Corrected calibration of the radiocarbon time scale. Radiocarbon 31:201-210.
 
-[10] Kuitems, M, Plicht, Jvd, Jansma, E, Wood from the Netherlands around the time of the Santorini eruption dated by dndrochronology and Radiocarbon. Radiocarbon this issue.
+[10] Kuitems, M, Plicht, Jvd, Jansma, E, Wood from the Netherlands around the time of the Santorini eruption dated by dendrochronology and Radiocarbon. Radiocarbon this issue.
 
 [11] Kaiser, K. F., M. Friedrich, C. Miramont, B. Kromer, M. Sgier, M. Schaub, I. Boeren, S. Remmele, S. Talamo, F. Guibal and O. Sivan (2012). 'Challenging process to make the Lateglacial tree-ring chronologies from Europe absolute-an inventory.' Quaternary Science Reviews 36: 78-90.
 

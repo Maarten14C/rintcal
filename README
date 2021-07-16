@@ -1,18 +1,18 @@
 This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. The folllowing curves are included:
 
-filename					calibration curve
-3Col_intcal20.14C		IntCal20 (Reimer et al. 2020)
-3Col_marine20.14C	Marine20 (Heaton et al. 2020)
+filename				calibration curve
+3Col_intcal20.14C	  	IntCal20 (Reimer et al. 2020)
+3Col_marine20.14C	    Marine20 (Heaton et al. 2020)
 3Col_shcal20.14C		SHCal20 (Hogg et al. 2020)
-intcal13.14c				IntCal13 (Reimer et al. 2013)
+intcal13.14c			IntCal13 (Reimer et al. 2013)
 marine13.14c			Marine13 (Reimer et al. 2013)
 shcal13.14c				SHCal13 (Hogg et al. 2013)
-intcal09.14c				IntCal09 (Reimer et al. 2009)
+intcal09.14c			IntCal09 (Reimer et al. 2009)
 marine09.14c			Marine09 (Reimer et al. 2009)
-intcal04.14c				IntCal04 (Reimer et al. 2004)
+intcal04.14c			IntCal04 (Reimer et al. 2004)
 marine04.14c			Marine04 (Hughen et al. 2004)
 shcal04.14c				SHCal04 (McCormac et al. 2004)
-intcal98.14c				IntCal98 (Stuiver et al. 1998a)
+intcal98.14c			IntCal98 (Stuiver et al. 1998a)
 marine98.14c			Marine98 (Stuiver et al. 1998b)
 
 The formats of the curves were adapted to plain-text files with three columns separated by spaces: cal BP, and 14C BP sigma. The values are ordered according to increasing cal BP age, and any commented lines were removed. See TranslateCal20.R for details. 

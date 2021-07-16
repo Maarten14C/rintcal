@@ -1,8 +1,8 @@
 Package: IntCal
 Type: Package
 Title: Radiocarbon Calibration Curves 
-Version: 0.2.0
-Date: 2021-07-04
+Version: 0.2.1
+Date: 2021-07-16
 Authors@R: c(
     person("Maarten", "Blaauw", email = "maarten.blaauw@qub.ac.uk", role = c("aut", "cre")))
 Description: The IntCal20 radiocarbon calibration curves (Reimer et al. 2020 <doi:10.1017/RDC.2020.68>) are provided here in a single data package, together with previous IntCal curves (IntCal13, IntCal09, IntCal04, IntCal98) and postbomb curves. Also provided are functions to copy the curves into memory, and to plot the curves and their underlying data. 
@@ -10,5 +10,5 @@ License: GPL (>= 2)
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2021-07-04 16:40:28 UTC; maarten
+Packaged: 2021-07-16 16:40:28 UTC; maarten
 Language: en-GB
