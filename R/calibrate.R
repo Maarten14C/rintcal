@@ -1,6 +1,53 @@
 # functions copied and adapted from clam R package
 
 
+
+#' @name pMC.age
+#' @title Calculate C14 ages from pMC values.
+#' @description Calculate C14 ages from pMC values of radiocarbon dates.
+#' @details Post-bomb dates are often reported as pMC or percent modern carbon. Since Bacon expects radiocarbon ages,
+#'  this function can be used to calculate radiocarbon ages from pMC values. The reverse function is \link{age.pMC}.
+#' @param mn Reported mean of the pMC.
+#' @param sdev Reported error of the pMC.
+#' @param ratio Most modern-date values are reported against \code{100}. If it is against \code{1} instead, use \code{1} here.
+#' @param decimals Amount of decimals required for the radiocarbon age.
+#' @return Radiocarbon ages from pMC values. If pMC values are above 100\%, the resulting radiocarbon ages will be negative.
+#' @examples
+#'   pMC.age(110, 0.5) # a postbomb date, so with a negative 14C age
+#'   pMC.age(80, 0.5) # prebomb dates can also be calculated
+#'   pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\%)
+#' @seealso \url{http://www.qub.ac.uk/chrono/blaauw/manualBacon_2.3.pdf}
+#' @export
+pMC.age <- function(mn, sdev, ratio=100, decimals=0) {
+  y <- -8033 * log(mn/ratio)
+  sdev <- y - -8033 * log((mn+sdev)/ratio)
+  round(c(y, sdev), decimals)
+}
+
+
+
+#' @name age.pMC
+#' @title Calculate pMC values from C14 ages
+#' @description Calculate pMC values from radiocarbon ages
+#' @details Post-bomb dates are often reported as pMC or percent modern carbon. Since Bacon expects radiocarbon ages,
+#' this function can be used to calculate pMC values from radiocarbon ages. The reverse function of \link{pMC.age}.
+#' @param mn Reported mean of the 14C age.
+#' @param sdev Reported error of the 14C age.
+#' @param ratio Most modern-date values are reported against \code{100}. If it is against \code{1} instead, use \code{1} here.
+#' @param decimals Amount of decimals required for the pMC value.
+#' @return pMC values from C14 ages.
+#' @examples
+#'   age.pMC(-2000, 20)
+#'   age.pMC(-2000, 20, 1)
+#' @export
+age.pMC <- function(mn, sdev, ratio=100, decimals=3) {
+  y <- exp(-mn / 8033)
+  sdev <- y - exp(-(mn + sdev) / 8033)
+  signif(ratio*c(y, sdev), decimals)
+}
+
+
+
 # See Christen and Perez 2009, Radiocarbon 51:1047-1059. Instead of assuming the standard Gaussian model (default in clam), a student t distribution can be used with two parameters. Christen and Perez 2009 suggest t.a = 3 and t.b = 4; this can be put as clam( calibt=c(3,4) )
 calibt <- function(t.a, t.b, f.cage, f.error, f.mu, f.sigma) # removed theta as par
   (t.b + ((f.cage-f.mu)^2) / (2*(f.sigma^2 + f.error^2))) ^ (-1*(t.a+0.5))
