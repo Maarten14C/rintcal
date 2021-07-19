@@ -158,7 +158,7 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 
 
 #' @name calibrate
-#' @title Calibrate individual 14C dates.
+#' @title Plot individual calibrated dates.
 #' @description Calibrate individual 14C dates, plot them and report calibrated ranges.
 #' @details
 #' Type \code{calibrate()} to see how a date of 2450 +- 50 14C BP gets calibrated (the calibration curve happens to show
