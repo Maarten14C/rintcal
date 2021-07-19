@@ -4,22 +4,22 @@
 \alias{hpd}
 \title{Calculate highest posterior density}
 \usage{
-hpd(caldist, prob = 0.95, hpdsteps = 1, yrsteps = FALSE, rule = 1)
+hpd(calib, prob = 0.95, return.raw = FALSE, rounded = 1)
 }
 \arguments{
-\item{caldist}{The calibrated distribution, as returned from caldist()}
+\item{calib}{The calibrated distribution, as returned from caldist()}
 
 \item{prob}{Probability range which should be calculated. Default \code{prob=0.95}.}
 
-\item{hpdsteps}{It works.}
+\item{return.raw}{The raw data to calculate hpds can be returned, e.g. to draw polygons of the calibrated distributions. Defaults to \code{return.raw=FALSE}.}
 
-\item{yrsteps}{This too. Could be used e.g. for postbomb dates?}
-
-\item{rule}{Which extrapolation rule to use. Defaults to \code{rule=1} which returns NAs.}
+\item{rounded}{Rounding for reported probabilities. Defaults to 1 decimal.}
 }
 \description{
 Calculate highest posterior density ranges of calibrated distribution
 }
 \examples{
 hpd(caldist(130,20))
+plot(tmp <- caldist(2450,50), type='l')
+abline(v=hpd(tmp)[,1:2], col=4)
 }

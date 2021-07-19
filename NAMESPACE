@@ -2,6 +2,7 @@
 
 export(age.pMC)
 export(caldist)
+export(calibrate)
 export(ccurve)
 export(copyCalibrationCurve)
 export(draw.ccurve)

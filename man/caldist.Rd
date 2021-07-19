@@ -10,7 +10,7 @@ caldist(
   cc = 1,
   postbomb = FALSE,
   yrsteps = FALSE,
-  threshold = 1e-06,
+  threshold = 0.001,
   calibt = FALSE,
   BCAD = FALSE,
   rule = 1

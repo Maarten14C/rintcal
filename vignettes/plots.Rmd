@@ -1,0 +1,51 @@
+---
+title: "IntCal - plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"plots"}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, echo=FALSE}
+require(IntCal)
+```
+
+We can also plot a calibration curve:
+
+```{r}
+draw.ccurve()
+```
+
+or zoom in to between AD 1600 and 2000 (using the BCAD scale):
+
+```{r}
+draw.ccurve(1600, 1950, BCAD=TRUE)
+```
+
+Interesting things happened after 1950, as can be seen by adding a postbomb curve:
+
+```{r}
+draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1')
+
+````
+
+The postbomb curve dwarves the IntCal20 curve, so we could also plot both on separate vertical axes: 
+
+```{r}
+draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1', add.yaxis=TRUE)
+```
+
+We can also visualise the data underlying parts of the IntCal calibration curve, for example from 500 to 0 cal BP:
+
+```{r}
+intcal.data(0, 500)
+```
+
+
+***
+
+<br>
+[<- prev (intro)](./intro.html) | 
+[next (calculations) ->](./calculations.html)
+<br>
+

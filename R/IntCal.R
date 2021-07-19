@@ -12,8 +12,7 @@
 #' @name IntCal
 NULL
 
-# todo: add vignettes
-
+# todo: calibrate function
 
 
 #' @name list.ccurves
@@ -140,7 +139,9 @@ ccurve <- function(cc=1, postbomb=FALSE) {
                                         fl <- "LevinKromer.14C" else
                                         if(tolower(cc) == "santos")
                                           fl <- "Santos.14C" else
-                                          stop("cannot find this curve", call.=FALSE)
+                                          if(tolower(cc) == "mixed")
+                                            fl <- "mixed.14C" else
+                                            stop("cannot find this curve", call.=FALSE)
   cc <- system.file("extdata/", fl, package='IntCal')
   cc <- read.table(cc)
   invisible(cc)
@@ -261,33 +262,31 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 
 #' @name mix.curves
 #' @title Build a custom-made, mixed calibration curve.
-#' @description If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used.
+#' @description If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used. The curve will be saved together with the calibration curves. 
 #' @details The proportional contribution of each of both calibration curves has to be set.
 #'
 #' @param proportion Proportion of the first calibration curve required. e.g., change to \code{proportion=0.7} if \code{cc1} should contribute 70\% (and \code{cc2} 30\%) to the mixed curve.
 #' @param cc1 The first calibration curve to be mixed. Defaults to the northern hemisphere terrestrial curve IntCal20.
 #' @param cc2 The second calibration curve to be mixed. Defaults to the marine curve IntCal20.
 #' @param name Name of the new calibration curve.
-#' @param dirname Directory where the file will be written. If using the default \code{dirname="."},
-#' the new curve will be saved in current working directory.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0).
 #' @param sep Separator between fields (tab by default, "\\t")
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
 #' mix.curves(, dirname=tempdir())
 #' @export
-mix.curves <- function(proportion=.5, cc1="3Col_intcal20.14C", cc2="3Col_marine20.14C", name="mixed.14C", dirname=".", offset=c(0,0), sep="\t") {
+mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", offset=c(0,0), sep="\t") {
   ccloc <- system.file("extdata/", package='IntCal')
 #  dirname <- .validateDirectoryName(dirname)
 
-  cc1 <- read.table(paste0(ccloc, "/", cc1))
-  cc2 <- read.table(paste0(ccloc, "/", cc2))
+  cc1 <- ccurve(cc1)
+  cc2 <- ccurve(cc2)
   cc2.mu <- approx(cc2[,1], cc2[,2], cc1[,1], rule=2)$y + offset[1] # interpolate cc2 to the calendar years of cc1
   cc2.error <- approx(cc2[,1], cc2[,3], cc1[,1], rule=2)$y
   cc2.error <- sqrt(cc2.error^2 + offset[2]^2)
   mu <- proportion * cc1[,2] + (1-proportion) * cc2.mu
   error <- proportion * cc1[,3] + (1-proportion) * cc2.error
-  write.table(cbind(cc1[,1], mu, error), paste0(dirname, "/", name), row.names=FALSE, col.names=FALSE, sep=sep)
+  write.table(cbind(cc1[,1], mu, error), paste0(ccloc, name), row.names=FALSE, col.names=FALSE, sep=sep)
 }
 
 

@@ -10,7 +10,7 @@
 #' @param cal2 Last calendar year for the plot
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13".
 #' @param cc2 Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.
-#' @param calcurve.data Which dataset to use. Defaults to \code{calcurve.data="IntCal20"}, but can also be \code{calcurve.data="SHCal20"}. Note that Marine20 is based on IntCal20 and a marine model.
+#' @param calcurve.data Which dataset to use. Defaults to \code{calcurve.data="IntCal20"}, but can also be \code{calcurve.data="SHCal20"}. Note that Marine20 is based on IntCal20 and a marine carbon cycle model.
 #' @param BCAD The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.
 #' @param cal.lab The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.
 #' @param cal.rev Reverse the calendar axis.
