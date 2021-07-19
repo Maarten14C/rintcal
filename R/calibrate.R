@@ -246,7 +246,7 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' @param yaxs Whether or not to extend the limits of the vertical axis. Defaults to \code{yaxs="i"} which does not extend the limits.
 #' @param bty Draw a box around the graph ("n" for none, and "l", "7", "c", "u", "]" or "o" for correspondingly shaped boxes).
 #' @param ... Other plotting parameters.
-#' @return A graph of the raw and calibrated C-14 date, the calibrated ranges and, invisibly, the calibrated ranges and probabilities.
+#' @return A graph of the raw and calibrated C-14 date, the calibrated ranges and, invisibly, the calibrated distribution and hpd ranges.
 #' @examples
 #' calibrate()
 #' calibrate(130, 20)
@@ -256,7 +256,7 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' calibrate(age=130, error=20, BCAD=TRUE)
 #' calibrate(4450, 40, reservoir=c(100, 50))
 #' @export
-calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(1.7,.7,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", ...) {
+calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(2,2,1,1), xaxs="i", yaxs="i", bty="l", ...) {
   # read the data
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
@@ -346,7 +346,7 @@ calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FAL
 
   # adapt axis labels and hpds if BCAD
   xaxt <- ifelse(BCAD, "n", "s")
-  plot(0, type="n", xlim=cal.lim, ylim=cc.lim, xlab=cal.lab, ylab=C14.lab, xaxt=xaxt, xaxs=xaxs, yaxs=yaxs, bty=bty)
+  plot(0, type="n", xlim=cal.lim, ylim=cc.lim, xlab=cal.lab, ylab=C14.lab, xaxt=xaxt, xaxs=xaxs, yaxs=yaxs, bty=bty, mgp=mgp, mar=mar)
   if(BCAD) {
     axis(1, pretty(cal.lim), labels=1950-pretty(cal.lim))
     hpds[,1:2] <- 1950 - hpds[,1:2]
@@ -355,12 +355,12 @@ calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FAL
     cal.dist[,1] <- 1950 - cal.dist[,1]
   }
 
+  # draw the data
   polygon(ccpol, border=cc.col, col=cc.fill)
   polygon(tC14.dist[,2:1], border=dist.col, col=dist.fill)
   polygon(tC14.hpd[,2:1], border=NA, col=hpd.fill)
   polygon(tcal.dist, border=dist.col, col=dist.fill)
   polygon(tcal.hpd, border=dist.col, col=hpd.fill)
-
   dot <- ifelse(cal.rev, min(lims), max(lims))
   points(dot, age, col=date.col, pch=20)
   segments(dot, age-error, dot, age+error, col=date.col)
