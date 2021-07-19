@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibrate.R
 \name{calibrate}
 \alias{calibrate}
-\title{Calibrate individual 14C dates.}
+\title{Plot individual calibrated dates.}
 \usage{
 calibrate(
   age = 2450,
@@ -31,7 +31,7 @@ calibrate(
   legend.cex = 0.8,
   legend1.loc = "topleft",
   legend2.loc = "topright",
-  mgp = c(1.7, 0.7, 0),
+  mgp = c(2, 1, 0),
   mar = c(3, 3, 1, 1),
   xaxs = "i",
   yaxs = "i",
@@ -70,6 +70,8 @@ calibrate(
 
 \item{dist.fill}{Colour of the inner part of the distributions. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.2)}.}
 
+\item{hpd.fill}{Colour of the highest posterior density. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.3)}.}
+
 \item{dist.height}{Maximum height of the C14 and calibrated distributions (as proportion of the invisible secondary axes). Defaults to 0.3.}
 
 \item{cal.rev}{Whether or not to reverse the direction of the calendar axis.}
@@ -103,7 +105,7 @@ calibrate(
 \item{...}{Other plotting parameters.}
 }
 \value{
-A graph of the raw and calibrated C-14 date, the calibrated ranges and, invisibly, the calibrated ranges and probabilities.
+A graph of the raw and calibrated C-14 date, the calibrated ranges and, invisibly, the calibrated distribution and hpd ranges.
 }
 \description{
 Calibrate individual 14C dates, plot them and report calibrated ranges.
@@ -168,7 +170,7 @@ such as postscript are unable to use transparency; in that case provide differen
 calibrate()
 calibrate(130, 20)
 cal <- calibrate(2550, 20, reservoir=100)
-cal; plot(cal$calib)
+cal; plot(cal[[1]])
 calibrate(130, 20, prob=0.68)
 calibrate(age=130, error=20, BCAD=TRUE)
 calibrate(4450, 40, reservoir=c(100, 50))

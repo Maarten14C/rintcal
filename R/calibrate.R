@@ -230,6 +230,7 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' @param date.col Colour of the "dot-bar" plot of the C14 date. Defaults to \code{date.col="red"}.
 #' @param dist.col Colour of the outer lines of the distributions. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.2)}.
 #' @param dist.fill Colour of the inner part of the distributions. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.2)}.
+#' @param hpd.fill Colour of the highest posterior density. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.3)}.
 #' @param dist.height Maximum height of the C14 and calibrated distributions (as proportion of the invisible secondary axes). Defaults to 0.3.
 #' @param cal.rev Whether or not to reverse the direction of the calendar axis.
 #' @param yr.steps Temporal resolution at which C-14 ages are calibrated (in calendar years). By default follows the spacing in the calibration curve.
@@ -251,12 +252,12 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' calibrate()
 #' calibrate(130, 20)
 #' cal <- calibrate(2550, 20, reservoir=100)
-#' cal; plot(cal$calib)
+#' cal; plot(cal[[1]])
 #' calibrate(130, 20, prob=0.68)
 #' calibrate(age=130, error=20, BCAD=TRUE)
 #' calibrate(4450, 40, reservoir=c(100, 50))
 #' @export
-calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(2,2,1,1), xaxs="i", yaxs="i", bty="l", ...) {
+calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", ...) {
   # read the data
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
@@ -350,7 +351,7 @@ calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FAL
   if(BCAD) {
     axis(1, pretty(cal.lim), labels=1950-pretty(cal.lim))
     hpds[,1:2] <- 1950 - hpds[,1:2]
-    rownames(hpds) <- "BC/AD"
+ #   rownames(hpds)[1] <- "BC/AD"
     colnames(cal.dist)[1] <- "BC/AD"
     cal.dist[,1] <- 1950 - cal.dist[,1]
   }

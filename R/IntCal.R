@@ -7,7 +7,7 @@
 #' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk> 
 #' @importFrom utils read.csv read.table write.table packageName
 #' @importFrom stats approx dnorm
-#' @importFrom grDevices rgb
+#' @importFrom grDevices rgb extendrange
 #' @importFrom graphics axis par legend lines points polygon segments
 #' @name IntCal
 NULL
@@ -269,15 +269,16 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 #' @param cc1 The first calibration curve to be mixed. Defaults to the northern hemisphere terrestrial curve IntCal20.
 #' @param cc2 The second calibration curve to be mixed. Defaults to the marine curve IntCal20.
 #' @param name Name of the new calibration curve.
+#' @param dir Optional name of the directory where to save the file. Defaults to where the IntCal curves live.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0).
 #' @param sep Separator between fields (tab by default, "\\t")
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
-#' mix.curves(, dirname=tempdir())
+#' mix.curves()
 #' @export
-mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", offset=c(0,0), sep="\t") {
-  ccloc <- system.file("extdata/", package='IntCal')
-#  dirname <- .validateDirectoryName(dirname)
+mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", dir=c(), offset=c(0,0), sep="\t") {
+  if(length(dir) == 0)
+    dir <- system.file("extdata/", package='IntCal')
 
   cc1 <- ccurve(cc1)
   cc2 <- ccurve(cc2)
@@ -286,7 +287,7 @@ mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixe
   cc2.error <- sqrt(cc2.error^2 + offset[2]^2)
   mu <- proportion * cc1[,2] + (1-proportion) * cc2.mu
   error <- proportion * cc1[,3] + (1-proportion) * cc2.error
-  write.table(cbind(cc1[,1], mu, error), paste0(ccloc, name), row.names=FALSE, col.names=FALSE, sep=sep)
+  write.table(cbind(cc1[,1], mu, error), paste0(dir, name), row.names=FALSE, col.names=FALSE, sep=sep)
 }
 
 

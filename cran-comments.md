@@ -7,5 +7,5 @@
 
 0 errors | 0 warnings | 0 notes
 
-* No issues with reverse dependencies (packages rbacon, clam, rplum)
+* No issues with reverse dependencies (packages rbacon, clam)
 

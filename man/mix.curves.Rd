@@ -9,6 +9,7 @@ mix.curves(
   cc1 = "IntCal20",
   cc2 = "Marine20",
   name = "mixed.14C",
+  dir = c(),
   offset = c(0, 0),
   sep = "\\t"
 )
@@ -21,6 +22,8 @@ mix.curves(
 \item{cc2}{The second calibration curve to be mixed. Defaults to the marine curve IntCal20.}
 
 \item{name}{Name of the new calibration curve.}
+
+\item{dir}{Optional name of the directory where to save the file. Defaults to where the IntCal curves live.}
 
 \item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0).}
 
@@ -36,5 +39,5 @@ If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestri
 The proportional contribution of each of both calibration curves has to be set.
 }
 \examples{
-mix.curves(, dirname=tempdir())
+mix.curves()
 }
