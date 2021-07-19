@@ -1,4 +1,4 @@
-# functions copied and adapted from the clam R package
+# functions copied and adapted from the clam R package (by the same author and he agreed)
 
 
 
