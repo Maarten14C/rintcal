@@ -12,7 +12,7 @@
 #' @name IntCal
 NULL
 
-# todo: calibrate function
+# todo: function to draw multiple calibrated dates?
 
 
 #' @name list.ccurves

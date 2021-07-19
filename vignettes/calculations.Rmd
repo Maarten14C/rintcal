@@ -24,15 +24,21 @@ age.pMC(-2300, 40)
 
 We can also obtain the calibrated probability distributions from radiocarbon dates, e.g. one of 130 +- 20 C14 BP:
 
-```{r}
+```{r, fig.width=4, fig.asp=.8}
 calib.130 <- caldist(130, 20, BCAD=TRUE)
 plot(calib.130, type="l")
 ```
 
-Finally, for reporting purposes, calibrated dates are often reduced to their 95% highest posterior density (hpd) ranges (please report all, not just your favourite one!):
+For reporting purposes, calibrated dates are often reduced to their 95% highest posterior density (hpd) ranges (please report all, not just your favourite one!):
 
 ```{r}
 hpd(calib.130)
+```
+
+Want a plot of the radiocarbon and calibrated dates, together with their hpd ranges?
+
+```{r, fig.width=5, fig.asp=1}
+calibrate(130,20)
 ```
 
 
