@@ -2,8 +2,9 @@
 title: "IntCal - calculations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"calculations"}
+  %\VignetteIndexEntry{calculations}
   %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r, include=FALSE}

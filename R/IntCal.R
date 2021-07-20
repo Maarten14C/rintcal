@@ -12,7 +12,7 @@
 #' @name IntCal
 NULL
 
-# todo: function to draw multiple calibrated dates?
+# todo: the cal.dist polygon of calibrate(-900,90, cc="nh1") doesn't look well. Make calibrate (or ccurve?) work better with postbomb curve 
 
 
 #' @name list.ccurves

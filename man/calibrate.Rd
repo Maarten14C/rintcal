@@ -7,9 +7,10 @@
 calibrate(
   age = 2450,
   error = 50,
+  cc = 1,
+  postbomb = FALSE,
   reservoir = 0,
   prob = 0.95,
-  cc = 1,
   BCAD = FALSE,
   cal.lab = c(),
   C14.lab = c(),
@@ -44,11 +45,13 @@ calibrate(
 
 \item{error}{Error of the uncalibrated C-14 age.}
 
+\item{cc}{Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed").}
+
+\item{postbomb}{Whether or not this is a postbomb age. Defaults to FALSE.}
+
 \item{reservoir}{Reservoir age, or reservoir age and age offset.}
 
 \item{prob}{Probability confidence intervals (between 0 and 1).}
-
-\item{cc}{Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed").}
 
 \item{BCAD}{Use BC/AD or cal BP scale (default cal BP).}
 
@@ -144,7 +147,7 @@ asymmetric and multi-modal nature of calibrated distributions, the probability t
 lies outside the 1 standard deviation hpd ranges is considerable (c. 32\%). Therefore the use of 95\% calibrated ranges is preferable,
 and default.
 
-Negative radiocarbon ages are calibrated with postbomb curves, but the user needs to tell clam which curve to use.
+Negative radiocarbon ages are calibrated with postbomb curves, but the user needs to tell which curve to use.
 For example, to use the first of the three northern hemisphere curves, provide the option \code{cc="nh1"}, \code{cc="nh2"}, \code{cc="nh3"},
 while for southern hemisphere samples, use \code{cc="sh1-2"} or \code{cc="sh3"}.
 

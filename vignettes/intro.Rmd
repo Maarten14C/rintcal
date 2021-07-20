@@ -1,9 +1,10 @@
 ---
-title: "Introduction to the IntCal package"
+title: "IntCal - introduction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"intro"}
+  %\VignetteIndexEntry{introduction}
   %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 The international IntCal group provides ratified radiocarbon calibration curves such as IntCal20 (for northern hemisphere terrestrial radiocarbon dates; Reimer et al. 2020[^1]), Marine20 (for marine dates; Heaton et al. 2020[^2]) and SHCal20 (Hogg et al. 2020[^3]). This package provides these curves, as well as previous iterations (IntCal13, Marine13, SHCal13, IntCal09, Marine09, IntCal04, Marine04, SHCal04, IntCal98, Marine98) and postbomb curves (Hua et al. 2013[^4], Levin and Kromer 2004[^5], Santos et al. 2015[^6], Andrews et al. 2016[^7]). 

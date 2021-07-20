@@ -82,7 +82,7 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1
       if(!postbomb)
         if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
           stop("This appears to be a postbomb age. Please provide a postbomb curve")
-    cc <- ccurve(cc)
+    cc <- ccurve(cc, postbomb)
   }
   
   # calibrate; find how far age (measurement) is from cc[,2] of calibration curve
@@ -194,7 +194,7 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' lies outside the 1 standard deviation hpd ranges is considerable (c. 32\%). Therefore the use of 95\% calibrated ranges is preferable,
 #' and default.
 #'
-#' Negative radiocarbon ages are calibrated with postbomb curves, but the user needs to tell clam which curve to use.
+#' Negative radiocarbon ages are calibrated with postbomb curves, but the user needs to tell which curve to use.
 #' For example, to use the first of the three northern hemisphere curves, provide the option \code{cc="nh1"}, \code{cc="nh2"}, \code{cc="nh3"},
 #' while for southern hemisphere samples, use \code{cc="sh1-2"} or \code{cc="sh3"}.
 #'
@@ -217,9 +217,10 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' such as postscript are unable to use transparency; in that case provide different colours or leave the fourth value empty.
 #' @param age Mean of the uncalibrated C-14 age.
 #' @param error Error of the uncalibrated C-14 age.
+#' @param cc Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed").
+#' @param postbomb Whether or not this is a postbomb age. Defaults to FALSE. 
 #' @param reservoir Reservoir age, or reservoir age and age offset.
 #' @param prob Probability confidence intervals (between 0 and 1).
-#' @param cc Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed").
 #' @param BCAD Use BC/AD or cal BP scale (default cal BP).
 #' @param cal.lab Label of the calendar/horizontal axis. Defaults to the calendar scale, but alternative names can be provided.
 #' @param C14.lab Label of the C-14/vertical axis. Defaults to the 14C scale, but alternative names can be provided.
@@ -257,19 +258,19 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' calibrate(age=130, error=20, BCAD=TRUE)
 #' calibrate(4450, 40, reservoir=c(100, 50))
 #' @export
-calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", ...) {
+calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", ...) {
   # read the data
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
     error <- sqrt(error^2 + reservoir[2]^2)
-  Cc <- ccurve(cc)
+  Cc <- ccurve(cc, postbomb)
 
   # calculate the raw and calibrated distributions
   C14.dist <- caldist(age, error, cc=0, BCAD=FALSE)
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
-  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, calibt, BCAD=FALSE)
+  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, calibt, BCAD=FALSE, postbomb=postbomb)
   cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE, rounded=rounded)
   hpds <- cal.hpd[[2]]
   cal.hpd <- cal.hpd[[1]]
@@ -297,8 +298,9 @@ calibrate <- function(age=2450, error=50, reservoir=0, prob=0.95, cc=1, BCAD=FAL
     cal.hpd <- rbind(c(cal.hpd[1,1],0,1), cal.hpd)
   if(cal.dist[nrow(cal.dist),1] == Cc[nrow(Cc),1])
     cal.dist <- rbind(cal.dist, c(cal.dist[nrow(cal.dist),1],0))
-  if(cal.dist[1,1] == Cc[1,1])
-    cal.dist <- rbind(c(cal.dist[1,1],0), cal.dist)
+#  if(cal.dist[1,1] == Cc[1,1])
+  cal.dist <- rbind(c(cal.dist[1,1],0), cal.dist)
+  cal.dist <- rbind(cal.dist, c(cal.dist[nrow(cal.dist),1],0))
 
   # calculate limits
   if(length(cal.lim) == 0)
