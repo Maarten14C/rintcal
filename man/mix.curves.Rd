@@ -23,7 +23,7 @@ mix.curves(
 
 \item{name}{Name of the new calibration curve.}
 
-\item{dir}{Optional name of the directory where to save the file. Defaults to where the IntCal curves live.}
+\item{dir}{Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{dir="~/Curves"} or in your current working directory, \code{dir="."}.}
 
 \item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0).}
 
@@ -33,11 +33,16 @@ mix.curves(
 A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 }
 \description{
-If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used. The curve will be saved together with the calibration curves.
+If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used. The curve will be saved, together with the main calibration curves, in a temporary directory. This temporary directory then has to be specified in further commands, e.g. for rbacon: \code{Bacon(, ccdir=tmpdr)} (see examples). It is advisable to make your own curves folder and have ccdir point to that folder.
 }
 \details{
 The proportional contribution of each of both calibration curves has to be set.
 }
 \examples{
 mix.curves()
+tmpdir <- tempdir()
+tmpdir
+mix.curves(dir=tmpdir)
+# clean up:
+file.remove(tmpdir)
 }

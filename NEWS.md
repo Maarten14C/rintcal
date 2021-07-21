@@ -1,3 +1,10 @@
+# IntCal 0.2.2
+* in mix.curves(), calibration curves are now written to a temporary directory by default, as per CRAN policies
+* calibrate function now deals better with postbomb dates
+* added clam's function calBP.14C to find IntCal C14 ages corresponding to cal BP ages. 
+* added a warning/error to calibrate() for dates truncated by or outside the calibration curve
+* updated the vignettes
+
 # IntCal 0.2.1
 * added new function list.curves
 * Shortened the functions copyCalibrationCurve and draw.CalibrationCurves to the shorter and more consistent ccurve and draw.ccurve

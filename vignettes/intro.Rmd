@@ -15,7 +15,7 @@ On first usage of the package, it has to be installed:
 install.packages('IntCal')
 ``` 
 
-If you have a recent version of rbacon, rplum or clam installed on your computer, IntCal will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to maintain up-to-date, or use:
+If you have a recent version of rbacon, rplum or clam installed on your computer, IntCal will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to remain up-to-date, or use:
 
 ```{r, eval=FALSE}
 update.packages()
@@ -35,6 +35,12 @@ head(ic20)
 ```
 
 The files have three columns: cal BP, the corresponding IntCal C14 BP ages, and the uncertainties (1 standard deviation). 
+
+To see more detail of each IntCal function, place a question-mark before the function name, e.g.:
+
+```{R, eval=FALSE}
+?ccurve
+```
 
 To get a list of available curves and associated files (and where they can be found):
 
