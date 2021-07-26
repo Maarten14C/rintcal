@@ -42,14 +42,20 @@ Want a plot of the radiocarbon and calibrated dates, together with their hpd ran
 calibrate(130,20)
 ```
 
-You can also add calibrated distributions to an existing plot:
+You can also draw one or more calibrated distributions:
 
-```{R}
-plot(0, type="n", xlim=c(1000, 1800), ylim=c(1,6), xlab="AD", ylab="dates")
-dates <- sort(runif(6, 100, 1000), decreasing=TRUE)
+```{R, fig.width=4, fig.asp=1}
+dates <- sort(runif(5, 100, 1000))
 errors <- .05*dates
-for(i in 1:5)
-  add.date(dates[i], errors[i], i, ex=.7, BCAD=TRUE)
+depths <- 4:0
+draw.dates(dates, errors, depths, BCAD=TRUE, add=FALSE)
+```
+
+or add them to an existing plot:
+
+```{R, fig.width=4, fig.asp=1}
+plot(0, type="n", xlim=c(1000, 1850), ylim=c(0,5), xlab="AD", ylab="dates")
+draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE)
 ```
 
 

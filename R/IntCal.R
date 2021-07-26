@@ -8,11 +8,11 @@
 #' @importFrom utils read.csv read.table write.table packageName
 #' @importFrom stats approx dnorm
 #' @importFrom grDevices rgb extendrange
-#' @importFrom graphics axis par legend lines points polygon segments
+#' @importFrom graphics axis par legend lines points polygon segments text
 #' @name IntCal
 NULL
 
-# todo: 
+# todo: add labels to draw.dates function?
 
 
 #' @name list.ccurves
@@ -165,10 +165,9 @@ ccurve <- function(cc=1, postbomb=FALSE) {
 #' @examples
 #' mix.curves()
 #' tmpdir <- tempdir()
-#' tmpdir
 #' mix.curves(dir=tmpdir)
 #' # clean up:
-#' file.remove(tmpdir)
+#' unlink(tmpdir)
 #' @export
 mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", dir=c(), offset=c(0,0), sep="\t") {
   # place the IntCal curves within the same folder as the new curve:
@@ -184,7 +183,7 @@ mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixe
   cc2.error <- sqrt(cc2.error^2 + offset[2]^2)
   mu <- proportion * cc1[,2] + (1-proportion) * cc2.mu
   error <- proportion * cc1[,3] + (1-proportion) * cc2.error
-  
-  write.table(cbind(cc1[,1], mu, error), paste0(dir, name), row.names=FALSE, col.names=FALSE, sep=sep)
+
+  write.table(cbind(cc1[,1], mu, error), file.path(dir, name), row.names=FALSE, col.names=FALSE, sep=sep)
   message(name, " saved in folder ", dir)
 }

@@ -363,13 +363,13 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 
 
 
-#' @name add.date
+#' @name draw.dates
 #' @title add calibrated distributions to a plot.
 #' @description Add individual calibrated dates to a plot.
-#' @param age Mean of the uncalibrated C-14 age.
-#' @param error Error of the uncalibrated C-14 age.
-#' @param depth Depth of the date 
-#' @param cc Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed").
+#' @param age Mean of the uncalibrated C-14 age (or multiple ages).
+#' @param error Error of the uncalibrated C-14 age (or ages).
+#' @param depth Depth(s) of the date(s)
+#' @param cc Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed"). If there are multiple dates but all use the same calibration curve, one value can be provided. 
 #' @param postbomb Whether or not this is a postbomb age. Defaults to FALSE. 
 #' @param reservoir Reservoir age, or reservoir age and age offset.
 #' @param calibt Calibration based on the student-t distribution. By default, the Gaussian distribution is used (\code{calibt=FALSE}). To use the student-t distribution, provide two parameters such as \code{calibt=c(3,4)}.
@@ -377,6 +377,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param threshold Report only values above a threshold. Defaults to \code{threshold=1e-6}.
 #' @param BCAD Use BC/AD or cal BP scale (default cal BP).
 #' @param ex Exaggeration of the height of the distribution
+#' @param normalise If TRUE, the date is normalised by setting its peak value to 1 (handy for estimating how high to draw it). If there are multiple dates, it is normalised to the peak of the most precise date. Otherwise the peak of each date is at the same height.
 #' @param draw.hpd Whether or not to draw the hpd ranges as a line
 #' @param hpd.lwd Width of the line of the hpd ranges
 #' @param hpd.col Colour of the hpd rectangle
@@ -385,36 +386,97 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param on.axis Which axis to plot on. Defaults to 'x' or 1, but can be set to 'y' or 2. 
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
+#' @param add Whether or not to add the dates to an existing plot. If set to FALSE, a plot will be set up.
+#' @param cal.lab Title of the calendar axis (if present)
+#' @param cal.lim Limits of the calendar axis (if present)
+#' @param y.lab Title of the vertical axis (if present)
+#' @param y.lim Limits of the vertical axis (if present)
+#' @param labels Add labels to the dates. Empty by default.
+#' @param label.x Horizontal position of the date labels. By default draws them before the youngest age (1), but can also draw them after the oldest age (2), or above its mean (3). 
+#' @param label.y Vertical positions of the labels. Defaults to 0 (or 1 if label.x is 3 or 4).
+#' @param label.offset Offsets of the positions of the labels, giving the x and y offsets. Defaults to c(0,0).
+#' @param label.cex Size of labels. 
+#' @param label.col Colour of the labels. Defaults to the colour given to the borders of the dates.
+#' @param label.adj  Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text. 
+#' @param label.rot Rotation of the label. 0 by default (horizontal).
+#' @param ... Additional plotting options
 #' @examples
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
-#'   add.date(130, 20, depth=1) 
+#'   draw.dates(130, 20, depth=1) 
 #' @export
-add.date <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.0001, BCAD=FALSE, ex=1, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=FALSE, up=TRUE, on.axis=1, col=rgb(0,0,1,.5), border=rgb(0,0,1,.5)) {
-  if(length(age) > 1 || length(error) > 1)
-    stop("Can only deal with one date at a time")
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.0001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=FALSE, up=TRUE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=TRUE, cal.lab="", cal.lim=c(), y.lab="", y.lim=c(), labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=0, label.rot=0, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
       error <- sqrt(error^2 + reservoir[2]^2)
   }
-  dat <- hpd(caldist(age, error, cc=cc, postbomb=postbomb, calibt=calibt, BCAD=BCAD, threshold=threshold), prob, return.raw=TRUE)
-
-  prob <- dat[[1]]
-  hpds <- dat[[2]]
-  prob[,2] <- prob[,2]/max(prob[,2]) # normalise to a height of 1
   
-  if(mirror) {
-    pol <- cbind(c(prob[,1], rev(prob[,1])), depth+ex*c(prob[,2], -rev(prob[,2])))
-    } else
-      if(up)
-        pol <- cbind(c(prob[1,1], prob[,1], prob[nrow(prob),1]), depth+ex*c(0, prob[,2], 0)) else
-          pol <- cbind(c(prob[1,1], prob[,1], prob[nrow(prob),1]), depth-ex*c(0, prob[,2], 0))
-
-  if(on.axis == 'y' || on.axis == 2)
-    pol <- pol[,2:1]
-  polygon(pol, col=col, border=border)
+  # deal with multiple dates
+  if(length(age) > 1) {
+    if(length(cc) == 1)
+      cc <- rep(cc, length(age)) 
+    if(length(postbomb) == 1)
+      postbomb <- rep(postbomb, length(age))
+    if(length(hpd.lwd) == 1)
+      hpd.lwd <- rep(hpd.lwd, length(age))
+    if(length(hpd.col) == 1)
+      hpd.col <- rep(hpd.col, length(age))
+    if(length(col) == 1)
+      col <- rep(col, length(age))
+    if(length(border) == 1)
+      border <- rep(border, length(age))
+  }
   
-  if(draw.hpd)
-    segments(hpds[,1], depth, hpds[,2], depth, lwd=hpd.lwd, col=hpd.col)
+  max.hght <- 0; age.range <- c()
+  for(i in 1:length(age)) {
+    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD)  
+    max.hght <- max(max.hght, tmp[,2])
+    age.range <- range(age.range, range(tmp[,1]))
+  }
+  
+  if(!add) {
+    if(length(cal.lab) == 0)
+      cal.lab <- ifelse(BCAD, "BC/AD", "cal BP")
+    if(length(cal.lim) == 0)
+      cal.lim <- age.range
+    if(length(y.lim) == 0)
+      y.lim <- c(0, 1+length(age))
+    plot(0, type="n", xlim=cal.lim, xlab=cal.lab, ylim=y.lim, ylab=y.lab, ...)
+  }
+  
+  for(i in 1:length(age)) {
+    dat <- hpd(caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD, threshold=threshold), prob, return.raw=TRUE)
+
+    probs <- dat[[1]]
+    hpds <- dat[[2]]
+    if(normalise)
+      probs[,2] <- probs[,2]/max.hght else # normalise by setting the peal of the most precise date at 1
+        probs[,2] <- probs[,2]/max(probs[,2])
+
+    if(mirror) {
+      pol <- cbind(c(probs[,1], rev(probs[,1])), depth[i]+ex*c(probs[,2], -rev(probs[,2])))
+      } else
+        if(up)
+          pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]+ex*c(0, probs[,2], 0)) else
+            pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]-ex*c(0, probs[,2], 0))
+
+    if(on.axis == 'y' || on.axis == 2)
+      pol <- pol[,2:1]
+    polygon(pol, col=col[i], border=border[i])
+  
+    if(draw.hpd)
+      segments(hpds[,1], depth[i], hpds[,2], depth[i], lwd=hpd.lwd, col=hpd.col)
+
+    if(length(labels) > 0) {
+      xx <- c(min(probs[,1]), max(probs[,1]), mean(probs[,1]))
+      x <- xx[label.x]
+      if(length(label.y) == 0) {
+        y <- depth[i]   
+        if(label.x > 2)
+          ifelse(up, y <- y+1, y <- y-1)
+      }
+      text(x+label.offset[1], y+label.offset[2], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot)
+    }
+  }
 }
 
