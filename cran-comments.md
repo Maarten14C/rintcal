@@ -9,3 +9,4 @@
 
 * No issues with reverse dependencies (packages rbacon, clam)
 
+* the errors on debian have been removed as files are now written only to a temporary directory, and removed after writing.

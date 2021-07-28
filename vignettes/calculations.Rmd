@@ -48,14 +48,15 @@ You can also draw one or more calibrated distributions:
 dates <- sort(runif(5, 100, 1000))
 errors <- .05*dates
 depths <- 4:0
-draw.dates(dates, errors, depths, BCAD=TRUE, add=FALSE)
+labels <- c("my", "very", "own", "simulated", "dates")
+draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels)
 ```
 
 or add them to an existing plot:
 
 ```{R, fig.width=4, fig.asp=1}
-plot(0, type="n", xlim=c(1000, 1850), ylim=c(0,5), xlab="AD", ylab="dates")
-draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE)
+plot(0, type="n", xlim=c(600, 1850), ylim=c(0,5), xlab="AD", ylab="dates")
+draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE, labels=labels)
 ```
 
 

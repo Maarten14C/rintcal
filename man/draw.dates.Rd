@@ -13,7 +13,7 @@ draw.dates(
   reservoir = c(),
   calibt = c(),
   prob = 0.95,
-  threshold = 1e-04,
+  threshold = 0.001,
   BCAD = FALSE,
   ex = 0.9,
   normalise = TRUE,
@@ -25,7 +25,7 @@ draw.dates(
   on.axis = 1,
   col = rgb(0, 0, 1, 0.3),
   border = rgb(0, 0, 1, 0.5),
-  add = TRUE,
+  add = FALSE,
   cal.lab = "",
   cal.lim = c(),
   y.lab = "",
@@ -36,7 +36,7 @@ draw.dates(
   label.cex = 0.8,
   label.col = border,
   label.offset = c(0, 0),
-  label.adj = 0,
+  label.adj = c(1, 0),
   label.rot = 0,
   ...
 )
@@ -58,7 +58,7 @@ draw.dates(
 
 \item{prob}{Probability confidence intervals (between 0 and 1).}
 
-\item{threshold}{Report only values above a threshold. Defaults to \code{threshold=1e-6}.}
+\item{threshold}{Report only values above a threshold. Defaults to \code{threshold=0.001}.}
 
 \item{BCAD}{Use BC/AD or cal BP scale (default cal BP).}
 
@@ -82,7 +82,7 @@ draw.dates(
 
 \item{border}{Colour of the border of the distribution}
 
-\item{add}{Whether or not to add the dates to an existing plot. If set to FALSE, a plot will be set up.}
+\item{add}{Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.}
 
 \item{cal.lab}{Title of the calendar axis (if present)}
 
@@ -108,7 +108,7 @@ draw.dates(
 
 \item{label.rot}{Rotation of the label. 0 by default (horizontal).}
 
-\item{...}{Additional plot options}
+\item{...}{Additional plotting options}
 }
 \description{
 Add individual calibrated dates to a plot.

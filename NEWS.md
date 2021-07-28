@@ -2,6 +2,7 @@
 * in mix.curves(), calibration curves are now written to a temporary directory by default, as per CRAN policies
 * calibrate function now deals better with postbomb dates
 * added clam's function calBP.14C to find IntCal C14 ages corresponding to cal BP ages. 
+* added function glue.ccurves for gluing prebomb and postbomb calibration curves.
 * added a warning/error to calibrate() for dates truncated by or outside the calibration curve
 * updated the vignettes
 

@@ -374,7 +374,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param reservoir Reservoir age, or reservoir age and age offset.
 #' @param calibt Calibration based on the student-t distribution. By default, the Gaussian distribution is used (\code{calibt=FALSE}). To use the student-t distribution, provide two parameters such as \code{calibt=c(3,4)}.
 #' @param prob Probability confidence intervals (between 0 and 1).
-#' @param threshold Report only values above a threshold. Defaults to \code{threshold=1e-6}.
+#' @param threshold Report only values above a threshold. Defaults to \code{threshold=0.001}.
 #' @param BCAD Use BC/AD or cal BP scale (default cal BP).
 #' @param ex Exaggeration of the height of the distribution
 #' @param normalise If TRUE, the date is normalised by setting its peak value to 1 (handy for estimating how high to draw it). If there are multiple dates, it is normalised to the peak of the most precise date. Otherwise the peak of each date is at the same height.
@@ -386,7 +386,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param on.axis Which axis to plot on. Defaults to 'x' or 1, but can be set to 'y' or 2. 
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
-#' @param add Whether or not to add the dates to an existing plot. If set to FALSE, a plot will be set up.
+#' @param add Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.
 #' @param cal.lab Title of the calendar axis (if present)
 #' @param cal.lim Limits of the calendar axis (if present)
 #' @param y.lab Title of the vertical axis (if present)
@@ -404,7 +404,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.0001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=FALSE, up=TRUE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=TRUE, cal.lab="", cal.lim=c(), y.lab="", y.lim=c(), labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=0, label.rot=0, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=FALSE, up=TRUE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab="", cal.lim=c(), y.lab="", y.lim=c(), labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)

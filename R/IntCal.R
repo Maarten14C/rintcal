@@ -12,7 +12,7 @@
 #' @name IntCal
 NULL
 
-# todo: add labels to draw.dates function?
+# todo:
 
 
 #' @name list.ccurves
@@ -149,7 +149,7 @@ ccurve <- function(cc=1, postbomb=FALSE) {
 
 
 
-#' @name mix.curves
+#' @name mix.ccurves
 #' @title Build a custom-made, mixed calibration curve.
 #' @description If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used. The curve will be saved, together with the main calibration curves, in a temporary directory. This temporary directory then has to be specified in further commands, e.g. for rbacon: \code{Bacon(, ccdir=tmpdr)} (see examples). It is advisable to make your own curves folder and have ccdir point to that folder. 
 #' @details The proportional contribution of each of both calibration curves has to be set.
@@ -163,13 +163,13 @@ ccurve <- function(cc=1, postbomb=FALSE) {
 #' @param sep Separator between fields (tab by default, "\\t")
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
-#' mix.curves()
+#' mix.ccurves()
 #' tmpdir <- tempdir()
-#' mix.curves(dir=tmpdir)
+#' mix.ccurves(dir=tmpdir)
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", dir=c(), offset=c(0,0), sep="\t") {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", dir=c(), offset=c(0,0), sep="\t") {
   # place the IntCal curves within the same folder as the new curve:
   if(length(dir) == 0)
      dir <- tempdir()   
@@ -186,4 +186,21 @@ mix.curves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixe
 
   write.table(cbind(cc1[,1], mu, error), file.path(dir, name), row.names=FALSE, col.names=FALSE, sep=sep)
   message(name, " saved in folder ", dir)
+}
+
+
+
+#' @name glue.ccurves
+#' @title Glue prebomb and postbomb curves
+#' @description Produce a custom curve by merging two calibration curves, e.g. a prebomb and a postbomb one for dates which straddle both curves.
+#' @return The custom-made curve (invisibly)
+#' @param prebomb The prebomb curve. Defaults to "IntCal20"
+#' @param postbomb The postbomb curve. Defaults to "NH1" (Hua et al. 2013)
+#' @examples
+#' my.cc <- glue.ccurves()
+#' @export
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1") {
+  glued <- rbind(ccurve(prebomb, FALSE), ccurve(postbomb, TRUE))
+  glued <- glued[order(glued[,1]),]
+  invisible(glued[-which(diff(glued[,1]) == 0),]) # remove repeated years
 }
