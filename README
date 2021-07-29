@@ -1,4 +1,11 @@
-This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. The folllowing curves are included:
+This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. 
+
+For tutorials, see:
+[intro](vignettes/intro.Rmd)
+[calculations](vignettes/calculations.Rmd)
+[plots](vignettes/plots.Rmd)
+
+The folllowing curves are included:
 
 filename				calibration curve
 3Col_intcal20.14C	  	IntCal20 (Reimer et al. 2020)
