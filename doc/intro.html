@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>IntCal - introduction</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">IntCal - introduction</h1>
+
+
+
+<p>The international IntCal group provides ratified radiocarbon calibration curves such as IntCal20 (for northern hemisphere terrestrial radiocarbon dates; Reimer et al. 2020<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>), Marine20 (for marine dates; Heaton et al. 2020<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>) and SHCal20 (Hogg et al. 2020<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>). This package provides these curves, as well as previous iterations (IntCal13, Marine13, SHCal13, IntCal09, Marine09, IntCal04, Marine04, SHCal04, IntCal98, Marine98) and postbomb curves (Hua et al. 2013<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>, Levin and Kromer 2004<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>, Santos et al. 2015<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>, Andrews et al. 2016<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>).</p>
+<p>On first usage of the package, it has to be installed:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="st">&#39;IntCal&#39;</span>)</span></code></pre></div>
+<p>If you have a recent version of rbacon, rplum or clam installed on your computer, IntCal will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to remain up-to-date, or use:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">update.packages</span>()</span></code></pre></div>
+<p>To obtain access to the calibration curves, first the package has to be loaded:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">library</span>(IntCal)</span></code></pre></div>
+<p>Now you can load a calibration curve into the memory, for example the default curve IntCal20, and check the first few entries:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>ic20 &lt;-<span class="st"> </span><span class="kw">ccurve</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">head</span>(ic20)</span></code></pre></div>
+<pre><code>##   V1  V2 V3
+## 1  0 199 11
+## 2  1 197 11
+## 3  2 195 11
+## 4  3 193 11
+## 5  4 190 11
+## 6  5 188 11</code></pre>
+<p>The files have three columns: cal BP, the corresponding IntCal C14 BP ages, and the uncertainties (1 standard deviation).</p>
+<p>To see more detail of each IntCal function, place a question-mark before the function name, e.g.:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>?ccurve</span></code></pre></div>
+<p>To get a list of available curves and associated files (and where they can be found):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">list.ccurves</span>()</span></code></pre></div>
+<pre><code>## /tmp/RtmpYXhBbM/temp_libpath9a69b6ff36e/IntCal/extdata/</code></pre>
+<pre><code>##  [1] &quot;3Col_intcal04.14C&quot;         &quot;3Col_intcal09.14C&quot;        
+##  [3] &quot;3Col_intcal13.14C&quot;         &quot;3Col_intcal20.14C&quot;        
+##  [5] &quot;3Col_intcal98.14C&quot;         &quot;3Col_marine04.14C&quot;        
+##  [7] &quot;3Col_marine09.14C&quot;         &quot;3Col_marine13.14C&quot;        
+##  [9] &quot;3Col_marine20.14C&quot;         &quot;3Col_marine98.14C&quot;        
+## [11] &quot;3Col_shcal13.14C&quot;          &quot;3Col_shcal20.14C&quot;         
+## [13] &quot;intcal20_data_sources.txt&quot; &quot;intcal20_data.txt&quot;        
+## [15] &quot;Kure.14C&quot;                  &quot;LevinKromer.14C&quot;          
+## [17] &quot;postbomb_NH1.14C&quot;          &quot;postbomb_NH2.14C&quot;         
+## [19] &quot;postbomb_NH3.14C&quot;          &quot;postbomb_SH1-2.14C&quot;       
+## [21] &quot;postbomb_SH3.14C&quot;          &quot;Santos.14C&quot;               
+## [23] &quot;shcal20_data_sources.txt&quot;  &quot;shcal20_data.txt&quot;</code></pre>
+<p>You can also combine calibration curves, e.g. a 40%/60% mix of Intcal20 and Marine20 with a 100+-20 year offset for the latter. The resulting curve will be saved with the name mixed.14C, in a folder together with the calibration curves. The name of this folder is listed, and it can be changed by specifying the option ‘dir’.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">mix.ccurves</span>(<span class="fl">0.4</span>, <span class="dt">cc1=</span><span class="st">&quot;IntCal20&quot;</span>, <span class="dt">cc2=</span><span class="st">&quot;Marine20&quot;</span>, <span class="dt">offset=</span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">20</span>))</span></code></pre></div>
+<pre><code>## mixed.14C saved in folder /tmp/RtmpYXhBbM</code></pre>
+<p>To glue prebomb and postbomb calibration curves into one and store it as a variable in your session (for example, IntCal20 and the NH1 postbomb curve):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>glued &lt;-<span class="st"> </span><span class="kw">glue.ccurves</span>(<span class="st">&quot;IntCal20&quot;</span>, <span class="st">&quot;NH1&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="kw">plot</span>(glued[<span class="dv">1</span><span class="op">:</span><span class="dv">650</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;cal BP&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;C-14 BP&quot;</span>, <span class="dt">pch=</span><span class="st">&quot;.&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<hr />
+<p><br> <a href="./plots.html">next (plots) -&gt;</a> <br></p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Reimer PJ et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0–55 cal kBP). Radiocarbon 62, 725-757 <!-- [doi:10.1017/RDC.2020.41](http://dx.doi.org/10.1017/RDC.2020.41){target="_blank"} --><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Heaton TJ et al., 2020. Marine20—The Marine Radiocarbon Age Calibration Curve (0–55,000 cal BP). Radiocarbon 62, 779-820 <!--[doi:10.1017/RDC.2020.68](http://dx.doi.org/10.1017/RDC.2020.68){target="_blank"} --><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Hogg AG et al., 2020. SHCal20 Southern Hemisphere Calibration, 0–55,000 Years cal BP. Radiocarbon 62, 759-778 <!--[doi:10.1017/RDC.2020.59](http://dx.doi.org/10.1017/RDC.2020.59){target="_blank"} --><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Hua Q et al. 2013. Atmospheric Radiocarbon for the Period 1950–2010 Radiocarbon 55, 2059-2072. <!--[doi:10.2458/azu_js_rc.v55i2.16177](http://dx.doi.org/10.2458/azu_js_rc.v55i2.16177){target="_blank"} --><a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Levin I, Kromer, B, 2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46, 1261-1272 <!--[doi:10.1017/S0033822200033130](http://dx.doi.org/10.1017/S0033822200033130){target="_blank"} --><a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (<em>Araucaria angustifolia</em>): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25, 96-103 <!--[doi:10.1016/j.quageo.2014.10.004](http://dx.doi.org/10.1016/j.quageo.2014.10.004){target="_blank"} --><a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58, 531-548 <!--[doi:10.1017/RDC.2016.32](http://dx.doi.org/10.1017/RDC.2016.32){target="_blank"} --><a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

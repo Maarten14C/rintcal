@@ -1,0 +1,69 @@
+---
+title: "IntCal - calculations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{calculations}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include=FALSE}
+require(IntCal)
+```
+
+The IntCal package also provides some functions related to radiocarbon calibration. First there are two functions to calculate radiocarbon ages from pMC values (in this case of a postbomb date):
+
+```{r}
+pMC.age(150, 1)
+```
+
+and the other way round:
+
+```{r}
+age.pMC(-2300, 40)
+```
+
+We can also obtain the calibrated probability distributions from radiocarbon dates, e.g. one of 130 +- 20 C14 BP:
+
+```{r, fig.width=4, fig.asp=.8}
+calib.130 <- caldist(130, 20, BCAD=TRUE)
+plot(calib.130, type="l")
+```
+
+For reporting purposes, calibrated dates are often reduced to their 95% highest posterior density (hpd) ranges (please report all, not just your favourite one!):
+
+```{r}
+hpd(calib.130)
+```
+
+Want a plot of the radiocarbon and calibrated dates, together with their hpd ranges?
+
+```{r, fig.width=5, fig.asp=1}
+calibrate(130,20)
+```
+
+You can also draw one or more calibrated distributions:
+
+```{R, fig.width=4, fig.asp=1}
+dates <- sort(runif(5, 100, 1000))
+errors <- .05*dates
+depths <- 4:0
+labels <- c("my", "very", "own", "simulated", "dates")
+draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels)
+```
+
+or add them to an existing plot:
+
+```{R, fig.width=4, fig.asp=1}
+plot(0, type="n", xlim=c(600, 1850), ylim=c(0,5), xlab="AD", ylab="dates")
+draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE, labels=labels)
+```
+
+
+
+***
+
+<br>
+[<- prev (plots)](./plots.html)
+<br>
+
