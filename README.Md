@@ -3,9 +3,9 @@
 This package consists of a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from [intcal.org/curves/](intcal.org/curves/). It could be used to provide data to other R packages, thus requiring less replication and updating of data. The package also contains a number of functions to assist with calibrating dates and plotting calibration curves. 
 
 For tutorials, see:  
-[intro](./doc/intro.html)  
-[calculations](./doc/calculations.html)  
-[plots](./doc/plots.html)  
+[intro](./doc/intro.Rmd)  
+[calculations](./doc/calculations.Rmd)  
+[plots](./doc/plots.Rmd)  
 
 The following curves are included:
 
