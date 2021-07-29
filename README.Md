@@ -1,0 +1,75 @@
+This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. 
+
+For tutorials, see:
+[intro](vignettes/intro.Rmd)
+[calculations](vignettes/calculations.Rmd)
+[plots](vignettes/plots.Rmd)
+
+The folllowing curves are included:
+
+filename				calibration curve
+3Col_intcal20.14C	  	IntCal20 (Reimer et al. 2020)
+3Col_marine20.14C	    Marine20 (Heaton et al. 2020)
+3Col_shcal20.14C		SHCal20 (Hogg et al. 2020)
+intcal13.14c			IntCal13 (Reimer et al. 2013)
+marine13.14c			Marine13 (Reimer et al. 2013)
+shcal13.14c				SHCal13 (Hogg et al. 2013)
+intcal09.14c			IntCal09 (Reimer et al. 2009)
+marine09.14c			Marine09 (Reimer et al. 2009)
+intcal04.14c			IntCal04 (Reimer et al. 2004)
+marine04.14c			Marine04 (Hughen et al. 2004)
+shcal04.14c				SHCal04 (McCormac et al. 2004)
+intcal98.14c			IntCal98 (Stuiver et al. 1998a)
+marine98.14c			Marine98 (Stuiver et al. 1998b)
+
+The formats of the curves were adapted to plain-text files with three columns separated by spaces: cal BP, and 14C BP sigma. The values are ordered according to increasing cal BP age, and any commented lines were removed. See TranslateCal20.R for details. 
+
+Professor Paula Reimer, head of the IntCal steering group, kindly gave permission to include the IntCal curves into a single package.
+
+Additionally, the following postbomb curves were downloaded from calib.org/CALIBomb/ and are included in this data package:
+
+filename						postbomb calibration curve
+postbomb_NH1.14C		postbomb NH zone 1 (Hua et al. 2013)
+postbomb_NH2.14C		postbomb NH zone 2 (Hua et al. 2013)
+postbomb_NH3.14C		postbomb NH zone 3 (Hua et al. 2013)
+postbomb_SH1-2.14C	postbomb SH zones 1-2 (Hua et al. 2013)
+postbomb_SH3.14C		postbomb SH zone 2 (Hua et al. 2013)
+Kure.14c						Hawaiian coral (Andrews et al. 2016)
+Levin-Kromer_2004.14c	A concatenation of Levin & Kromer (2004) and Hammer & Levin (2017)
+Santos.14c					Brazilian tree rings (Santos et al. 2015)
+
+F14C ages in the postbomb files were translated to (negative) 14C ages.
+
+References
+
+Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58:531-548 <doi:10.1017/RDC.2016.32>
+
+Hammer S, Levin I, 2017, Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016. heiDATA: Heidelberg Research Data Repository <doi:10.11588/data/10100>
+
+Heaton TJ, Kohler P, Butzin M, Bard E, Reimer RW, Austin WEN, Bronk Ramsey C, Grootes PM, Hughen KA, Kromer B, Reimer PJ, Adkins J, Burke A, Cook MS, Olsen J, Skinner LC, 2020. Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62 <doi:10.1017/RDC.2020.68>
+
+Hua Q, Barbetti M, Rakowski A, 2013. Atmospheric radiocarbon for the period 1950–2010. Radiocarbon, 2059-2072. <doi:10.2458/azu_js_rc.v55i2.16177>
+
+Hogg AG, Hua Q, Blackwell, PG Buck CE, Guilderson TP, Heaton TJ, Niu M, Palmer JG, Reimer PJ, Reimer RW, Turney CSM, Zimmerman SRH, 2013. SHCal13 southern hemisphere calibration, 0–50,000 years cal BP. Radiocarbon 55(4) <doi:10.2458/azu_js_rc.55.16783>
+
+Hogg AG, Heaton TJ, Hua Q, Palmer JG, Turney CSM, Southon J, Bayliss A, Blackwell PG, Boswijk G, Bronk Ramsey C, Pearson C, Petchey F, Reimer PJ, Reimer R, Wacker L.  2020. SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62 <doi:10.1017/RDC.2020.59>
+
+Hughen KA, Baillie MGL, Bard E, Bayliss A, Beck JW, Bertrand C, Blackwell PG, Buck CE, Burr G, Cutler KB, Damon PE, Edwards RL, Fairbanks RG, Friedrich M, Guilderson TP, Kromer B, McCormac FG, Manning S, Bronk Ramsey C, Reimer PJ, Reimer RW, Remmele S, Southon JR, Stuiver M, Talamo S, Taylor FW, van der Plicht J, Weyhenmeyer CE, 2004. Marine04 marine radiocarbon age calibration, 0-26 cal kyr BP. Radiocarbon 46:1059-1086
+
+Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46(3):1261-1272
+
+McCormac FG, Hogg AG, Blackwell PG, Buck CE, Higham TFG, Reimer PJ, 2004. SHCal04 southern hemisphere calibration 0 - 1000 cal BP. Radiocarbon 46:1087-1092
+
+Reimer PJ, Baillie MGL, Bard E, Bayliss A, Beck JW, Bertrand C, Blackwell PG, Buck CE, Burr G, Cutler KB, Damon PE, Edwards RL, Fairbanks RG, Friedrich M, Guilderson TP, Hughen KA, Kromer B, McCormac FG, Manning S, Bronk Ramsey C, Reimer RW, Remmele S, Southon JR, Stuiver M, Talamo S, Taylor FW, van der Plicht J, Weyhenmeyer CE, 2004. IntCal04 terrestrial radiocarbon age calibration, 0-26 cal kyr BP. Radiocarbon 46:1029-1058
+
+Reimer PJ, Baillie MGL, Bard E, Bayliss A, Beck JW, Blackwell PG, Bronk Ramsey C, Buck CE, Burr GS, Edwards RL, Friedrich M, Grootes PM, Guilderson TP, Hajdas I,  Heaton TJ, Hogg AG, Hughen KA, Kaiser KF, Kromer B, McCormac FG, Manning SW, Reimer RW, Richards DA, Southon JR, Talamo S, Turney CSM, van der Plicht J, Weyhenmeyer CE, 2009. IntCal09 and Marine09 radiocarbon age calibration curves, 0-50,000 years cal BP. Radiocarbon 51:1111-1150
+
+Reimer PJ, Bard E, Bayliss A, Beck JW, Blackwell PG, Bronk Ramsey C, Buck CE, Cheng H, Edwards RL, Friedrich M, Grootes PM, Guilderson TP, Haflidason H, Hajdas I, Hatte C, Heaton TJ, Hogg AG, Hughen KA, Kaiser KF, Kromer B, Manning SW, Niu M, Reimer RW, Richards DA, Scott EM, Southon JR, Turney CSM, van der Plicht J. 2013. IntCal13 and Marine13 radiocarbon age calibration curves 0-50000 years calBP. Radiocarbon 55(4) <doi:10.2458/azu_js_rc.55.16947>
+
+Reimer PJ, Austin WEN, Bard E, Bayliss A, Blackwell PG, Bronk Ramsey C, Butzin M, Cheng H, Edwards RL, Friedrich M, Grootes PM, Guilderson TP, Hajdas I, Heaton TJ, Hogg AG, Hughen KA, Kromer B, Manning SW, Muscheler R, Palmer JG, Pearson C, van der Plicht J, Reimer RW, Richards DA, Scott EM, Southon JR, Turney CSM, Wacker L, Adolphi F, Bentgen U, Capano M, Fahrni S, Fogtmann-Schulz A, Friedrich R, Kohler P, Kudsk S, Miyake F, Olsen J, Reinig F, Sakamoto M, Sookdeo A, Talamo S. 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62 <doi:10.1017/RDC.2020.41>
+
+Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (Araucaria angustifolia): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25:96-103
+
+Stuiver M, Reimer PJ, Bard E, Beck JW, Burr GS, Hughen KA, Kromer B, McCormac FG, van der Plicht J, Spurk M, 1998a. IntCal98 radiocarbon age calibration, 24,000-0 calBP. Radiocarbon 40:1041-1083
+
+Stuiver M, Reimer PJ, Braziunas TF, 1998b. High-precision radiocarbon age calibation for terrestrial and marine samples. Radiocarbon 40:1127-1151
