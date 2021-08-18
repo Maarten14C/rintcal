@@ -29,7 +29,7 @@
 #' draw.ccurve(1800, 2020, BCAD=TRUE, cc2="nh1", cc2.postbomb=TRUE)
 #' draw.ccurve(1800, 2010, BCAD=TRUE, cc2="nh1", add.yaxis=TRUE)
 #' @export
-draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbomb=FALSE, cc2.postbomb=FALSE,  BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, add.yaxis=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), add=FALSE, bty="l", ...) {
+draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbomb=FALSE, cc2.postbomb=FALSE, BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, add.yaxis=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), add=FALSE, bty="l", ...) {
 
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1, cc1.postbomb)
@@ -56,30 +56,31 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 
   if(!add) { # then prepare plotting parameters
     if(is.na(cal.lab))
-      cal.lab <- "cal. yr BP"
+      if(ka) {
+        if(BCAD) 
+          cal.lab <- "ka BC/AD" else
+            cal.lab <- "kcal BP"
+      } else
+        if(BCAD)
+          cal.lab <- "BC/AD" else
+            cal.lab <- "cal. yr BP"
     if(is.na(c14.lab))
-      c14.lab <- expression(""^14*C~BP)
+      if(ka)
+        c14.lab <- expression(""^14*C~kBP) else
+          c14.lab <- expression(""^14*C~BP)
 
     cal.lim <- c(cal1, cal2)
     if(cal.rev)
       cal.lim <- rev(cal.lim)
-
-    if(BCAD)
-      if(is.na(cal.lab))
-        cal.lab <- "BC/AD"
-
-    if(ka) {
-      if(is.na(c14.lab))
-        c14.lab <- expression(""^14*C~kBP)
-      if(is.na(cal.lab))
-        cal.lab <- ifelse(BCAD, "kcal BC/AD", "kcal BP")
+    if(ka) 
       cal.lim <- cal.lim/1e3
-    }
 
-    if(is.na(c14.lim))
-      if(is.na(cc2) || add.yaxis)
+    if(is.na(c14.lim[1]))
+      if(is.na(cc2))
         c14.lim <- range(cc1.pol[,2]) else
-          c14.lim <- range(cc1.pol[,2], cc2.pol[,2])
+          if(add.yaxis)
+            c14.lim <- range(cc1.pol[,2]) else
+              c14.lim <- range(cc1.pol[,2], cc2.pol[,2])
     if(c14.rev)
       c14.lim <- rev(c14.lim)
 
@@ -382,7 +383,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param hpd.lwd Width of the line of the hpd ranges
 #' @param hpd.col Colour of the hpd rectangle
 #' @param mirror Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.
-#' @param up If mirror is not supplied, the distribution can be plotted up or down, depending on the direction of the axis.
+#' @param up If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.
 #' @param on.axis Which axis to plot on. Defaults to 'x' or 1, but can be set to 'y' or 2. 
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
@@ -404,7 +405,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=FALSE, up=TRUE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab="", cal.lim=c(), y.lab="", y.lim=c(), labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab=c(), cal.lim=c(), y.lab=c(), y.lim=c(), labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -427,9 +428,11 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), c
       border <- rep(border, length(age))
   }
   
-  max.hght <- 0; age.range <- c()
+  max.hght <- 0; age.range <- c();
   for(i in 1:length(age)) {
-    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD)  
+    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD)
+    tmp <- approx(tmp[,1], tmp[,2], min(tmp[,1]):max(tmp[,1]))
+    tmp <- cbind(tmp$x, tmp$y/sum(tmp$y))
     max.hght <- max(max.hght, tmp[,2])
     age.range <- range(age.range, range(tmp[,1]))
   }
@@ -437,24 +440,34 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), c
   if(!add) {
     if(length(cal.lab) == 0)
       cal.lab <- ifelse(BCAD, "BC/AD", "cal BP")
+    if(length(y.lab) == 0)
+      y.lab <- "depth"
     if(length(cal.lim) == 0)
-      cal.lim <- age.range
+      cal.lim <- age.range[2:1]
     if(length(y.lim) == 0)
-      y.lim <- c(0, 1+length(age))
+      y.lim <- range(depth, depth-ex, depth+ex)[2:1]
     plot(0, type="n", xlim=cal.lim, xlab=cal.lab, ylim=y.lim, ylab=y.lab, ...)
   }
   
   for(i in 1:length(age)) {
-    dat <- hpd(caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD, threshold=threshold), prob, return.raw=TRUE)
 
+    dat <- hpd(caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD, threshold=threshold), prob, return.raw=TRUE)
     probs <- dat[[1]]
     hpds <- dat[[2]]
+
+    probs <- approx(probs[,1], probs[,2], min(probs[,1]):max(probs[,1]))
+    probs <- cbind(probs$x, probs$y/sum(probs$y))
+
+#    if(min(diff(probs[,1])) >=1) # if
+#      if(length(unique(diff(probs[,1]))) > 1)
+#        probs[,2] <- probs[,2] / max(diff(probs[,1]))
+
     if(normalise)
-      probs[,2] <- probs[,2]/max.hght else # normalise by setting the peal of the most precise date at 1
+      probs[,2] <- probs[,2] / (max.hght) else # most precise date peaks at 1. Correcting for different calcurve steps
         probs[,2] <- probs[,2]/max(probs[,2])
 
     if(mirror) {
-      pol <- cbind(c(probs[,1], rev(probs[,1])), depth[i]+ex*c(probs[,2], -rev(probs[,2])))
+      pol <- cbind(c(probs[,1], rev(probs[,1])), depth[i]+(ex/2)*c(probs[,2], -rev(probs[,2])))
       } else
         if(up)
           pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]+ex*c(0, probs[,2], 0)) else

@@ -12,7 +12,9 @@
 #' @name IntCal
 NULL
 
-# todo:
+# todo: add another caldist function a la l.calib of coffee for single cal yrs but multiple dates? hpds sometimes are >100%??? prepare calib function with MCMC ccurve.
+
+# done: repaired problems with depths and calheights in draw.dates, draw.ccurve now plots correct label when BCAD, c14.lim now estimated correctly when a second curve is added
 
 
 #' @name list.ccurves
