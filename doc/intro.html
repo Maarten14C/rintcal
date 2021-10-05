@@ -370,7 +370,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>?ccurve</span></code></pre></div>
 <p>To get a list of available curves and associated files (and where they can be found):</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">list.ccurves</span>()</span></code></pre></div>
-<pre><code>## /tmp/RtmpXGJ1L4/temp_libpath5a5036a0a77a8/IntCal/extdata/</code></pre>
+<pre><code>## /tmp/RtmpNRfQoR/temp_libpath5e1b45147a6c5/IntCal/extdata/</code></pre>
 <pre><code>##  [1] &quot;3Col_intcal04.14C&quot;         &quot;3Col_intcal09.14C&quot;        
 ##  [3] &quot;3Col_intcal13.14C&quot;         &quot;3Col_intcal20.14C&quot;        
 ##  [5] &quot;3Col_intcal98.14C&quot;         &quot;3Col_marine04.14C&quot;        
@@ -385,7 +385,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ## [23] &quot;shcal20_data_sources.txt&quot;  &quot;shcal20_data.txt&quot;</code></pre>
 <p>You can also combine calibration curves, e.g. a 40%/60% mix of Intcal20 and Marine20 with a 100+-20 year offset for the latter. The resulting curve will be saved with the name mixed.14C, in a folder together with the calibration curves. The name of this folder is listed, and it can be changed by specifying the option ‘dir’.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">mix.ccurves</span>(<span class="fl">0.4</span>, <span class="dt">cc1=</span><span class="st">&quot;IntCal20&quot;</span>, <span class="dt">cc2=</span><span class="st">&quot;Marine20&quot;</span>, <span class="dt">offset=</span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">20</span>))</span></code></pre></div>
-<pre><code>## mixed.14C saved in folder /tmp/RtmpXGJ1L4</code></pre>
+<pre><code>## mixed.14C saved in folder /tmp/RtmpNRfQoR</code></pre>
 <p>To glue prebomb and postbomb calibration curves into one and store it as a variable in your session (for example, IntCal20 and the NH1 postbomb curve):</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>glued &lt;-<span class="st"> </span><span class="kw">glue.ccurves</span>(<span class="st">&quot;IntCal20&quot;</span>, <span class="st">&quot;NH1&quot;</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="kw">plot</span>(glued[<span class="dv">1</span><span class="op">:</span><span class="dv">650</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;cal BP&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;C-14 BP&quot;</span>, <span class="dt">pch=</span><span class="st">&quot;.&quot;</span>)</span></code></pre></div>

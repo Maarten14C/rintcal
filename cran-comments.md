@@ -7,4 +7,4 @@
 
 0 errors | 0 warnings | 0 notes
 
-* No issues with reverse dependencies (packages rbacon, clam)
+* No issues with reverse dependencies (packages rbacon, clam, coffee)
