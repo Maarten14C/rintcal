@@ -18,13 +18,14 @@ hpd(calib.130)
 calibrate(130,20)
 
 ## ---- fig.width=4, fig.asp=1--------------------------------------------------
+set.seed(123)
 dates <- sort(runif(5, 100, 1000))
 errors <- .05*dates
-depths <- 4:0
+depths <- 0:4
 labels <- c("my", "very", "own", "simulated", "dates")
-draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels)
+draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels, cal.lim=range(dates, 600, 1700))
 
 ## ---- fig.width=4, fig.asp=1--------------------------------------------------
-plot(0, type="n", xlim=c(600, 1850), ylim=c(0,5), xlab="AD", ylab="dates")
+plot(0, type="n", xlim=c(600, 1700), ylim=c(5,-1), xlab="AD", ylab="dates")
 draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE, labels=labels)
 

@@ -392,6 +392,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param cal.lim Limits of the calendar axis (if present)
 #' @param y.lab Title of the vertical axis (if present)
 #' @param y.lim Limits of the vertical axis (if present)
+#' @param y.rev Reverse the y-axis. Defaults to TRUE
 #' @param labels Add labels to the dates. Empty by default.
 #' @param label.x Horizontal position of the date labels. By default draws them before the youngest age (1), but can also draw them after the oldest age (2), or above its mean (3). 
 #' @param label.y Vertical positions of the labels. Defaults to 0 (or 1 if label.x is 3 or 4).
@@ -405,7 +406,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab=c(), cal.lim=c(), y.lab=c(), y.lim=c(), labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab=c(), cal.lim=c(), y.lab=c(), y.lim=c(), y.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -443,9 +444,13 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), c
     if(length(y.lab) == 0)
       y.lab <- "depth"
     if(length(cal.lim) == 0)
-      cal.lim <- age.range[2:1]
+      cal.lim <- age.range
+    if(!BCAD)
+      cal.lim <- cal.lim[2:1]
     if(length(y.lim) == 0)
-      y.lim <- range(depth, depth-ex, depth+ex)[2:1]
+      y.lim <- range(depth, depth-ex, depth+ex)
+    if(y.rev)
+      y.lim <- rev(y.lim)
     plot(0, type="n", xlim=cal.lim, xlab=cal.lab, ylim=y.lim, ylab=y.lab, ...)
   }
   
@@ -482,6 +487,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), c
 
     if(length(labels) > 0) {
       xx <- c(min(probs[,1]), max(probs[,1]), mean(probs[,1]))
+      if(!BCAD) xx <- xx[c(2,1,3)]
       x <- xx[label.x]
       if(length(label.y) == 0) {
         y <- depth[i]   

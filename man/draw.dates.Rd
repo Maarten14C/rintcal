@@ -20,16 +20,17 @@ draw.dates(
   draw.hpd = TRUE,
   hpd.lwd = 2,
   hpd.col = rgb(0, 0, 1, 0.7),
-  mirror = FALSE,
-  up = TRUE,
+  mirror = TRUE,
+  up = FALSE,
   on.axis = 1,
   col = rgb(0, 0, 1, 0.3),
   border = rgb(0, 0, 1, 0.5),
   add = FALSE,
-  cal.lab = "",
+  cal.lab = c(),
   cal.lim = c(),
-  y.lab = "",
+  y.lab = c(),
   y.lim = c(),
+  y.rev = TRUE,
   labels = c(),
   label.x = 1,
   label.y = c(),
@@ -74,7 +75,7 @@ draw.dates(
 
 \item{mirror}{Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.}
 
-\item{up}{If mirror is not supplied, the distribution can be plotted up or down, depending on the direction of the axis.}
+\item{up}{If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.}
 
 \item{on.axis}{Which axis to plot on. Defaults to 'x' or 1, but can be set to 'y' or 2.}
 
@@ -91,6 +92,8 @@ draw.dates(
 \item{y.lab}{Title of the vertical axis (if present)}
 
 \item{y.lim}{Limits of the vertical axis (if present)}
+
+\item{y.rev}{Reverse the y-axis. Defaults to TRUE}
 
 \item{labels}{Add labels to the dates. Empty by default.}
 

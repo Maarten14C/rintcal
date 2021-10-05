@@ -10,7 +10,6 @@ draw.ccurve(1600, 1950, BCAD=TRUE)
 ## ---- fig.width=4, fig.asp=.8-------------------------------------------------
 draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1')
 
-
 ## ---- fig.width=4, fig.asp=.8-------------------------------------------------
 draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1', add.yaxis=TRUE)
 

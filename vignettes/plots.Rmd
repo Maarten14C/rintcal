@@ -27,8 +27,7 @@ Interesting things happened after 1950, as can be seen by adding a postbomb curv
 
 ```{r, fig.width=4, fig.asp=.8}
 draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1')
-
-````
+```
 
 The postbomb curve dwarves the IntCal20 curve, so we could also plot both on separate vertical axes: 
 
