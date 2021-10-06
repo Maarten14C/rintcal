@@ -8,3 +8,5 @@
 0 errors | 0 warnings | 0 notes
 
 * No issues with reverse dependencies (packages rbacon, clam, coffee)
+
+* Rmd files now have matching code chunk delimiters - solved problem reported by Kurt Hornik
