@@ -9,4 +9,3 @@
 
 * No issues with reverse dependencies (packages rbacon, clam, coffee)
 
-* Rmd files now have matching code chunk delimiters - solved problem reported by Kurt Hornik

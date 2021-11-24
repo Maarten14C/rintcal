@@ -1,3 +1,9 @@
+# IntCal 0.2.4
+* now includes the updated postbomb curves, published by Hua et al. 2021
+* repaired problems with depths and calheights in draw.dates
+* draw.ccurve now plots correct label when BCAD
+* c14.lim now estimated correctly when a second curve is added
+
 # IntCal 0.2.3
 * draw.ccurve now plots the correct label when using BCAD, and plots depths at the expected heights
 * draw.dates now plots multiple dates at the expected heights (with more precise dates peaking higher)
