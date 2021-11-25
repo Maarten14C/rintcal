@@ -57,7 +57,7 @@
 
 # postbomb curves:
 
-# NH1, NH2, NH3, SH1-2 and SH3 postbomb curves from Hua et al. 2021 doi:10.1017/RDC.2021.95
+# NH1, NH2, NH3, SH1-2 and SH3 postbomb curves from Hua et al. 2021 doi:10.1017/RDC.2021.95. The radiocarbon data were translated from delta14C to radiocarbon ages.
 
 # kure <- read.table("inst/extdata/Kure.14c", skip=11, header=FALSE)
 # as.c <- array(pMC.age(kure[,2], kure[,3], ratio=1), dim=c(nrow(kure),2))

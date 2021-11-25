@@ -1,8 +1,8 @@
 ---
-title: calculations
+title: 3. calculations
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calculations}
+  %\VignetteIndexEntry{3. calculations}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

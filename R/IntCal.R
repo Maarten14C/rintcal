@@ -51,7 +51,7 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 #' @return The calibration curve (invisible).
 #' @param cc Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
 #' \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13".
-#' @param postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}).
+#' @param postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -137,15 +137,25 @@ ccurve <- function(cc=1, postbomb=FALSE) {
                                   fl <- "postbomb_SH1-2.14C" else
                                   if(tolower(cc) == "sh3")
                                     fl <- "postbomb_SH3.14C" else
-                                    if(tolower(cc) == "kure")
-                                      fl <- "kure.14C" else
-                                      if(tolower(cc) == "levinkromer")
-                                        fl <- "LevinKromer.14C" else
-                                        if(tolower(cc) == "santos")
-                                          fl <- "Santos.14C" else
-                                          if(tolower(cc) == "mixed")
-                                            fl <- "mixed.14C" else
-                                            stop("cannot find this curve", call.=FALSE)
+                                    if(tolower(cc) == "nh1_monthly")
+                                      fl <- "postbomb_NH1_monthly.14C" else
+                                      if(tolower(cc) == "nh2_monthly")
+                                        fl <- "postbomb_NH2_monthly.14C" else
+                                        if(tolower(cc) == "nh3_monthly")
+                                          fl <- "postbomb_NH3_monthly.14C" else
+                                          if(tolower(cc) == "sh1-2_monthly")
+                                            fl <- "postbomb_SH1-2_monthly.14C" else
+                                            if(tolower(cc) == "sh3_monthly")
+                                              fl <- "postbomb_SH3_monthly.14C" else
+                                              if(tolower(cc) == "kure")
+                                                fl <- "kure.14C" else
+                                                if(tolower(cc) == "levinkromer")
+                                                  fl <- "LevinKromer.14C" else
+                                                  if(tolower(cc) == "santos")
+                                                    fl <- "Santos.14C" else
+                                                    if(tolower(cc) == "mixed")
+                                                      fl <- "mixed.14C" else
+                                                      stop("cannot find this curve", call.=FALSE)
   cc <- system.file("extdata/", fl, package='IntCal')
   cc <- read.table(cc)
   invisible(cc)
@@ -206,5 +216,8 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
 glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1") {
   glued <- rbind(ccurve(prebomb, FALSE), ccurve(postbomb, TRUE))
   glued <- glued[order(glued[,1]),]
-  invisible(glued[-which(diff(glued[,1]) == 0),]) # remove repeated years
+  repeated <- which(diff(glued[,1]) == 0)
+  if(length(repeated) > 0)
+    invisible(glued[-repeated,]) else # remove any repeated years
+      invisible(glued[order(glued[,1]),])
 }

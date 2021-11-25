@@ -1,8 +1,8 @@
 ---
-title: "IntCal - plots"
+title: 2. plots
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{plots}
+  %\VignetteIndexEntry{2. plots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

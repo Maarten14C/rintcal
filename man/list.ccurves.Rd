@@ -2,7 +2,7 @@
 % Please edit documentation in R/IntCal.R
 \name{list.ccurves}
 \alias{list.ccurves}
-\title{List the calibration curves.}
+\title{List the calibration curves}
 \usage{
 list.ccurves()
 }

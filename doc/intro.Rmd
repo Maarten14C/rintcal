@@ -1,13 +1,13 @@
 ---
-title: IntCal - introduction
+title: 1. introduction
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{introduction}
+  %\VignetteIndexEntry{1. introduction}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-The international IntCal group provides ratified radiocarbon calibration curves such as IntCal20 (for northern hemisphere terrestrial radiocarbon dates; Reimer et al. 2020[^1]), Marine20 (for marine dates; Heaton et al. 2020[^2]) and SHCal20 (Hogg et al. 2020[^3]). This package provides these curves, as well as previous iterations (IntCal13, Marine13, SHCal13, IntCal09, Marine09, IntCal04, Marine04, SHCal04, IntCal98, Marine98) and postbomb curves (Hua et al. 2013[^4], Levin and Kromer 2004[^5], Santos et al. 2015[^6], Andrews et al. 2016[^7]). 
+The international IntCal group provides ratified radiocarbon calibration curves such as IntCal20 (for northern hemisphere terrestrial radiocarbon dates; Reimer et al. 2020[^1]), Marine20 (for marine dates; Heaton et al. 2020[^2]) and SHCal20 (Hogg et al. 2020[^3]). This package provides these curves, as well as previous iterations (IntCal13, Marine13, SHCal13, IntCal09, Marine09, IntCal04, Marine04, SHCal04, IntCal98, Marine98) and postbomb curves (Levin and Kromer 2004[^4], Santos et al. 2015[^5], Andrews et al. 2016[^6], Hua et al. 2021[^7]).
 
 On first usage of the package, it has to be installed: 
 
@@ -15,7 +15,7 @@ On first usage of the package, it has to be installed:
 install.packages('IntCal')
 ``` 
 
-If you have a recent version of rbacon, rplum or clam installed on your computer, IntCal will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to remain up-to-date, or use:
+If you have a recent version of `rbacon`, `rplum` or `clam` installed on your computer, `IntCal` will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to remain up-to-date, or use:
 
 ```{r, eval=FALSE}
 update.packages()
@@ -73,10 +73,10 @@ plot(glued[1:650,1:2], xlab="cal BP", ylab="C-14 BP", pch=".")
 
 [^3]: Hogg AG et al., 2020. SHCal20 Southern Hemisphere Calibration, 0–55,000 Years cal BP. Radiocarbon 62, 759-778 <!--[doi:10.1017/RDC.2020.59](http://dx.doi.org/10.1017/RDC.2020.59){target="_blank"} -->
 
-[^4]: Hua Q et al. 2013. Atmospheric Radiocarbon for the Period 1950–2010 Radiocarbon 55, 2059-2072. <!--[doi:10.2458/azu_js_rc.v55i2.16177](http://dx.doi.org/10.2458/azu_js_rc.v55i2.16177){target="_blank"} -->
+[^4]: Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46, 1261-1272 <!--[doi:10.1017/S0033822200033130](http://dx.doi.org/10.1017/S0033822200033130){target="_blank"} -->
 
-[^5]: Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46, 1261-1272 <!--[doi:10.1017/S0033822200033130](http://dx.doi.org/10.1017/S0033822200033130){target="_blank"} -->
+[^5]: Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25, 96-103 <!--[doi:10.1016/j.quageo.2014.10.004](http://dx.doi.org/10.1016/j.quageo.2014.10.004){target="_blank"} -->
 
-[^6]: Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25, 96-103 <!--[doi:10.1016/j.quageo.2014.10.004](http://dx.doi.org/10.1016/j.quageo.2014.10.004){target="_blank"} -->
+[^6]: Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58, 531-548 <!--[doi:10.1017/RDC.2016.32](http://dx.doi.org/10.1017/RDC.2016.32){target="_blank"} -->
 
-[^7]: Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58, 531-548 <!--[doi:10.1017/RDC.2016.32](http://dx.doi.org/10.1017/RDC.2016.32){target="_blank"} -->
+[^7]: Hua Q et al. 2021. Atmospheric Radiocarbon for the Period 1950–2019 Radiocarbon <!--[doi:10.2458/azu_js_rc.v55i2.16177](http://dx.doi.org/10.2458/azu_js_rc.v55i2.16177){target="_blank"} -->

@@ -10,7 +10,7 @@ ccurve(cc = 1, postbomb = FALSE)
 \item{cc}{Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
 \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13".}
 
-\item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}).}
+\item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}}
 }
 \value{
 The calibration curve (invisible).
@@ -36,6 +36,8 @@ Hogg et al. 2013 SHCal13 Southern Hemisphere Calibration, 0–50,000 Years cal B
 Hogg et al. 2020 SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62. \doi{10.1017/RDC.2020.59}
 
 Hua et al. 2013 Atmospheric radiocarbon for the period 1950-2010. Radiocarbon 55(4), \doi{10.2458/azu_js_rc.v55i2.16177}
+
+Hua et al. 2021 Atmospheric radiocarbon for the period 1950-2019. Radiocarbon in press,  \doi{10.1017/RDC.2021.95}
 
 Hughen et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62. \doi{10.1017/RDC.2020.68}
 
