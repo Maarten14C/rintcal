@@ -4,7 +4,7 @@
 #' @return The calibration curve (invisible).
 #' @param cal1 First calendar year for the plot
 #' @param cal2 Last calendar year for the plot
-#' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "Kure", "LevinKromer" or "Santos" for postbomb curves.
+#' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "nh1_monthly", "nh1_monthly", "nh2_monthly", "nh3_monthly", "sh1-2_monthly", "sh3_monthly", "Kure", "LevinKromer" or "Santos" for postbomb curves.
 #' @param cc2 Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.
 #' @param cc1.postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve for cc1 (default \code{cc1.postbomb=FALSE}).
 #' @param cc2.postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve for cc2 (default \code{cc2.postbomb=FALSE}).

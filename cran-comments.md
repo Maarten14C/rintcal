@@ -7,5 +7,5 @@
 
 0 errors | 0 warnings | 0 notes
 
-* No issues with reverse dependencies (packages rbacon, clam, coffee)
+* Confirmed with revdepcheck that there are no issues with reverse dependencies (packages rbacon, clam, coffee)
 

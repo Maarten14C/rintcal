@@ -33,7 +33,7 @@ draw.ccurve(
 
 \item{cal2}{Last calendar year for the plot}
 
-\item{cc1}{Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "Kure", "LevinKromer" or "Santos" for postbomb curves.}
+\item{cc1}{Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "nh1_monthly", "nh1_monthly", "nh2_monthly", "nh3_monthly", "sh1-2_monthly", "sh3_monthly", "Kure", "LevinKromer" or "Santos" for postbomb curves.}
 
 \item{cc2}{Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.}
 
