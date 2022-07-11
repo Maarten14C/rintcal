@@ -284,13 +284,13 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
     cc.min <- max(1, min(which(Cc[,1] >= min(cal.lim))))
     cc.max <- min(nrow(Cc), max(which(Cc[,1] <= max(cal.lim))))
   } else {
-     cc.min <- min(which(Cc[,2] >= min(C14.lim)))
-     cc.max <- max(which(Cc[,2] <= max(C14.lim)))
+     cc.min <- min(C14.lim, which(Cc[,2] >= min(C14.lim)))
+     cc.max <- max(C14.lim, which(Cc[,2] <= max(C14.lim)))
   }
 
   # we don't need the entire calibration curve
   Cc <- Cc[cc.min:cc.max,]
-  cc.lim <- extendrange(c(Cc[,2]-Cc[,3], Cc[,2]+Cc[,3], C14.dist[,1]), f=extend.range)
+  cc.lim <- extendrange(c(cc.min, cc.max, Cc[,2]-Cc[,3], Cc[,2]+Cc[,3], C14.dist[,1]), f=extend.range)
   ccpol <- cbind(c(Cc[,1], rev(Cc[,1])), c(Cc[,2]-Cc[,3], rev(Cc[,2]+Cc[,3])))
 
   # to plot the probability distributions on the age-scales, they need to be transposed
