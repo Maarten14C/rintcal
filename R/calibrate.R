@@ -60,12 +60,13 @@ age.pMC <- function(mn, sdev, ratio=100, decimals=3) {
 #' @param calibt Use the student-t distribution as alternative to the normal distribution. Requires 2 parameters, e.g., \code{calibt=c(3,4)}, defaults to FALSE.
 #' @param BCAD Which calendar scale to use. Defaults to cal BP, \code{BCAD=FALSE}.
 #' @param rule Which extrapolation rule to use. Defaults to \code{rule=1} which returns NAs.
+#' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.
 #' @examples
 #' calib <- caldist(130,20)
 #' plot(calib, type="l")
 #' postbomb <- caldist(-3030, 20, "nh1", BCAD=TRUE)
 #' @export
-caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1e-3, calibt=FALSE, BCAD=FALSE, rule=1) {
+caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1e-3, calibt=FALSE, BCAD=FALSE, rule=1, ccdir=NULL) {
   # deal with cal BP and negative ages	
   if(cc == 0) { # no ccurve needed
     xseq <- seq(age-5*error, age+5*error, length=1e3) # hard-coded values
@@ -75,7 +76,7 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1
       if(!postbomb)
         if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
           stop("This appears to be a postbomb age. Please provide a postbomb curve")
-    cc <- ccurve(cc, postbomb)
+    cc <- ccurve(cc, postbomb, ccdir)
   }
   
   # calibrate; find how far age (measurement) is from cc[,2] of calibration curve
@@ -159,12 +160,13 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' @param cc calibration curve for C14 (see \code{caldist()}).
 #' @param postbomb Whether or not to use a postbomb curve (see \code{caldist()}).
 #' @param rule How should R's approx function deal with extrapolation. If \code{rule=1}, the default, then NAs are returned for such points and if it is 2, the value at the closest data extreme is used.
+#' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.
 #' @author Maarten Blaauw
 #' @examples
 #' calBP.14C(100)
 #' @export
-calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1) {
-  cc <- ccurve(cc, postbomb)
+calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
+  cc <- ccurve(cc, postbomb, ccdir)
   mu <- approx(cc[,1], cc[,2], yr, rule=rule)$y
   er <- approx(cc[,1], cc[,3], yr, rule=rule)$y
   return(c(mu, er))

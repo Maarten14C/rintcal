@@ -4,13 +4,15 @@
 \alias{ccurve}
 \title{Copy a calibration curve}
 \usage{
-ccurve(cc = 1, postbomb = FALSE)
+ccurve(cc = 1, postbomb = FALSE, ccdir = NULL)
 }
 \arguments{
 \item{cc}{Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
 \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13".}
 
 \item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}}
+
+\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 }
 \value{
 The calibration curve (invisible).

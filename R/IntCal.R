@@ -44,6 +44,27 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 }
 
 
+
+#' @name new.ccdir
+#' @title Make directory and fill with calibration curves
+#' @description Make an alternative `curves' directory and fill it with the calibration curves.
+#' @details Copies all calibration curves within the `IntCal' package to the new directory.
+#' @param ccdir Name and location of the new directory. Defaults to `ccurves', a folder within the current working directory, \code{ccdir="./ccurves"}.
+#' @examples
+#' new.ccdir(tempdir())
+#' @export
+new.ccdir <- function(ccdir="./ccurves") {
+  if(!dir.exists(ccdir))
+    dir.create(ccdir)
+
+  # find all calibration curves (files ending in .14C) and copy them into the new directory
+  fl <- list.files(file.path(system.file(package = 'IntCal'), "extdata"), full.names=TRUE, pattern=".14C")
+  file.copy(fl, ccdir)
+  message("Calibration curves placed in folder ", ccdir)
+}
+
+
+
 #' @name ccurve
 #' @title Copy a calibration curve
 #' @description Copy one of the calibration curves into memory.
@@ -52,6 +73,7 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 #' @param cc Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
 #' \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13".
 #' @param postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}
+#' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -83,7 +105,7 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 #'
 #' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000–0 cal BP. Radiocarbon 40, 1041-1083. \doi{10.1017/S0033822200019123}
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE) {
+ccurve <- function(cc=1, postbomb=FALSE, ccdir=NULL) {
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
@@ -103,60 +125,62 @@ ccurve <- function(cc=1, postbomb=FALSE) {
                     fl <- "Santos.14C" else
                       stop("cannot find this postbomb curve\n", call.=FALSE)
   } else
-  if(cc==1 || tolower(cc) == "intcal20")
-    fl <- "3Col_intcal20.14C" else
-    if(cc==2 || tolower(cc) == "marine20")
-      fl <- "3Col_marine20.14C" else
-      if(cc==3 || tolower(cc) == "shcal20")
-        fl <- "3Col_shcal20.14C" else
-        if(tolower(cc) == "intcal13")
-          fl <- "3Col_intcal13.14C" else
-          if(tolower(cc) == "marine13")
-            fl <- "3Col_marine13.14C" else
-            if(tolower(cc) == "shcal13")
-              fl <- "3Col_shcal13.14C" else
-              if(tolower(cc) == "intcal09")
-                fl <- "3Col_intcal09.14C" else
-                if(tolower(cc) == "marine09")
-                  fl <- "3Col_marine09.14C" else
-                  if(tolower(cc) == "intcal04")
-                    fl <- "3Col_intcal04.14C" else
-                    if(tolower(cc) == "marine04")
-                      fl <- "3Col_marine04.14C" else
-                      if(tolower(cc) == "intcal98")
-                        fl <- "3Col_intcal98.14C" else
-                        if(tolower(cc) == "marine98")
-                          fl <- "3Col_marine98.14C" else  
-                          if(tolower(cc) == "nh1")
-                            fl <- "postbomb_NH1.14C" else
-                            if(tolower(cc) == "nh2")
-                              fl <- "postbomb_NH2.14C" else
-                              if(tolower(cc) == "nh3")
-                                fl <- "postbomb_NH3.14C" else
-                                if(tolower(cc) == "sh1-2")
-                                  fl <- "postbomb_SH1-2.14C" else
-                                  if(tolower(cc) == "sh3")
-                                    fl <- "postbomb_SH3.14C" else
-                                    if(tolower(cc) == "nh1_monthly")
-                                      fl <- "postbomb_NH1_monthly.14C" else
-                                      if(tolower(cc) == "nh2_monthly")
-                                        fl <- "postbomb_NH2_monthly.14C" else
-                                        if(tolower(cc) == "nh3_monthly")
-                                          fl <- "postbomb_NH3_monthly.14C" else
-                                          if(tolower(cc) == "sh1-2_monthly")
-                                            fl <- "postbomb_SH1-2_monthly.14C" else
-                                            if(tolower(cc) == "sh3_monthly")
-                                              fl <- "postbomb_SH3_monthly.14C" else
-                                              if(tolower(cc) == "kure")
-                                                fl <- "kure.14C" else
-                                                if(tolower(cc) == "levinkromer")
-                                                  fl <- "LevinKromer.14C" else
-                                                  if(tolower(cc) == "santos")
-                                                    fl <- "Santos.14C" else
-                                                    if(tolower(cc) == "mixed")
-                                                      fl <- "mixed.14C" else
-                                                      stop("cannot find this curve", call.=FALSE)
-  cc <- system.file("extdata/", fl, package='IntCal')
+    if(cc==1 || tolower(cc) == "intcal20")
+      fl <- "3Col_intcal20.14C" else
+      if(cc==2 || tolower(cc) == "marine20")
+        fl <- "3Col_marine20.14C" else
+        if(cc==3 || tolower(cc) == "shcal20")
+          fl <- "3Col_shcal20.14C" else
+          if(tolower(cc) == "intcal13")
+            fl <- "3Col_intcal13.14C" else
+            if(tolower(cc) == "marine13")
+              fl <- "3Col_marine13.14C" else
+              if(tolower(cc) == "shcal13")
+                fl <- "3Col_shcal13.14C" else
+                if(tolower(cc) == "intcal09")
+                  fl <- "3Col_intcal09.14C" else
+                  if(tolower(cc) == "marine09")
+                    fl <- "3Col_marine09.14C" else
+                    if(tolower(cc) == "intcal04")
+                      fl <- "3Col_intcal04.14C" else
+                      if(tolower(cc) == "marine04")
+                        fl <- "3Col_marine04.14C" else
+                        if(tolower(cc) == "intcal98")
+                          fl <- "3Col_intcal98.14C" else
+                          if(tolower(cc) == "marine98")
+                            fl <- "3Col_marine98.14C" else
+                            if(tolower(cc) == "nh1")
+                              fl <- "postbomb_NH1.14C" else
+                              if(tolower(cc) == "nh2")
+                                fl <- "postbomb_NH2.14C" else
+                                if(tolower(cc) == "nh3")
+                                  fl <- "postbomb_NH3.14C" else
+                                  if(tolower(cc) == "sh1-2")
+                                    fl <- "postbomb_SH1-2.14C" else
+                                    if(tolower(cc) == "sh3")
+                                      fl <- "postbomb_SH3.14C" else
+                                       if(tolower(cc) == "nh1_monthly")
+                                        fl <- "postbomb_NH1_monthly.14C" else
+                                        if(tolower(cc) == "nh2_monthly")
+                                          fl <- "postbomb_NH2_monthly.14C" else
+                                          if(tolower(cc) == "nh3_monthly")
+                                            fl <- "postbomb_NH3_monthly.14C" else
+                                            if(tolower(cc) == "sh1-2_monthly")
+                                              fl <- "postbomb_SH1-2_monthly.14C" else
+                                              if(tolower(cc) == "sh3_monthly")
+                                                fl <- "postbomb_SH3_monthly.14C" else
+                                                if(tolower(cc) == "kure")
+                                                  fl <- "kure.14C" else
+                                                  if(tolower(cc) == "levinkromer")
+                                                    fl <- "LevinKromer.14C" else
+                                                    if(tolower(cc) == "santos")
+                                                      fl <- "Santos.14C" else
+                                                      if(tolower(cc) == "mixed")
+                                                        fl <- "mixed.14C" else
+                                                        stop("cannot find this curve", call.=FALSE)
+  if(length(ccdir) == 0)
+    cc <- system.file("extdata/", fl, package='IntCal') else
+      cc <- file.path(ccdir, fl)
   cc <- read.table(cc)
   invisible(cc)
 }

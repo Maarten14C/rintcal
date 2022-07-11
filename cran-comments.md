@@ -1,6 +1,5 @@
 ## Test environments
-* local Fedora install, R 4.1.2
-* local Mac OS, R 4.1.0
+* local Fedora install, R 4.1.3
 * rhub win-builder (devel and release)
 
 ## R CMD check results

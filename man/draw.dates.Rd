@@ -39,6 +39,7 @@ draw.dates(
   label.offset = c(0, 0),
   label.adj = c(1, 0),
   label.rot = 0,
+  ccdir = NULL,
   ...
 )
 }
@@ -110,6 +111,8 @@ draw.dates(
 \item{label.adj}{Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text.}
 
 \item{label.rot}{Rotation of the label. 0 by default (horizontal).}
+
+\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 
 \item{...}{Additional plotting options}
 }

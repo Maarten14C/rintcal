@@ -13,7 +13,8 @@ caldist(
   threshold = 0.001,
   calibt = FALSE,
   BCAD = FALSE,
-  rule = 1
+  rule = 1,
+  ccdir = NULL
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ caldist(
 \item{BCAD}{Which calendar scale to use. Defaults to cal BP, \code{BCAD=FALSE}.}
 
 \item{rule}{Which extrapolation rule to use. Defaults to \code{rule=1} which returns NAs.}
+
+\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 }
 \description{
 Calculate the calibrated distribution of a radiocarbon date.

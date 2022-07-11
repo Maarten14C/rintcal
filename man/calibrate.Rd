@@ -39,6 +39,7 @@ calibrate(
   xaxs = "i",
   yaxs = "i",
   bty = "l",
+  ccdir = NULL,
   ...
 )
 }
@@ -110,6 +111,8 @@ calibrate(
 \item{yaxs}{Whether or not to extend the limits of the vertical axis. Defaults to \code{yaxs="i"} which does not extend the limits.}
 
 \item{bty}{Draw a box around the graph ("n" for none, and "l", "7", "c", "u", "]" or "o" for correspondingly shaped boxes).}
+
+\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 
 \item{...}{Other plotting parameters.}
 }

@@ -12,7 +12,7 @@
 63,tManningKromer
 64,tVienna
 65,tTokyo
-66,tArizona
+66,tDebrecen
 67,tMiyake
 68,tPearson
 69,tZurich
@@ -41,12 +41,12 @@ dataset,    name,     original name,  origin,         references
 8,          tIrvine, UCIAMS,          atmospheric,    17-20
 59,         tGalimberti, Galimberti,  atmospheric,    21
 60,         tMannheim, MAMS,          atmospheric,    22-25
-61,         tAix,    AIX,            atmospheric,    26-27
-62,         tAarhus,  AAR,            atmospheric,    22, 28-30
-63,         tManningKromer, ManningKromer,  atmospheric,    31-32
-64,         tVienna,  VERA,           atmospheric,    33-34
+61,         tAix, AIX,                atmospheric,    26-27
+62,         tAarhus, AAR,             atmospheric,    22, 28-30
+63,         tManningKromer, ManningKromer, atmospheric, 31-32
+64,         tVienna, VERA,            atmospheric,    33-34
 65,         tTokyo, Sakamoto,         atmospheric,    35-39
-66,         tArizona, Debrecen,       atmospheric,    40
+66,         tDebrecen, Debrecen,      atmospheric,    40
 67,         tMiyake, Miyake,          atmospheric,    41
 68,         tPearson, Pearson,        atmospheric,    22, 41-45
 69,         tZurich, ETH,             atmospheric,    22-23, 25, 41, 43, 46-49

@@ -1,3 +1,7 @@
+# IntCal 0.3.1
+* added an option ccdir to provide alternative locations of the calibration curves
+* added a function new.ccdir(), which copies the package's calibration curves into a specified folder
+
 # IntCal 0.3.0
 * updated to the updated postbomb curves (now both yearly and monthly), published by Hua et al. 2021
 * repaired problems with depths and calheights in draw.dates

@@ -25,6 +25,7 @@ draw.ccurve(
   cc2.fill = rgb(0, 0.5, 0, 0.2),
   add = FALSE,
   bty = "l",
+  ccdir = NULL,
   ...
 )
 }
@@ -68,6 +69,8 @@ draw.ccurve(
 \item{add}{Whether or not to add the curve(s) to an existing plot. Defaults to FALSE, which draws a new plot}
 
 \item{bty}{Draw a box around a box of a certain shape. Defaults to \code{bty="l"}.}
+
+\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 
 \item{...}{Any additional optional plotting parameters.}
 }
