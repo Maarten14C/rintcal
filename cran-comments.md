@@ -4,9 +4,10 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
+
+* Regarding the Note about possibly misspelled words: none of the words are misspelled
 
 * I'd like to change the package name from IntCal to rintcal please, so that it becomes clearer that this package is not officially affiliated with the IntCal Working Group (IWG). IWG has made their data available freely on intcal.org and this package aims to provide these data in a readable format, and to provide these data to other R packages, thus requiring less replication and updating of data. 
 
-
-* Confirmed with revdepcheck that there are no issues with reverse dependencies (packages rbacon, clam, coffee). If CRAN accepts the name change, I will then proceed with updating the packages with reverse dependencies accordingly.
+* If CRAN accepts the name change, I will then proceed with updating the packages with reverse dependencies to the IntCal package accordingly.
