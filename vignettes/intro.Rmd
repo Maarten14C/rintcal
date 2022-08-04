@@ -12,10 +12,10 @@ The international IntCal group provides ratified radiocarbon calibration curves 
 On first usage of the package, it has to be installed: 
 
 ```{r, eval=FALSE}
-install.packages('IntCal')
+install.packages('rintcal')
 ``` 
 
-If you have a recent version of `rbacon`, `rplum` or `clam` installed on your computer, `IntCal` will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to remain up-to-date, or use:
+If you have a recent version of `rbacon`, `rplum` or `clam` installed on your computer, `rintcal` will probably have been installed as well. Sometimes new versions of these packages appear, so please re-issue the above command regularly to remain up-to-date, or use:
 
 ```{r, eval=FALSE}
 update.packages()
@@ -24,7 +24,7 @@ update.packages()
 To obtain access to the calibration curves, first the package has to be loaded:
 
 ```{r}
-library(IntCal)
+library(rintcal)
 ```
 
 Now you can load a calibration curve into the memory, for example the default curve IntCal20, and check the first few entries:
@@ -36,7 +36,7 @@ head(ic20)
 
 The files have three columns: cal BP, the corresponding IntCal C14 BP ages, and the uncertainties (1 standard deviation). 
 
-To see more detail of each IntCal function, place a question-mark before the function name, e.g.:
+To see more detail of each rintcal function, place a question-mark before the function name, e.g.:
 
 ```{r, eval=FALSE}
 ?ccurve

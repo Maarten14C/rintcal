@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r, echo=FALSE}
-require(IntCal)
+require(rintcal)
 ```
 
 We can also plot a calibration curve:

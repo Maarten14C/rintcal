@@ -1,3 +1,7 @@
+# rintcal 0.3.2
+* The C14.lim option to specify axis limits in the calibrate() function now works as expected
+* renamed the package from IntCal to rintcal, to highlight the fact that this package is not officially affiliated with the IntCal Working Group
+
 # IntCal 0.3.1
 * added an option ccdir to provide alternative locations of the calibration curves
 * added a function new.ccdir(), which copies the package's calibration curves into a specified folder

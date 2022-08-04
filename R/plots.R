@@ -274,23 +274,26 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   cal.dist <- rbind(cal.dist, c(cal.dist[nrow(cal.dist),1],0))
 
   # calculate limits
-  if(length(cal.lim) == 0)
+  if(length(cal.lim) == 0) {
     cal.lim <- range(dat[,1])
   lims <- cal.lim
   cal.lim <- rev(extendrange(cal.lim, f=extend.range))
   if(cal.rev)
     cal.lim <- rev(cal.lim)
+  } else
+    lims <- cal.lim
   if(length(C14.lim) == 0) {
     cc.min <- max(1, min(which(Cc[,1] >= min(cal.lim))))
     cc.max <- min(nrow(Cc), max(which(Cc[,1] <= max(cal.lim))))
+    # we don't need the entire calibration curve
+    Cc <- Cc[cc.min:cc.max,]
+    cc.lim <- extendrange(c(Cc[,2]-Cc[,3], Cc[,2]+Cc[,3], C14.dist[,1]), f=extend.range)
   } else {
-     cc.min <- min(C14.lim, which(Cc[,2] >= min(C14.lim)))
-     cc.max <- max(C14.lim, which(Cc[,2] <= max(C14.lim)))
+     cc.min <- min(1, which(Cc[,2] >= min(C14.lim)))
+     cc.max <- max(nrow(Cc), which(Cc[,2] <= max(C14.lim)))
+     Cc <- Cc[cc.min:cc.max,]
+     cc.lim <- range(C14.lim)
   }
-
-  # we don't need the entire calibration curve
-  Cc <- Cc[cc.min:cc.max,]
-  cc.lim <- extendrange(c(cc.min, cc.max, Cc[,2]-Cc[,3], Cc[,2]+Cc[,3], C14.dist[,1]), f=extend.range)
   ccpol <- cbind(c(Cc[,1], rev(Cc[,1])), c(Cc[,2]-Cc[,3], rev(Cc[,2]+Cc[,3])))
 
   # to plot the probability distributions on the age-scales, they need to be transposed
@@ -317,7 +320,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
         cal.lab <- "cal BP"
   if(length(C14.lab) == 0)
     C14.lab <- expression(""^14*C~BP)
-
+cat("\n", cal.lim, "\n")
   # adapt axis labels and hpds if BCAD and/or ka
   xaxt <- ifelse(BCAD || ka, "n", "s")
   yaxt <- ifelse(ka, "n", "s")

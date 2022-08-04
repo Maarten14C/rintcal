@@ -8,10 +8,10 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
-require(IntCal)
+require(rintcal)
 ```
 
-The IntCal package also provides some functions related to radiocarbon calibration. First there are two functions to calculate radiocarbon ages from pMC values (in this case of a postbomb date):
+The rintcal package also provides some functions related to radiocarbon calibration. First there are two functions to calculate radiocarbon ages from pMC values (in this case of a postbomb date):
 
 ```{r}
 pMC.age(150, 1)
