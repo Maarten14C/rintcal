@@ -12,7 +12,7 @@
 #' @name rintcal
 NULL
 
-# todo: add another caldist function a la l.calib of coffee for single cal yrs but multiple dates? prepare calib function with MCMC ccurve. Can we do caldist with multiple dates? 
+# todo: prepare calib function with MCMC ccurve.
 
 # done: 
 
