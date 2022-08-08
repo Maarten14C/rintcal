@@ -174,7 +174,7 @@ calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
 
 
 #  find the calibrated probability of a calendar age for a 14C date
-#' @name calBP.14C
+#' @name l.calib
 #' @title Find the calibrated probability of a calendar age for a 14C date. 
 #' @description Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates. 
 #' @details The function cannot deal with multiple calibration curves if multiple calendar years or radiocarbon dates are entered.
