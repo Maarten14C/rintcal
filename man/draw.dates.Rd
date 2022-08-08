@@ -62,7 +62,9 @@ draw.dates(
 
 \item{t.a}{Value a of the t distribution (defaults to 3).}
 
-\item{t.b}{Value a of the t distribution (defaults to 4).#' @param prob Probability confidence intervals (between 0 and 1).}
+\item{t.b}{Value a of the t distribution (defaults to 4).}
+
+\item{prob}{Probability confidence intervals (between 0 and 1).}
 
 \item{threshold}{Report only values above a threshold. Defaults to \code{threshold=0.001}.}
 

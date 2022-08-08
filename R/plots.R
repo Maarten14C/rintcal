@@ -382,7 +382,8 @@ cat("\n", cal.lim, "\n")
 #' @param reservoir Reservoir age, or reservoir age and age offset.
 #' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
 #' @param t.a Value a of the t distribution (defaults to 3).
-#' @param t.b Value a of the t distribution (defaults to 4).#' @param prob Probability confidence intervals (between 0 and 1).
+#' @param t.b Value a of the t distribution (defaults to 4).
+#' @param prob Probability confidence intervals (between 0 and 1).
 #' @param threshold Report only values above a threshold. Defaults to \code{threshold=0.001}.
 #' @param BCAD Use BC/AD or cal BP scale (default cal BP).
 #' @param ex Exaggeration of the height of the distribution
