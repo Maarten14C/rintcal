@@ -151,7 +151,6 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 
 
 
-# find the 14C age of a single cal BP year
 #' @name calBP.14C
 #' @title Find the 14C age and error belonging to a cal BP age.
 #' @description Given a calendar age, the calibration curve (default cc=1) is interpolated and the corresponding 14C age and error are returned.
@@ -173,3 +172,31 @@ calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
 }
 
 
+
+#  find the calibrated probability of a calendar age for a 14C date
+#' @name calBP.14C
+#' @title Find the calibrated probability of a calendar age for a 14C date. 
+#' @description Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates. 
+#' @details The function cannot deal with multiple calibration curves if multiple calendar years or radiocarbon dates are entered.
+#' @param yr The cal BP year.
+#' @param y The radiocarbon date's mean.
+#' @param er The radiocarbon date's lab error.
+#' @param cc calibration curve for the radiocarbon date(s) (see \code{ccurve()}).
+#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the student-t distribution.
+#' @param t.a Value a of the student t distribution (defaults to 3).
+#' @param t.b Value a of the student t distribution (defaults to 4).
+#' @author Maarten Blaauw
+#' @examples
+#' l.calib(100, 130, 20)
+#' l.calib(100:110, 130, 20) # multiple calendar ages of a single date
+#' l.calib(100, c(130,150), c(15,20)) # multiple radiocarbon ages and a single calendar age
+#' @export
+l.calib <- function(yr, y, er, cc=ccurve(1,FALSE), normal=TRUE, t.a=3, t.b=4) {
+  cc.x <- approx(cc[,1], cc[,2], yr)$y
+  cc.er <- approx(cc[,1], cc[,3], yr)$y
+  if(normal)
+    prob <- dnorm(y, cc.x, sqrt(cc.er^2 + er^2)) else
+      prob <- (t.b + ((y-cc.x)^2) / (2*(sqrt(er^2+cc.er^2)^2))) ^ (-1*(t.a+0.5))
+  prob[is.na(prob)] <- 0
+  return(prob)
+}

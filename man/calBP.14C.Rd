@@ -2,29 +2,49 @@
 % Please edit documentation in R/calibrate.R
 \name{calBP.14C}
 \alias{calBP.14C}
+\alias{l.calib}
 \title{Find the 14C age and error belonging to a cal BP age.}
 \usage{
 calBP.14C(yr, cc = 1, postbomb = FALSE, rule = 1, ccdir = NULL)
+
+l.calib(yr, y, er, cc = ccurve(1, FALSE), normal = TRUE, t.a = 3, t.b = 4)
 }
 \arguments{
 \item{yr}{The cal BP year.}
 
-\item{cc}{calibration curve for C14 (see \code{caldist()}).}
+\item{cc}{calibration curve for the radiocarbon date(s) (see \code{ccurve()}).}
 
 \item{postbomb}{Whether or not to use a postbomb curve (see \code{caldist()}).}
 
 \item{rule}{How should R's approx function deal with extrapolation. If \code{rule=1}, the default, then NAs are returned for such points and if it is 2, the value at the closest data extreme is used.}
 
 \item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
+
+\item{y}{The radiocarbon date's mean.}
+
+\item{er}{The radiocarbon date's lab error.}
+
+\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the student-t distribution.}
+
+\item{t.a}{Value a of the student t distribution (defaults to 3).}
+
+\item{t.b}{Value a of the student t distribution (defaults to 4).}
 }
 \description{
 Given a calendar age, the calibration curve (default cc=1) is interpolated and the corresponding 14C age and error are returned.
+
+Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates.
 }
 \details{
 Interpolation is used, and values outside the calibration curve are given as NA. For negative cal BP ages, a postbomb curve will have to be provided.
+
+The function cannot deal with multiple calibration curves if multiple calendar years or radiocarbon dates are entered.
 }
 \examples{
 calBP.14C(100)
+l.calib(100, 130, 20)
+l.calib(100:110, 130, 20) # multiple calendar ages of a single date
+l.calib(100, c(130,150), c(15,20)) # multiple radiocarbon ages and a single calendar age
 }
 \author{
 Maarten Blaauw
