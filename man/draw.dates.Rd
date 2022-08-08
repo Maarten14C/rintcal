@@ -11,7 +11,9 @@ draw.dates(
   cc = 1,
   postbomb = FALSE,
   reservoir = c(),
-  calibt = c(),
+  normal = TRUE,
+  t.a = 3,
+  t.b = 4,
   prob = 0.95,
   threshold = 0.001,
   BCAD = FALSE,
@@ -56,9 +58,11 @@ draw.dates(
 
 \item{reservoir}{Reservoir age, or reservoir age and age offset.}
 
-\item{calibt}{Calibration based on the student-t distribution. By default, the Gaussian distribution is used (\code{calibt=FALSE}). To use the student-t distribution, provide two parameters such as \code{calibt=c(3,4)}.}
+\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
 
-\item{prob}{Probability confidence intervals (between 0 and 1).}
+\item{t.a}{Value a of the t distribution (defaults to 3).}
+
+\item{t.b}{Value a of the t distribution (defaults to 4).#' @param prob Probability confidence intervals (between 0 and 1).}
 
 \item{threshold}{Report only values above a threshold. Defaults to \code{threshold=0.001}.}
 

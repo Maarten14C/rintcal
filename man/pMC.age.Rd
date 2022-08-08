@@ -30,6 +30,3 @@ Post-bomb dates are often reported as pMC or percent modern carbon. Since Bacon 
   pMC.age(80, 0.5) # prebomb dates can also be calculated
   pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\\%)
 }
-\seealso{
-\url{http://www.qub.ac.uk/chrono/blaauw/manualBacon_2.3.pdf}
-}

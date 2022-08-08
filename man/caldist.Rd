@@ -11,7 +11,9 @@ caldist(
   postbomb = FALSE,
   yrsteps = FALSE,
   threshold = 0.001,
-  calibt = FALSE,
+  normal = TRUE,
+  t.a = 3,
+  t.b = 4,
   BCAD = FALSE,
   rule = 1,
   ccdir = NULL
@@ -30,7 +32,11 @@ caldist(
 
 \item{threshold}{Report only values above a threshold. Defaults to \code{threshold=1e-6}.}
 
-\item{calibt}{Use the student-t distribution as alternative to the normal distribution. Requires 2 parameters, e.g., \code{calibt=c(3,4)}, defaults to FALSE.}
+\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
+
+\item{t.a}{Value a of the t distribution (defaults to 3).}
+
+\item{t.b}{Value a of the t distribution (defaults to 4).}
 
 \item{BCAD}{Which calendar scale to use. Defaults to cal BP, \code{BCAD=FALSE}.}
 

@@ -15,11 +15,11 @@ l.calib(yr, y, er, cc = ccurve(1, FALSE), normal = TRUE, t.a = 3, t.b = 4)
 
 \item{cc}{calibration curve for the radiocarbon date(s) (see \code{ccurve()}).}
 
-\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the student-t distribution.}
+\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
 
-\item{t.a}{Value a of the student t distribution (defaults to 3).}
+\item{t.a}{Value a of the t distribution (defaults to 3).}
 
-\item{t.b}{Value a of the student t distribution (defaults to 4).}
+\item{t.b}{Value a of the t distribution (defaults to 4).}
 }
 \description{
 Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates.

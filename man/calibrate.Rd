@@ -28,7 +28,9 @@ calibrate(
   yr.steps = FALSE,
   threshold = 5e-04,
   edge = TRUE,
-  calibt = FALSE,
+  normal = TRUE,
+  t.a = 3,
+  t.b = 4,
   rounded = 1,
   extend.range = 0.05,
   legend.cex = 0.8,
@@ -90,7 +92,11 @@ calibrate(
 
 \item{edge}{How to treat dates are at or beyond the edge of the calibration curve. If dates are truncated, a warning is given. If they lie beyond the calibration curve, an error is given.}
 
-\item{calibt}{Calibration based on the student-t distribution. By default, the Gaussian distribution is used (\code{calibt=FALSE}). To use the student-t distribution, provide two parameters such as \code{calibt=c(3,4)}.}
+\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
+
+\item{t.a}{Value a of the t distribution (defaults to 3).}
+
+\item{t.b}{Value a of the t distribution (defaults to 4).}
 
 \item{rounded}{Rounding of the percentages of the reported hpd ranges. Defaults to 1 decimal.}
 
@@ -146,8 +152,8 @@ To use alternative curves, use \code{cc=2} (\code{cc2="Marine20"}), \code{cc=3} 
 
 Calibrate works in cal BP (calendar years before AD 1950) by default, but can work with cal BC/AD through the option \code{BCAD=TRUE}.
 
-By default the Gaussian distribution is used to calibrate dates. For use of the student-t distribution instead,
-provide two sensible values, e.g., \code{calibt=c(3,4)}.
+By default the Gaussian distribution is used to calibrate dates. For use of the t distribution (Christen and Perez 2016) instead,
+set \code{normal=FALSE} provide values for t.a and t.b (defaults to \code{t.a=3} and \code{t.b=4}).
 
 Calibrated distributions are usually reduced to their 68\% or 95\% calibrated ranges, taking into account the asymmetric
 and multi-peaked shape of these distributions.

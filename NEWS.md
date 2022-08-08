@@ -1,6 +1,8 @@
-# rintcal 0.3.2
+# rintcal 0.4.0
 * The C14.lim option to specify axis limits in the calibrate() function now works as expected
 * renamed the package from IntCal to rintcal, to highlight the fact that this package is not officially affiliated with the IntCal Working Group
+* added a function l.calib to calibrate multiple dates or calendar years
+* enhanced the options of the t model (Christen and Perez 2016) as alternative for the normal distribution
 
 # IntCal 0.3.1
 * added an option ccdir to provide alternative locations of the calibration curves

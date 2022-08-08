@@ -16,7 +16,6 @@
 #'   pMC.age(110, 0.5) # a postbomb date, so with a negative 14C age
 #'   pMC.age(80, 0.5) # prebomb dates can also be calculated
 #'   pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\%)
-#' @seealso \url{http://www.qub.ac.uk/chrono/blaauw/manualBacon_2.3.pdf}
 #' @export
 pMC.age <- function(mn, sdev, ratio=100, decimals=0) {
   y <- -8033 * log(mn/ratio)
@@ -57,7 +56,9 @@ age.pMC <- function(mn, sdev, ratio=100, decimals=3) {
 #' @param postbomb Whether or not to use a postbomb curve. Required for negative radiocarbon ages.
 #' @param yrsteps Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve
 #' @param threshold Report only values above a threshold. Defaults to \code{threshold=1e-6}.
-#' @param calibt Use the student-t distribution as alternative to the normal distribution. Requires 2 parameters, e.g., \code{calibt=c(3,4)}, defaults to FALSE.
+#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
+#' @param t.a Value a of the t distribution (defaults to 3).
+#' @param t.b Value a of the t distribution (defaults to 4).
 #' @param BCAD Which calendar scale to use. Defaults to cal BP, \code{BCAD=FALSE}.
 #' @param rule Which extrapolation rule to use. Defaults to \code{rule=1} which returns NAs.
 #' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.
@@ -66,7 +67,7 @@ age.pMC <- function(mn, sdev, ratio=100, decimals=3) {
 #' plot(calib, type="l")
 #' postbomb <- caldist(-3030, 20, "nh1", BCAD=TRUE)
 #' @export
-caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1e-3, calibt=FALSE, BCAD=FALSE, rule=1, ccdir=NULL) {
+caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, BCAD=FALSE, rule=1, ccdir=NULL) {
   # deal with cal BP and negative ages	
   if(cc == 0) { # no ccurve needed
     xseq <- seq(age-5*error, age+5*error, length=1e3) # hard-coded values
@@ -80,10 +81,10 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1
   }
   
   # calibrate; find how far age (measurement) is from cc[,2] of calibration curve
-  if(length(calibt) < 2)
+  if(normal)
     cal <- cbind(cc[,1], dnorm(cc[,2], age, sqrt(error^2+cc[,3]^2))) else
-      cal <- cbind(cc[,1], (calibt[2] + ((age-cc[,2])^2) / (2*(cc[,3]^2 + error^2))) ^ (-1*(calibt[1]+0.5)))
-
+      cal <- cbind(cc[,1], (t.b + ((age-cc[,2])^2) / (2*(cc[,3]^2 + error^2))) ^ (-1*(t.a+0.5)))
+  
   # interpolate and normalise calibrated distribution to 1
   if(yrsteps)
     yrsteps <- seq(min(cal[,1]), max(cal[,1]), by=yrsteps) else
@@ -182,9 +183,9 @@ calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
 #' @param y The radiocarbon date's mean.
 #' @param er The radiocarbon date's lab error.
 #' @param cc calibration curve for the radiocarbon date(s) (see \code{ccurve()}).
-#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the student-t distribution.
-#' @param t.a Value a of the student t distribution (defaults to 3).
-#' @param t.b Value a of the student t distribution (defaults to 4).
+#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
+#' @param t.a Value a of the t distribution (defaults to 3).
+#' @param t.b Value a of the t distribution (defaults to 4).
 #' @author Maarten Blaauw
 #' @examples
 #' l.calib(100, 130, 20)

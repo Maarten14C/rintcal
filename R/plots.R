@@ -137,8 +137,8 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 #'
 #' Calibrate works in cal BP (calendar years before AD 1950) by default, but can work with cal BC/AD through the option \code{BCAD=TRUE}.
 #'
-#' By default the Gaussian distribution is used to calibrate dates. For use of the student-t distribution instead,
-#' provide two sensible values, e.g., \code{calibt=c(3,4)}.
+#' By default the Gaussian distribution is used to calibrate dates. For use of the t distribution (Christen and Perez 2016) instead,
+#' set \code{normal=FALSE} provide values for t.a and t.b (defaults to \code{t.a=3} and \code{t.b=4}).
 #'
 #' Calibrated distributions are usually reduced to their 68\% or 95\% calibrated ranges, taking into account the asymmetric
 #' and multi-peaked shape of these distributions.
@@ -191,7 +191,9 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 #' @param yr.steps Temporal resolution at which C-14 ages are calibrated (in calendar years). By default follows the spacing in the calibration curve.
 #' @param threshold Below which value should probabilities be excluded from calculations.
 #' @param edge How to treat dates are at or beyond the edge of the calibration curve. If dates are truncated, a warning is given. If they lie beyond the calibration curve, an error is given.
-#' @param calibt Calibration based on the student-t distribution. By default, the Gaussian distribution is used (\code{calibt=FALSE}). To use the student-t distribution, provide two parameters such as \code{calibt=c(3,4)}.
+#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
+#' @param t.a Value a of the t distribution (defaults to 3).
+#' @param t.b Value a of the t distribution (defaults to 4).
 #' @param rounded Rounding of the percentages of the reported hpd ranges. Defaults to 1 decimal.
 #' @param extend.range Range by which the axes are extended beyond the data limits. Defaults to 5\%.
 #' @param legend.cex Size of the font of the legends. Defaults to 0.8.
@@ -214,7 +216,7 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 #' calibrate(age=130, error=20, BCAD=TRUE)
 #' calibrate(4450, 40, reservoir=c(100, 50))
 #' @export
-calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, ka=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, edge=TRUE, calibt=FALSE, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", ccdir=NULL, ...) {
+calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, ka=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, edge=TRUE, normal=TRUE, t.a=3, t.b=4, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", ccdir=NULL, ...) {
   # read the data
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
@@ -241,7 +243,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
-  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, calibt, BCAD=FALSE, postbomb=postbomb, ccdir=ccdir)
+  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, ccdir=ccdir)
   cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE, rounded=rounded)
   hpds <- cal.hpd[[2]]
   cal.hpd <- cal.hpd[[1]]
@@ -378,8 +380,9 @@ cat("\n", cal.lim, "\n")
 #' @param cc Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed"). If there are multiple dates but all use the same calibration curve, one value can be provided. 
 #' @param postbomb Whether or not this is a postbomb age. Defaults to FALSE. 
 #' @param reservoir Reservoir age, or reservoir age and age offset.
-#' @param calibt Calibration based on the student-t distribution. By default, the Gaussian distribution is used (\code{calibt=FALSE}). To use the student-t distribution, provide two parameters such as \code{calibt=c(3,4)}.
-#' @param prob Probability confidence intervals (between 0 and 1).
+#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
+#' @param t.a Value a of the t distribution (defaults to 3).
+#' @param t.b Value a of the t distribution (defaults to 4).#' @param prob Probability confidence intervals (between 0 and 1).
 #' @param threshold Report only values above a threshold. Defaults to \code{threshold=0.001}.
 #' @param BCAD Use BC/AD or cal BP scale (default cal BP).
 #' @param ex Exaggeration of the height of the distribution
@@ -412,7 +415,7 @@ cat("\n", cal.lim, "\n")
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), calibt=c(), prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab=c(), cal.lim=c(), y.lab=c(), y.lim=c(), y.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ccdir=NULL, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab=c(), cal.lim=c(), y.lab=c(), y.lim=c(), y.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ccdir=NULL, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -437,7 +440,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), c
   
   max.hght <- 0; age.range <- c();
   for(i in 1:length(age)) {
-    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD, ccdir=ccdir)
+    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, BCAD=BCAD, ccdir=ccdir)
     tmp <- approx(tmp[,1], tmp[,2], min(tmp[,1]):max(tmp[,1]))
     tmp <- cbind(tmp$x, tmp$y/sum(tmp$y))
     max.hght <- max(max.hght, tmp[,2])
@@ -461,7 +464,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), c
   }
   
   for(i in 1:length(age)) {
-    dat <- hpd(caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], calibt=calibt, BCAD=BCAD, threshold=threshold, ccdir=ccdir), prob, return.raw=TRUE)
+    dat <- hpd(caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, BCAD=BCAD, threshold=threshold, ccdir=ccdir), prob, return.raw=TRUE)
     probs <- dat[[1]]
     hpds <- dat[[2]]
 
