@@ -4,10 +4,8 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 Notes
+0 Errors | 0 Warnings | 1 Notes
 
-* The note (on rhub's win_devel) related to possibly misspelled words. I can confirm that these words are not misspelled.
+* the words identified as possibly misspelled words are not misspelled.
 
-* I'd like to change the package name from IntCal to rintcal please, so that it becomes clearer that this package is not officially affiliated with the IntCal Working Group (IWG). IWG has made their data available freely on intcal.org and this package aims to provide these data in a readable format, and to provide these data to other R packages, thus requiring less replication and updating of data. 
-
-* If CRAN accepts the name change, I will then proceed with updating the packages with reverse dependencies to the IntCal package (rbacon, clam, coffee) accordingly.
+* corrected the code problems kindly spotted by CRAN's Victoria Wimmer: added \value tags, avoided writing in usespace, and added on.exit where par() is used; apologies for these oversights.
