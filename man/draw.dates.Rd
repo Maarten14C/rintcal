@@ -122,6 +122,9 @@ draw.dates(
 
 \item{...}{Additional plotting options}
 }
+\value{
+A plot of the (calibrated) dates
+}
 \description{
 Add individual calibrated dates to a plot.
 }

@@ -50,6 +50,7 @@ age.pMC <- function(mn, sdev, ratio=100, decimals=3) {
 #' @name caldist
 #' @title Calculate calibrated distribution
 #' @description Calculate the calibrated distribution of a radiocarbon date.
+#' @return The probability distribution(s) as two columns: cal BP ages and their associated probabilities
 #' @param age Uncalibrated radiocarbon age
 #' @param error Lab error of the radiocarbon age
 #' @param cc Calibration curve to use. Defaults to IntCal20 (\code{cc=1}).
@@ -112,6 +113,7 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1
 #' @name hpd
 #' @title Calculate highest posterior density
 #' @description Calculate highest posterior density ranges of calibrated distribution
+#' @return The highest posterior density ranges, as three columns: from age, to age, and the corresponding percentage(s) of the range(s)
 #' @param calib The calibrated distribution, as returned from caldist()
 #' @param prob Probability range which should be calculated. Default \code{prob=0.95}.
 #' @param return.raw The raw data to calculate hpds can be returned, e.g. to draw polygons of the calibrated distributions. Defaults to \code{return.raw=FALSE}.
@@ -156,6 +158,7 @@ hpd <- function(calib, prob=0.95, return.raw=FALSE, rounded=1) {
 #' @title Find the 14C age and error belonging to a cal BP age.
 #' @description Given a calendar age, the calibration curve (default cc=1) is interpolated and the corresponding 14C age and error are returned.
 #' @details Interpolation is used, and values outside the calibration curve are given as NA. For negative cal BP ages, a postbomb curve will have to be provided. 
+#' @return The calibration-curve 14C year belonging to the entered cal BP age
 #' @param yr The cal BP year.
 #' @param cc calibration curve for C14 (see \code{caldist()}).
 #' @param postbomb Whether or not to use a postbomb curve (see \code{caldist()}).
@@ -179,6 +182,7 @@ calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
 #' @title Find the calibrated probability of a calendar age for a 14C date. 
 #' @description Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates. 
 #' @details The function cannot deal with multiple calibration curves if multiple calendar years or radiocarbon dates are entered.
+#' @return The calibrated probability of a calendar age for a 14C age
 #' @param yr The cal BP year.
 #' @param y The radiocarbon date's mean.
 #' @param er The radiocarbon date's lab error.

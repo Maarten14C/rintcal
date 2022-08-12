@@ -44,6 +44,9 @@ caldist(
 
 \item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 }
+\value{
+The probability distribution(s) as two columns: cal BP ages and their associated probabilities
+}
 \description{
 Calculate the calibrated distribution of a radiocarbon date.
 }

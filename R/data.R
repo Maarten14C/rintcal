@@ -6,6 +6,7 @@
 #' Additionally, there are some floating tree-ring datasets with imprecisely known calendar ages; tAdolphy (50) and tTurney (51-52). For these and the following datasets, horizontal error bars indicate their 1 sd calendar age uncertainties.
 #' Beside trees, other datasets include lake sediment (lSuigestu, 53-54), corals (cBard 55-56, cFairbanks 57, cCutler 58 and cDurand 61, marine sediment (mCariaco 59-60, 62-63, mBard 64-65) and speleothems (sSouthon 66-67, sHoffman 68, sBeck 69).
 #' The southern hemisphere calibration curve SHCal20 is mostly modelled on IntCal20, but it contains datasets from the southern hemisphere; tPretoria (70), tWaikato (72-75), tBelfast (76-67), tSydney (78-80), tLivermore (81), tArizona, tIrvineWaikato and tZurich (82-83).
+#' @return A plot of the IntCal curve and the underlying data
 #' @param cal1 First calendar year for the plot
 #' @param cal2 Last calendar year for the plot
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13".

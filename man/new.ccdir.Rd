@@ -4,16 +4,19 @@
 \alias{new.ccdir}
 \title{Make directory and fill with calibration curves}
 \usage{
-new.ccdir(ccdir = "./ccurves")
+new.ccdir(ccdir)
 }
 \arguments{
-\item{ccdir}{Name and location of the new directory. Defaults to `ccurves', a folder within the current working directory, \code{ccdir="./ccurves"}.}
+\item{ccdir}{Name and location of the new directory. For example, this could be a folder called 'ccurves', living within the current working directory, \code{ccdir="./ccurves"}.}
+}
+\value{
+A message informing the user the name of the folder into which the calibration curves have been copied.
 }
 \description{
 Make an alternative `curves' directory and fill it with the calibration curves.
 }
 \details{
-Copies all calibration curves within the `rintcal' package to the new directory.
+Copies all calibration curvccdires within the `rintcal' package to the new directory.
 }
 \examples{
 new.ccdir(tempdir())

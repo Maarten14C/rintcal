@@ -21,6 +21,9 @@ l.calib(yr, y, er, cc = ccurve(1, FALSE), normal = TRUE, t.a = 3, t.b = 4)
 
 \item{t.b}{Value a of the t distribution (defaults to 4).}
 }
+\value{
+The calibrated probability of a calendar age for a 14C age
+}
 \description{
 Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates.
 }

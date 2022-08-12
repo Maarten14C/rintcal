@@ -15,6 +15,9 @@ hpd(calib, prob = 0.95, return.raw = FALSE, rounded = 1)
 
 \item{rounded}{Rounding for reported probabilities. Defaults to 1 decimal.}
 }
+\value{
+The highest posterior density ranges, as three columns: from age, to age, and the corresponding percentage(s) of the range(s)
+}
 \description{
 Calculate highest posterior density ranges of calibrated distribution
 }

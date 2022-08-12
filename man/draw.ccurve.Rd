@@ -75,7 +75,7 @@ draw.ccurve(
 \item{...}{Any additional optional plotting parameters.}
 }
 \value{
-The calibration curve (invisible).
+A plot of the calibration curve
 }
 \description{
 Draw one or two of the calibration curves, or add a calibration curve to an existing plot.

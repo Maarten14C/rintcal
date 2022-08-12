@@ -1,3 +1,8 @@
+# rintcal 0.4.1
+* updated the documentation to include value entries for each function
+* ensured that no data is written into userspace by default, as per CRAN policies
+* enhanced functions to set par values more gracefully
+
 # rintcal 0.4.0
 * The C14.lim option to specify axis limits in the calibrate() function now works as expected
 * renamed the package from IntCal to rintcal, to highlight the fact that this package is not officially affiliated with the IntCal Working Group

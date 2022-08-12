@@ -17,6 +17,9 @@ calBP.14C(yr, cc = 1, postbomb = FALSE, rule = 1, ccdir = NULL)
 
 \item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 }
+\value{
+The calibration-curve 14C year belonging to the entered cal BP age
+}
 \description{
 Given a calendar age, the calibration curve (default cc=1) is interpolated and the corresponding 14C age and error are returned.
 }

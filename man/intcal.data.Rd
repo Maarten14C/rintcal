@@ -83,6 +83,9 @@ intcal.data(
 
 \item{...}{Any additional optional plotting parameters.}
 }
+\value{
+A plot of the IntCal curve and the underlying data
+}
 \description{
 plot the C14 ages underpinning the IntCal20/Marine20/SHCal20 calibration curves
 }

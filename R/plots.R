@@ -1,7 +1,7 @@
 #' @name draw.ccurve
 #' @title Draw a calibration curve.
 #' @description Draw one or two of the calibration curves, or add a calibration curve to an existing plot.
-#' @return The calibration curve (invisible).
+#' @return A plot of the calibration curve
 #' @param cal1 First calendar year for the plot
 #' @param cal2 Last calendar year for the plot
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "nh1_monthly", "nh1_monthly", "nh2_monthly", "nh3_monthly", "sh1-2_monthly", "sh3_monthly", "Kure", "LevinKromer" or "Santos" for postbomb curves.
@@ -97,7 +97,9 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
   # add a second curve?
   if(!is.na(cc2)) {
     if(add.yaxis) {
-      op <- par(new=TRUE)
+      oldpar <- par(no.readonly = TRUE)
+      on.exit(par(oldpar))
+      par(new=TRUE)
       plot(cc2.pol, type="n", xlim=cal.lim, xlab="", ylab="", bty="n", xaxt="n", yaxt="n")
     }
     polygon(cc2.pol, col=cc2.fill, border=NA) # calibration curve
@@ -374,6 +376,7 @@ cat("\n", cal.lim, "\n")
 #' @name draw.dates
 #' @title add calibrated distributions to a plot.
 #' @description Add individual calibrated dates to a plot.
+#' @return A plot of the (calibrated) dates
 #' @param age Mean of the uncalibrated C-14 age (or multiple ages).
 #' @param error Error of the uncalibrated C-14 age (or ages).
 #' @param depth Depth(s) of the date(s)

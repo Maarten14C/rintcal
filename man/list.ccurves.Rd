@@ -6,6 +6,9 @@
 \usage{
 list.ccurves()
 }
+\value{
+A list of the available calibration curves
+}
 \description{
 List the file names of the calibration curves available within the rintcal package.
 }
