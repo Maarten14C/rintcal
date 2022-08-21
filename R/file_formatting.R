@@ -45,14 +45,14 @@
 
 # IntCal20
 ### The files were made by reading the files of the calibration curves as distributed in http://intcal.org/curves:
-#cc.terr <- read.csv( "intcal20.14c", header=FALSE, skip=11, sep=",")
-#cc.marine <- read.csv( "marine20.14c", header=FALSE, skip=11)
-#cc.south <- read.csv( "shcal20.14c", header=FALSE, skip=11, sep=",")
+# cc.terr <- read.csv( "intcal20.14c", header=FALSE, skip=11, sep=",")
+# cc.marine <- read.csv( "marine20.14c", header=FALSE, skip=11)
+# cc.south <- read.csv( "shcal20.14c", header=FALSE, skip=11, sep=",")
 
 ### ... and were then written in the desired format (increasing cal BP ages, 3 columns, tab separator):
-#write.table( cc.terr[nrow(cc.terr):1,1:3], file="3Col_intcal20.14C", row.names=FALSE, col.names=FALSE)
-#write.table( cc.marine[nrow(cc.marine):1,1:3], file="3Col_marine20.14C", row.names=FALSE, col.names=FALSE)
-#write.table( cc.south[nrow(cc.south):1,1:3], file="3Col_shcal20.14C", row.names=FALSE, col.names=FALSE)
+# write.table( cc.terr[nrow(cc.terr):1,1:3], file="3Col_intcal20.14C", row.names=FALSE, col.names=FALSE)
+# write.table( cc.marine[nrow(cc.marine):1,1:3], file="3Col_marine20.14C", row.names=FALSE, col.names=FALSE)
+# write.table( cc.south[nrow(cc.south):1,1:3], file="3Col_shcal20.14C", row.names=FALSE, col.names=FALSE)
 
 
 # postbomb curves:

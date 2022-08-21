@@ -324,7 +324,6 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
         cal.lab <- "cal BP"
   if(length(C14.lab) == 0)
     C14.lab <- expression(""^14*C~BP)
-cat("\n", cal.lim, "\n")
   # adapt axis labels and hpds if BCAD and/or ka
   xaxt <- ifelse(BCAD || ka, "n", "s")
   yaxt <- ifelse(ka, "n", "s")

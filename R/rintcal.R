@@ -5,16 +5,31 @@
 #' It also comes with a limited number of relevant functions, to read in calibration curves, translate pMC ages to 14C ages (et vice versa), etc. 
 #' @docType package
 #' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk>
-#' @importFrom utils read.csv read.table write.table packageName
+#' @importFrom utils read.table write.table packageName
 #' @importFrom stats approx dnorm
 #' @importFrom grDevices rgb extendrange
 #' @importFrom graphics axis par legend lines points polygon segments text
+#' @importFrom data.table fread fwrite
 #' @name rintcal
 NULL
 
 # todo: prepare calib function with MCMC ccurve.
 
 # done: 
+
+
+
+# internal functions to speed up reading and writing files, using the data.table R package if present
+fastread <- function(fl, ...)
+  if("data.frame" %in% (.packages()))
+    as.data.frame(data.table::fread(fl), ...) else
+      read.table(fl, ...)
+
+fastwrite <- function(fl, ...)
+  if("data.frame" %in% (.packages()))
+    data.table::fwrite(as.data.frame(fl), ...) else
+      write.table(fl, ...)
+
 
 
 #' @name list.ccurves
@@ -185,7 +200,7 @@ ccurve <- function(cc=1, postbomb=FALSE, ccdir=NULL) {
   if(length(ccdir) == 0)
     cc <- system.file("extdata/", fl, package='rintcal') else
       cc <- file.path(ccdir, fl)
-  cc <- read.table(cc)
+  cc <- fastread(cc)
   invisible(cc)
 }
 
@@ -215,7 +230,7 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
   # place the IntCal curves within the same folder as the new curve:
   if(length(ccdir) == 0)
      ccdir <- tempdir()
-  curves <- list.files(system.file("extdata", package='rintcal'), pattern=".14C", full.names=T)
+  curves <- list.files(system.file("extdata", package='rintcal'), pattern=".14C", full.names=TRUE)
   file.copy(curves, ccdir)
 
   cc1 <- ccurve(cc1)
@@ -229,7 +244,7 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
   mycc <- cbind(cc1[,1], mu, error)
 
   if(save) {
-    write.table(mycc, file.path(ccdir, name), row.names=FALSE, col.names=FALSE, sep=sep)
+    fastwrite(mycc, file.path(ccdir, name), row.names=FALSE, col.names=FALSE, sep=sep)
     message(name, " saved in folder ", ccdir)
   }
   invisible(mycc)

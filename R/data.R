@@ -207,14 +207,14 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   if(tolower(calcurve.data) == "intcal20") {
     dat <- system.file("extdata/", "intcal20_data.txt", package = "rintcal")
     sourcesdat <- system.file("extdata/", "intcal20_data_sources.txt", package = "rintcal")
-    sourcesdat <- read.table(sourcesdat, nrows=32, sep=",")
+    sourcesdat <- fastread(sourcesdat, nrows=32, sep=",")
   }
   if(tolower(calcurve.data) == "shcal20") {
     dat <- system.file("extdata/", "shcal20_data.txt", package = "rintcal")
     sourcesdat <- system.file("extdata/", "shcal20_data_sources.txt", package = "rintcal")
-    sourcesdat <- read.table(sourcesdat, nrows=9, sep=",")
+    sourcesdat <- fastread(sourcesdat, nrows=9, sep=",")
   }
-  dat <- read.table(dat, header=TRUE, sep=" ")
+  dat <- fastread(dat, header=TRUE, sep=" ")
 
   if(BCAD)
     dat$cal <- 1950 - dat$cal
