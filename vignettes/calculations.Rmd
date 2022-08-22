@@ -50,7 +50,7 @@ dates <- sort(runif(5, 100, 1000))
 errors <- .05*dates
 depths <- 0:4
 labels <- c("my", "very", "own", "simulated", "dates")
-draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels, cal.lim=range(dates, 600, 1700))
+draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels, age.lim=range(dates, 600, 1700))
 ```
 
 or add them to an existing plot:

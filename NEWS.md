@@ -1,3 +1,7 @@
+# rintcal 0.4.2
+* made draw.dates more flexible, e.g. can now rotate axes
+
+
 # rintcal 0.4.1
 * updated the documentation to include value entries for each function
 * ensured that no data is written into userspace by default, as per CRAN policies

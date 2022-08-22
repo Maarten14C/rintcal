@@ -28,11 +28,12 @@ draw.dates(
   col = rgb(0, 0, 1, 0.3),
   border = rgb(0, 0, 1, 0.5),
   add = FALSE,
-  cal.lab = c(),
-  cal.lim = c(),
-  y.lab = c(),
-  y.lim = c(),
-  y.rev = TRUE,
+  rotate.axes = FALSE,
+  age.lab = c(),
+  age.lim = c(),
+  d.lab = c(),
+  d.lim = c(),
+  d.rev = TRUE,
   labels = c(),
   label.x = 1,
   label.y = c(),
@@ -58,7 +59,7 @@ draw.dates(
 
 \item{reservoir}{Reservoir age, or reservoir age and age offset.}
 
-\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
+\item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2009).}
 
 \item{t.a}{Value a of the t distribution (defaults to 3).}
 
@@ -92,27 +93,29 @@ draw.dates(
 
 \item{add}{Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.}
 
-\item{cal.lab}{Title of the calendar axis (if present)}
+\item{rotate.axes}{By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use \code{rotate.axes=TRUE} to rotate the axes.}
 
-\item{cal.lim}{Limits of the calendar axis (if present)}
+\item{age.lab}{Title of the calendar axis (if present)}
 
-\item{y.lab}{Title of the vertical axis (if present)}
+\item{age.lim}{Limits of the calendar axis (if present)}
 
-\item{y.lim}{Limits of the vertical axis (if present)}
+\item{d.lab}{Title of the vertical axis (if present)}
 
-\item{y.rev}{Reverse the y-axis. Defaults to TRUE}
+\item{d.lim}{Limits of the vertical axis (if present)}
+
+\item{d.rev}{Reverse the y-axis. Defaults to TRUE}
 
 \item{labels}{Add labels to the dates. Empty by default.}
 
 \item{label.x}{Horizontal position of the date labels. By default draws them before the youngest age (1), but can also draw them after the oldest age (2), or above its mean (3).}
 
-\item{label.y}{Vertical positions of the labels. Defaults to 0 (or 1 if label.x is 3 or 4).}
+\item{label.y}{Vertical positions of the depths/labels. Defaults to 0 (or 1 if label.x is 3 or 4).}
 
 \item{label.cex}{Size of labels.}
 
 \item{label.col}{Colour of the labels. Defaults to the colour given to the borders of the dates.}
 
-\item{label.offset}{Offsets of the positions of the labels, giving the x and y offsets. Defaults to c(0,0).}
+\item{label.offset}{Offsets of the positions of the depths/labels, giving the x and y offsets. Defaults to c(0,0).}
 
 \item{label.adj}{Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text.}
 
@@ -121,6 +124,8 @@ draw.dates(
 \item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
 
 \item{...}{Additional plotting options}
+
+\item{age.rev}{Reverse the age axis. Defaults to TRUE}
 }
 \value{
 A plot of the (calibrated) dates

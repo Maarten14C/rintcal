@@ -382,7 +382,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param cc Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed"). If there are multiple dates but all use the same calibration curve, one value can be provided. 
 #' @param postbomb Whether or not this is a postbomb age. Defaults to FALSE. 
 #' @param reservoir Reservoir age, or reservoir age and age offset.
-#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
+#' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2009).
 #' @param t.a Value a of the t distribution (defaults to 3).
 #' @param t.b Value a of the t distribution (defaults to 4).
 #' @param prob Probability confidence intervals (between 0 and 1).
@@ -399,15 +399,17 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
 #' @param add Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.
-#' @param cal.lab Title of the calendar axis (if present)
-#' @param cal.lim Limits of the calendar axis (if present)
-#' @param y.lab Title of the vertical axis (if present)
-#' @param y.lim Limits of the vertical axis (if present)
-#' @param y.rev Reverse the y-axis. Defaults to TRUE
+#' @param rotate.axes By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use \code{rotate.axes=TRUE} to rotate the axes.
+#' @param age.lab Title of the calendar axis (if present)
+#' @param age.lim Limits of the calendar axis (if present)
+#' @param age.rev Reverse the age axis. Defaults to TRUE
+#' @param d.lab Title of the vertical axis (if present)
+#' @param d.lim Limits of the vertical axis (if present)
+#' @param d.rev Reverse the y-axis. Defaults to TRUE
 #' @param labels Add labels to the dates. Empty by default.
 #' @param label.x Horizontal position of the date labels. By default draws them before the youngest age (1), but can also draw them after the oldest age (2), or above its mean (3). 
-#' @param label.y Vertical positions of the labels. Defaults to 0 (or 1 if label.x is 3 or 4).
-#' @param label.offset Offsets of the positions of the labels, giving the x and y offsets. Defaults to c(0,0).
+#' @param label.y Vertical positions of the depths/labels. Defaults to 0 (or 1 if label.x is 3 or 4).
+#' @param label.offset Offsets of the positions of the depths/labels, giving the x and y offsets. Defaults to c(0,0).
 #' @param label.cex Size of labels. 
 #' @param label.col Colour of the labels. Defaults to the colour given to the borders of the dates.
 #' @param label.adj  Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text. 
@@ -418,7 +420,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, cal.lab=c(), cal.lim=c(), y.lab=c(), y.lim=c(), y.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ccdir=NULL, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, rotate.axes=FALSE, age.lab=c(), age.lim=c(), d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ccdir=NULL, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -451,19 +453,21 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
   }
   
   if(!add) {
-    if(length(cal.lab) == 0)
-      cal.lab <- ifelse(BCAD, "BC/AD", "cal BP")
-    if(length(y.lab) == 0)
-      y.lab <- "depth"
-    if(length(cal.lim) == 0)
-      cal.lim <- age.range
+    if(length(age.lab) == 0)
+      age.lab <- ifelse(BCAD, "BC/AD", "cal BP")
+    if(length(d.lab) == 0)
+      d.lab <- "depth"
+    if(length(age.lim) == 0)
+      age.lim <- age.range
     if(!BCAD)
-      cal.lim <- cal.lim[2:1]
-    if(length(y.lim) == 0)
-      y.lim <- range(depth, depth-ex, depth+ex)
-    if(y.rev)
-      y.lim <- rev(y.lim)
-    plot(0, type="n", xlim=cal.lim, xlab=cal.lab, ylim=y.lim, ylab=y.lab, ...)
+      age.lim <- age.lim[2:1]
+    if(length(d.lim) == 0)
+      d.lim <- range(depth, depth-ex, depth+ex)
+    if(d.rev)
+      d.lim <- rev(d.lim)
+    if(rotate.axes)
+      plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=d.lim, xlab=d.lab, ...) else		
+        plot(0, type="n", xlim=age.lim, xlab=age.lab, ylim=d.lim, ylab=d.lab, ...)
   }
   
   for(i in 1:length(age)) {
@@ -491,10 +495,14 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
 
     if(on.axis == 'y' || on.axis == 2)
       pol <- pol[,2:1]
+    if(rotate.axes)
+      pol <- pol[,2:1]
     polygon(pol, col=col[i], border=border[i])
   
     if(draw.hpd)
-      segments(hpds[,1], depth[i], hpds[,2], depth[i], lwd=hpd.lwd, col=hpd.col)
+      if(rotate.axes)
+        segments(depth[i], hpds[,1], depth[i], hpds[,2], lwd=hpd.lwd, col=hpd.col) else
+          segments(hpds[,1], depth[i], hpds[,2], depth[i], lwd=hpd.lwd, col=hpd.col)
 
     if(length(labels) > 0) {
       xx <- c(min(probs[,1]), max(probs[,1]), mean(probs[,1]))
@@ -505,7 +513,9 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
         if(label.x > 2)
           ifelse(up, y <- y+1, y <- y-1)
       }
-      text(x+label.offset[1], y+label.offset[2], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot)
+     if(rotate.axes)
+       text(x+label.offset[1], y+label.offset[2], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot) else
+         text(y+label.offset[2], x+label.offset[1], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot)
     }
   }
 }
