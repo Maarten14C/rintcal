@@ -15,7 +15,8 @@ NULL
 
 # todo: prepare calib function with MCMC ccurve. adapt draw.dates so it doesn't draw one-by-one: instead, make a matrix and have all distributions have the same lengths. Also investigate calibrating multiple dates and calendar age sequences of same calcurve at once (e.g., calib.cc0, calib.cc1, ..., using l.calib?).
 
-# done: added functions to calculate wmean, median, midpoint and mode of calibrated distributions
+# done: added point.estimates function to calculate wmean, median, midpoint and mode of calibrated distributions
+
 
 
 # internal functions to speed up reading and writing files, using the data.table R package if present

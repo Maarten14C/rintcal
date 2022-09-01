@@ -36,8 +36,17 @@ For reporting purposes, calibrated dates are often reduced to their 95% highest 
 hpd(calib.130)
 ```
 
-Want a plot of the radiocarbon and calibrated dates, together with their hpd ranges?
+Additionally, calibrated dates are often reduced to single point estimates. Note however how poor representations they are of the entire calibrated distribution!
 
+```{r, fig.width=4, fig.asp=.8}
+calib.2450 <- caldist(2450, 20)
+plot(calib.2450, type="l")
+points.2450 <- point.estimates(calib.2450)
+points.2450
+abline(v=points.2450, col=1:4, lty=2)
+```
+
+Want a plot of the radiocarbon and calibrated distributions, together with their hpd ranges?
 ```{r, fig.width=5, fig.asp=1}
 calibrate(130,20)
 ```

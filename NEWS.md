@@ -1,6 +1,8 @@
+# rintcal 0.4.3
+* added a function point.estimates to calculate the mode, median, weighted mean and midpoint of a calibrated distribution (after a suggestion by Alexandra Rouillard)
+
 # rintcal 0.4.2
 * made draw.dates more flexible, e.g. can now rotate axes
-
 
 # rintcal 0.4.1
 * updated the documentation to include value entries for each function
