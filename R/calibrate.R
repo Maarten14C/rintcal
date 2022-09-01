@@ -110,6 +110,54 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1
 
 
 
+#' @name point.estimates
+#' @title Calculate a point estimate
+#' @description Calculate a point estimate of a calibrated distribution - either the weighted mean, the median or the mode (maximum). Note that point estimates often tend to be very poor representations of entire calibrated distributions, so please be careful and do not reduce entire calibrated distributions to just 1 point value.
+#' @return The chosen point estimates
+#' @param calib The calibrated distribution, as returned from caldist()
+#' @param wmean Report the weighted mean (defaults to TRUE)
+#' @param median Report the median (defaults to TRUE)
+#' @param mode Report the mode, which is the year with the maximum probability (defaults to TRUE)
+#' @param midpoint Report the midpoint of the hpd range(s)
+#' @param probability range for the hpd range(s)
+#' @param rounded Rounding for reported probabilities. Defaults to 1 decimal.
+#' @examples
+#' point.estimates(caldist(130,20))
+#' plot(tmp <- caldist(2450,50), type='l')
+#' abline(v=point.estimates(tmp), col=1:4)
+#' @export
+point.estimates <- function(calib, wmean=TRUE, median=TRUE, mode=TRUE, midpoint=TRUE, prob=.95, rounded=1) {
+  to.report <- c()
+  name <- c()
+
+  if(wmean) {
+    wmean <- weighted.mean(calib[,1], calib[,2])
+    to.report <- c(to.report, wmean)
+    name <- c(name, "weighted mean")
+  }
+  if(median) {
+    median <- approx(cumsum(calib[,2]), calib[,1], 0.5)$y
+    to.report <- c(to.report, median)
+    name <- c(name, "median")
+  }
+  if(mode) {
+    mode <- calib[which(calib[,2] == max(calib[,2]))[1],1]
+    to.report <- c(to.report, mode)
+    name <- c(name, "mode")
+  }
+  if(midpoint) {
+    midpoint <- range(hpd(calib, prob)[,1:2])
+    midpoint <- midpoint[1] + (midpoint[2]-midpoint[1])/2
+    to.report <- c(to.report, midpoint)
+    name <- c(name, "midpoint")
+  }
+
+  names(to.report) <- name
+  return(round(to.report, rounded))
+}
+
+
+
 #' @name hpd
 #' @title Calculate highest posterior density
 #' @description Calculate highest posterior density ranges of calibrated distribution
