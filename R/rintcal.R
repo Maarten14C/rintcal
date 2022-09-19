@@ -1,6 +1,6 @@
 #' rintcal
 #'
-#' The international IntCal research group publishes ratified radiocarbon calibration curves such as IntCal20, Marine20 and SHCal20 (Reimer et al. 2020).
+#' @description The international IntCal research group publishes ratified radiocarbon calibration curves such as IntCal20, Marine20 and SHCal20 (Reimer et al. 2020).
 #' This data package provides the files of these curves, for use by other R package (reducing the need for replication and the size of other packages that use IntCal curves).
 #' It also comes with a limited number of relevant functions, to read in calibration curves, translate pMC ages to 14C ages (et vice versa), etc. 
 #' @docType package
@@ -13,9 +13,9 @@
 #' @name rintcal
 NULL
 
-# todo: prepare calib function with MCMC ccurve. adapt draw.dates so it doesn't draw one-by-one: instead, make a matrix and have all distributions have the same lengths. Also investigate calibrating multiple dates and calendar age sequences of same calcurve at once (e.g., calib.cc0, calib.cc1, ..., using l.calib?).
+# todo: check contamination function, investigate downloading json files from IntCal/ORAU, make a table function, add a legend option to draw.ccurve, prepare calib function with MCMC ccurve. adapt draw.dates so it doesn't draw one-by-one: instead, make a matrix and have all distributions have the same lengths. Also investigate calibrating multiple dates and calendar age sequences of same calcurve at once (e.g., calib.cc0, calib.cc1, ..., using l.calib?).
 
-# done: added point.estimates function to calculate wmean, median, midpoint and mode of calibrated distributions
+# done: added point.estimates function to calculate wmean, median, midpoint and mode of calibrated distributions, reading/writing of large files should now go faster, added new functions contamination, age.F14C, F14C.age, D14C.F14C and F14C.D14C, ...
 
 
 

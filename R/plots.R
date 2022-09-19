@@ -466,7 +466,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
     if(d.rev)
       d.lim <- rev(d.lim)
     if(rotate.axes)
-      plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=d.lim, xlab=d.lab, ...) else		
+      plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=d.lim, xlab=d.lab, ...) else
         plot(0, type="n", xlim=age.lim, xlab=age.lab, ylim=d.lim, ylab=d.lab, ...)
   }
   
@@ -478,17 +478,12 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
     probs <- approx(probs[,1], probs[,2], min(probs[,1]):max(probs[,1]))
     probs <- cbind(probs$x, probs$y/sum(probs$y))
 
-#    if(min(diff(probs[,1])) >=1) # if
-#      if(length(unique(diff(probs[,1]))) > 1)
-#        probs[,2] <- probs[,2] / max(diff(probs[,1]))
-
     if(normalise)
       probs[,2] <- probs[,2] / (max.hght) else # most precise date peaks at 1. Correcting for different calcurve steps
         probs[,2] <- probs[,2]/max(probs[,2])
 
-    if(mirror) {
-      pol <- cbind(c(probs[,1], rev(probs[,1])), depth[i]+(ex/2)*c(probs[,2], -rev(probs[,2])))
-      } else
+    if(mirror)
+      pol <- cbind(c(probs[,1], rev(probs[,1])), depth[i]+(ex/2)*c(probs[,2], -rev(probs[,2]))) else
         if(up)
           pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]+ex*c(0, probs[,2], 0)) else
             pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]-ex*c(0, probs[,2], 0))

@@ -19,7 +19,7 @@ l.calib(yr, y, er, cc = ccurve(1, FALSE), normal = TRUE, t.a = 3, t.b = 4)
 
 \item{t.a}{Value a of the t distribution (defaults to 3).}
 
-\item{t.b}{Value a of the t distribution (defaults to 4).}
+\item{t.b}{Value b of the t distribution (defaults to 4).}
 }
 \value{
 The calibrated probability of a calendar age for a 14C age

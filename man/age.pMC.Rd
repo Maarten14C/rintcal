@@ -4,14 +4,14 @@
 \alias{age.pMC}
 \title{Calculate pMC values from C14 ages}
 \usage{
-age.pMC(mn, sdev, ratio = 100, decimals = 3)
+age.pMC(mn, sdev = c(), ratio = 100, decimals = 3)
 }
 \arguments{
 \item{mn}{Reported mean of the 14C age.}
 
 \item{sdev}{Reported error of the 14C age.}
 
-\item{ratio}{Most modern-date values are reported against \code{100}. If it is against \code{1} instead, use \code{1} here.}
+\item{ratio}{Most modern-date values are reported against \code{100}. If it is against \code{1} instead, a warning is provided; use \code{age.F14C}.}
 
 \item{decimals}{Amount of decimals required for the pMC value.}
 }

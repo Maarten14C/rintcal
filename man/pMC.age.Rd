@@ -4,7 +4,7 @@
 \alias{pMC.age}
 \title{Calculate C14 ages from pMC values.}
 \usage{
-pMC.age(mn, sdev, ratio = 100, decimals = 0)
+pMC.age(mn, sdev = c(), ratio = 100, decimals = 0)
 }
 \arguments{
 \item{mn}{Reported mean of the pMC.}
@@ -28,5 +28,5 @@ Post-bomb dates are often reported as pMC or percent modern carbon. Since Bacon 
 \examples{
   pMC.age(110, 0.5) # a postbomb date, so with a negative 14C age
   pMC.age(80, 0.5) # prebomb dates can also be calculated
-  pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\\%)
+  pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\\%), throws a warning, use F14C.age instead
 }
