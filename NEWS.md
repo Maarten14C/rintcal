@@ -1,6 +1,9 @@
 # rintcal 0.4.3
 * added a function point.estimates to calculate the mode, median, weighted mean and midpoint of a calibrated distribution (after a suggestion by Alexandra Rouillard)
 * reading and writing of large files should now go faster if the data.table R package is installed (which doesn't seem to work well on some Macs)
+* added functions F14C.D14C, D14C.F14C, age.F14C, F14C.age and contaminate
+* draw.ccurve now adds a legend if more than one calibration curve is plotted
+* draw.dates should behave a bit faster
 
 # rintcal 0.4.2
 * made draw.dates more flexible, e.g. can now rotate axes

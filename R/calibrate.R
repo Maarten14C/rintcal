@@ -107,7 +107,7 @@ age.F14C <- function(mn, sdev=c(), decimals=3) {
 #' @name D14C.F14C
 #' @title Transform D14C into F14C
 #' @details As explained by Heaton et al. 2020 (Radiocarbon), 14C measurements are commonly expressed in
-#' three domains: Delta14C, F14C and the radiocarbon age. This function translates Delta14C, the historical level of Delta14C in the year t cal BP, to F14C values.
+#' three domains: Delta14C, F14C and the radiocarbon age. This function translates Delta14C, the historical level of Delta14C in the year t cal BP, to F14C values. Note that per convention, this function uses the Cambridge half-life, not the Libby half-life.
 #' @param D14C The Delta14C value to translate
 #' @param the cal BP age
 #' @return The corresponding F14C value
@@ -122,7 +122,7 @@ D14C.F14C <- function(D14C, t)
 #' @name F14C.D14C
 #' @title Transform F14C into D14C
 #' @details As explained by Heaton et al. 2020 (Radiocarbon), 14C measurements are commonly expressed in
-#' three domains: Delta14C, F14C and the radiocarbon age. This function translates F14C values into Delta14C, the historical level of Delta14C in the year t cal BP.
+#' three domains: Delta14C, F14C and the radiocarbon age. This function translates F14C values into Delta14C, the historical level of Delta14C in the year t cal BP. Note that per convention, this function uses the Cambridge half-life, not the Libby half-life.
 #' @param F14C The F14C value to translate
 #' @param the cal BP age
 #' @return The corresponding D14C value
@@ -151,6 +151,7 @@ F14C.D14C <- function(F14C, t)
 #' @param cc Calibration curve to use. Defaults to IntCal20 (\code{cc=1}).
 #' @param postbomb Whether or not to use a postbomb curve. Required for negative radiocarbon ages.
 #' @param yrsteps Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve
+#' @param dist.res As an alternative to yrsteps, provide the amount of 'bins' in the distribution
 #' @param threshold Report only values above a threshold. Defaults to \code{threshold=1e-6}.
 #' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
 #' @param t.a Value a of the t distribution (defaults to 3).
@@ -163,7 +164,7 @@ F14C.D14C <- function(F14C, t)
 #' plot(calib, type="l")
 #' postbomb <- caldist(-3030, 20, "nh1", BCAD=TRUE)
 #' @export
-caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, BCAD=FALSE, rule=1, ccdir=NULL) {
+caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, dist.res=200, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, BCAD=FALSE, rule=1, ccdir=NULL) {
   # deal with cal BP and negative ages	
   if(cc == 0) { # no ccurve needed
     xseq <- seq(age-5*error, age+5*error, length=1e3) # hard-coded values
@@ -185,8 +186,10 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, threshold=1
   if(yrsteps)
     yrsteps <- seq(min(cal[,1]), max(cal[,1]), by=yrsteps) else
       yrsteps <- cal[,1]
+ #     yrsteps <- seq(min(cal[,1]), max(cal[,1]), length=dist.res)
   cal <- approx(cal[,1], cal[,2], yrsteps, rule=rule)
-  cal <- cbind(cal$x, cal$y/sum(cal$y)) # normalise
+  # cal <- cbind(cal$x, cal$y/sum(cal$y)) # normalise
+  cal <- cbind(cal$x, cal$y) # do NOT normalise (not to peaks, nor to sums)
 
   # remove years with very small probabilities on the extremes of the distribution
   above <- which(cal[,2] >= threshold * max(cal[,2])) # relative to its peak
@@ -321,9 +324,9 @@ calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
 
 
 # calculate the impacts of contamination
-#' @name contamination
-#' @title The impact of contamination on a radiocarbon age
-#' @description Given a certain radiocarbon age, calculate the observed impact of contamination with an amount of material of a different 14C ratio
+#' @name contaminate
+#' @title Simulate the impact of contamination on a radiocarbon age
+#' @description Given a certain radiocarbon age, calculate the observed impact of contamination with a ratio of material with a different 14C content (for example, 1% contamination with modern carbon)
 #' @return The observed radiocarbon age and error
 #' @param y the true radiocarbon age
 #' @param er the error of the true radiocarbon age
@@ -332,18 +335,20 @@ calBP.14C <- function(yr, cc=1, postbomb=FALSE, rule=1, ccdir=NULL) {
 #' @param F14C.er error of the contamination. Defaults to 0.
 #' @author Maarten Blaauw
 #' @examples
-#' contamination(5000, 20, .01, 1)
-#' plot impacts of different amounts of contamination with modern carbon:
+#' contaminate(5000, 20, .01, 1) # 1% contamination with modern carbon
+#' Impacts of different amounts of contamination with modern carbon:
 #' real.14C <- seq(0, 50e3, length=200)
 #' contam <- seq(0, .1, length=101) # 0 to 10% contamination
 #' contam.col <- rainbow(length(contam))
-#' plot(0, type="n", xlim=range(real.14C), xlab="real 14C age", ylim=range(real.14C), ylab="observed 14C age")
-#' legend("topleft", legend=seq(0, .1, length=11), text.col=rainbow(11), bty="n")
+#' plot(0, type="n", xlim=c(0, 55e3), xlab="real 14C age", ylim=range(real.14C), ylab="observed 14C age")
 #' for(i in 1:length(contam))
 #'   lines(real.14C, contamination(real.14C, c(), contam[i], 1, decimals=5), col=contam.col[i])
+#' contam.legend <- seq(0, .1, length=6)
+#' contam.col <- rainbow(length(contam.legend))
+#' text(52e3, contaminate(50e3, c(), contam.legend, 1), labels=contam.legend, col=contam.col, cex=.7)
 #' @export
-contamination <- function(y, sdev=c(), fraction, F14C, F14C.er=0, decimals=5) {
-  y.F <- cbind(age.F14C(y, sdev, decimals))
+contaminate <- function(y, sdev=c(), fraction, F14C, F14C.er=0, decimals=5) {
+  y.F <- age.F14C(y, sdev, decimals)
   mn <- ((1-fraction)*y.F[,1]) + (fraction*F14C)
   if(length(sdev) == 0)
     return(F14C.age(mn, c(), decimals)) else {

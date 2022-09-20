@@ -13,17 +13,17 @@
 #' @name rintcal
 NULL
 
-# todo: check contamination function, investigate downloading json files from IntCal/ORAU, make a table function, add a legend option to draw.ccurve, prepare calib function with MCMC ccurve. adapt draw.dates so it doesn't draw one-by-one: instead, make a matrix and have all distributions have the same lengths. Also investigate calibrating multiple dates and calendar age sequences of same calcurve at once (e.g., calib.cc0, calib.cc1, ..., using l.calib?).
+# todo: make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve, add historical calibration curves such as Libby & Arnold 1951
 
-# done: added point.estimates function to calculate wmean, median, midpoint and mode of calibrated distributions, reading/writing of large files should now go faster, added new functions contamination, age.F14C, F14C.age, D14C.F14C and F14C.D14C, ...
-
-
+# done:
 
 # internal functions to speed up reading and writing files, using the data.table R package if present
 fastread <- function(fl, ...)
   if("data.frame" %in% (.packages())) # some Macs have problems with this package
     as.data.frame(data.table::fread(fl), ...) else
       read.table(fl, ...)
+
+
 
 fastwrite <- function(fl, ...)
   if("data.frame" %in% (.packages())) # some Macs have problems with this package

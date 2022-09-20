@@ -23,7 +23,67 @@ and the other way round:
 age.pMC(-2300, 40)
 ```
 
-We can also obtain the calibrated probability distributions from radiocarbon dates, e.g. one of 130 +- 20 C14 BP:
+The same for calculations in the F14C realm:
+
+```{r}
+F14C.age(.150, .01)
+```
+
+and the other way round:
+
+```{r}
+age.F14C(-2300, 40)
+```
+
+To transfer D14C (deviations in atmospheric 14C concentration at t cal BP) to F14C, and the other way around:
+
+```{r}
+F14C.D14C(0.8, t=1000)
+D14C.F14C(-97.2, 1000)
+```
+
+These functions can be used to investigate Delta14C over time:
+
+```{r, fig.width=4, fig.asp=.8}
+cc <- ccurve()
+cc.Fmin <- age.F14C(cc[,2]+cc[,3])
+cc.Fmax <- age.F14C(cc[,2]-cc[,3])
+cc.D14Cmin <- F14C.D14C(cc.Fmin, cc[,1])
+cc.D14Cmax <- F14C.D14C(cc.Fmax, cc[,1])
+par(mar=c(4,3,1,3), bty="l")
+plot(cc[,1]/1e3, cc.D14Cmax, type="l", xlab="kcal BP", ylab="")
+mtext(expression(paste(Delta, ""^{14}, "C")), 2, 1.7)
+lines(cc[,1]/1e3, cc.D14Cmin)
+par(new=TRUE)
+plot(cc[,1]/1e3, (cc[,2]+cc[,3])/1e3, type="l", xaxt="n", yaxt="n", col=4, xlab="", ylab="")
+lines(cc[,1]/1e3, (cc[,2]-cc[,3])/1e3, col=4)
+axis(4, col=4, col.axis=4)
+mtext("14C kBP", 4, 1.7, col=4)
+```
+
+The above functions can be used to calculate the effect of contamination on radiocarbon ages, e.g. what age would be observed if material with a 'true' radiocarbon age of 5000 +- 20 14C BP would be contaminated with 1% of modern carbon (F14C=1)?
+
+```{r}
+contaminate(5000, 20, .01, 1)
+```
+
+The effect of different levels of contamination can also be visualised:
+
+```{r, fig.width=4, fig.asp=.8}
+real.14C <- seq(0, 50e3, length=200)
+contam <- seq(0, .1, length=101) # 0 to 10% contamination
+contam.col <- rainbow(length(contam))
+plot(0, type="n", xlim=c(0, 55e3), xlab="real 14C age", ylim=range(real.14C), ylab="observed 14C age")
+for(i in 1:length(contam))
+  lines(real.14C, contamination(real.14C, c(), contam[i], 1, decimals=5), col=contam.col[i])
+contam.legend <- seq(0, .1, length=6)
+contam.col <- rainbow(length(contam.legend))
+text(52e3, contaminate(50e3, c(), contam.legend, 1), labels=contam.legend, col=contam.col, cex=.7)
+
+```
+
+
+Now on to calibration. We can obtain the calibrated probability distributions from radiocarbon dates, e.g. one of 130 +- 20 C14 BP:
 
 ```{r, fig.width=4, fig.asp=.8}
 calib.130 <- caldist(130, 20, BCAD=TRUE)

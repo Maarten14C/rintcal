@@ -23,6 +23,7 @@
 #' @param add Whether or not to add the curve(s) to an existing plot. Defaults to FALSE, which draws a new plot
 #' @param bty Draw a box around a box of a certain shape. Defaults to \code{bty="l"}.
 #' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.
+#' @param legend Location of the legend (only activated if more than one curve is plotted). Plotted in the topleft corner by default. Use \code{legend=c()} to leave empty
 #' @param ... Any additional optional plotting parameters. 
 #' @examples 
 #' draw.ccurve()
@@ -30,7 +31,7 @@
 #' draw.ccurve(1800, 2020, BCAD=TRUE, cc2="nh1", cc2.postbomb=TRUE)
 #' draw.ccurve(1800, 2010, BCAD=TRUE, cc2="nh1", add.yaxis=TRUE)
 #' @export
-draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbomb=FALSE, cc2.postbomb=FALSE, BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, add.yaxis=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), add=FALSE, bty="l", ccdir=NULL, ...) {
+draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbomb=FALSE, cc2.postbomb=FALSE, BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, add.yaxis=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), add=FALSE, bty="l", ccdir=NULL, legend="topleft", ...) {
 
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1, cc1.postbomb, ccdir)
@@ -107,6 +108,8 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
     lines(cc.2[,1], cc.2[,2]+cc.2[,3], col=cc2.col)
     if(add.yaxis)
       axis(4, col=cc2.col, col.axis=cc2.col)
+    if(length(legend) > 0)
+      legend(legend, legend=c(cc1, cc2), text.col=c(cc1.col, cc2.col), bty="n")
   }
 }
 
@@ -388,17 +391,18 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param prob Probability confidence intervals (between 0 and 1).
 #' @param threshold Report only values above a threshold. Defaults to \code{threshold=0.001}.
 #' @param BCAD Use BC/AD or cal BP scale (default cal BP).
-#' @param ex Exaggeration of the height of the distribution
+#' @param ex Exaggeration of the height of the distribution, defaults to \code{ex=1}.
 #' @param normalise If TRUE, the date is normalised by setting its peak value to 1 (handy for estimating how high to draw it). If there are multiple dates, it is normalised to the peak of the most precise date. Otherwise the peak of each date is at the same height.
 #' @param draw.hpd Whether or not to draw the hpd ranges as a line
 #' @param hpd.lwd Width of the line of the hpd ranges
-#' @param hpd.col Colour of the hpd rectangle
+#' @param hpd.col Colour of the hpd rectangle for all dates or radiocarbon dates
+#' @param cal.hpd.col Colour of the hpd rectangle for cal BP dates
 #' @param mirror Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.
 #' @param up If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.
-#' @param on.axis Which axis to plot on. Defaults to 'x' or 1, but can be set to 'y' or 2. 
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
 #' @param add Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.
+#' @param ka Whether or not to plot ages as thousands of years. Defaults to \code{ka=FALSE}.
 #' @param rotate.axes By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use \code{rotate.axes=TRUE} to rotate the axes.
 #' @param age.lab Title of the calendar axis (if present)
 #' @param age.lim Limits of the calendar axis (if present)
@@ -415,12 +419,13 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param label.adj  Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text. 
 #' @param label.rot Rotation of the label. 0 by default (horizontal).
 #' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.
+#' @param dist.res Resolution of the distribution polygons. Defaults to \code{dist.res=100}.
 #' @param ... Additional plotting options
 #' @examples
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, ex=.9, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), mirror=TRUE, up=FALSE, on.axis=1, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), add=FALSE, rotate.axes=FALSE, age.lab=c(), age.lim=c(), d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ccdir=NULL, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, ex=1, normalise=TRUE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), cal.hpd.col=rgb(0, 0.5, 0.5, 0.35), mirror=TRUE, up=FALSE, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), cal.col=rgb(0, 0.5, 0.5, 0.35), cal.border=rgb(0, 0.5, 0.5, 0.35), add=FALSE, ka=FALSE, rotate.axes=FALSE, age.lab=c(), age.lim=c(), d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, ccdir=NULL, dist.res=100, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -441,77 +446,95 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
       col <- rep(col, length(age))
     if(length(border) == 1)
       border <- rep(border, length(age))
+    if(0 %in% cc) { # then we've cal BP dates
+      these <- which(cc==0)
+      hpd.col[these] <- cal.hpd.col
+      col[these] <- cal.col
+      border[these] <- cal.border
+    }
   }
   
-  max.hght <- 0; age.range <- c();
+  ages <- array(NA, dim=c(dist.res, length(age))) # later fill with years
+  probs <- ages # later fill with probs
+  hpds <- list()
   for(i in 1:length(age)) {
     tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, BCAD=BCAD, ccdir=ccdir)
-    tmp <- approx(tmp[,1], tmp[,2], min(tmp[,1]):max(tmp[,1]))
-    tmp <- cbind(tmp$x, tmp$y/sum(tmp$y))
-    max.hght <- max(max.hght, tmp[,2])
-    age.range <- range(age.range, range(tmp[,1]))
+    hpds[[i]] <- hpd(tmp, prob, return.raw=TRUE)
+    tmp <- approx(tmp[,1], tmp[,2], seq(min(tmp[,1]), max(tmp[,1]), length=dist.res)) #else
+    if(normalise)
+      tmp <- cbind(tmp$x, tmp$y) else
+        tmp <- cbind(tmp$x, tmp$y/max(tmp$y))
+    ages[,i] <- tmp[,1]
+    probs[,i] <- tmp[,2]
   }
-  
+  if(ka)
+    ages <- ages/1e3
+
   if(!add) {
     if(length(age.lab) == 0)
-      age.lab <- ifelse(BCAD, "BC/AD", "cal BP")
+      if(ka) {
+        age.lab <- ifelse(BCAD, "k BC/AD", "kcal BP")
+      } else
+        age.lab <- ifelse(BCAD, "BC/AD", "cal BP")
+
     if(length(d.lab) == 0)
       d.lab <- "depth"
     if(length(age.lim) == 0)
-      age.lim <- age.range
+      age.lim <- extendrange(ages)
     if(!BCAD)
       age.lim <- age.lim[2:1]
     if(length(d.lim) == 0)
-      d.lim <- range(depth, depth-ex, depth+ex)
+      d.lim <- extendrange(depth)
     if(d.rev)
       d.lim <- rev(d.lim)
     if(rotate.axes)
       plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=d.lim, xlab=d.lab, ...) else
         plot(0, type="n", xlim=age.lim, xlab=age.lab, ylim=d.lim, ylab=d.lab, ...)
   }
-  
+
+  # the heights of the distributions depend on the depth axis limits
+  ex <- ex * (max(d.lim) - min(d.lim)) / 20 / max(probs)
+  if(mirror)
+    ex <- ex/2
+
+  # prepare for drawing the distributions
+  if(mirror) {
+    agepol <- ages[c(1:nrow(ages), nrow(ages):1),]
+    probpol <- ex*rbind(probs[1:nrow(probs),], -probs[nrow(probs):1,])
+  } else {
+      agepol <- ages[c(1,1:nrow(ages), nrow(ages)),]
+      probpol <- ex*probs[c(1,1:nrow(probs),nrow(probs)),]
+      if(up)
+        probpol <- -1*probpol
+    }
+
+  # now draw the dates
   for(i in 1:length(age)) {
-    dat <- hpd(caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, BCAD=BCAD, threshold=threshold, ccdir=ccdir), prob, return.raw=TRUE)
-    probs <- dat[[1]]
-    hpds <- dat[[2]]
-
-    probs <- approx(probs[,1], probs[,2], min(probs[,1]):max(probs[,1]))
-    probs <- cbind(probs$x, probs$y/sum(probs$y))
-
-    if(normalise)
-      probs[,2] <- probs[,2] / (max.hght) else # most precise date peaks at 1. Correcting for different calcurve steps
-        probs[,2] <- probs[,2]/max(probs[,2])
-
-    if(mirror)
-      pol <- cbind(c(probs[,1], rev(probs[,1])), depth[i]+(ex/2)*c(probs[,2], -rev(probs[,2]))) else
-        if(up)
-          pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]+ex*c(0, probs[,2], 0)) else
-            pol <- cbind(c(probs[1,1], probs[,1], probs[nrow(probs),1]), depth[i]-ex*c(0, probs[,2], 0))
-
-    if(on.axis == 'y' || on.axis == 2)
-      pol <- pol[,2:1]
     if(rotate.axes)
-      pol <- pol[,2:1]
-    polygon(pol, col=col[i], border=border[i])
-  
-    if(draw.hpd)
+      polygon(depth[i]+probpol[,i], agepol[,i], col=col[i], border=border[i]) else
+        polygon(agepol[,i], depth[i]+probpol[,i], col=col[i], border=border[i])
+    if(draw.hpd) {
+      if(ka)
+        this.hpd <- hpds[[i]][[2]]/1e3 else
+          this.hpd <- hpds[[i]][[2]]
       if(rotate.axes)
-        segments(depth[i], hpds[,1], depth[i], hpds[,2], lwd=hpd.lwd, col=hpd.col) else
-          segments(hpds[,1], depth[i], hpds[,2], depth[i], lwd=hpd.lwd, col=hpd.col)
-
+        segments(depth[i], this.hpd[,1], depth[i], this.hpd[,2], lwd=hpd.lwd, col=hpd.col[i]) else
+          segments(this.hpd[,1], depth[i], this.hpd[,2], depth[i], lwd=hpd.lwd, col=hpd.col[i])
+    }
     if(length(labels) > 0) {
-      xx <- c(min(probs[,1]), max(probs[,1]), mean(probs[,1]))
+      xx <- c(min(ages[,i]), max(ages[,i]), mean(ages[,i]))
       if(!BCAD) xx <- xx[c(2,1,3)]
       x <- xx[label.x]
       if(length(label.y) == 0) {
-        y <- depth[i]   
+        y <- depth[i]
         if(label.x > 2)
           ifelse(up, y <- y+1, y <- y-1)
       }
-     if(rotate.axes)
-       text(x+label.offset[1], y+label.offset[2], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot) else
-         text(y+label.offset[2], x+label.offset[1], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot)
+     ifelse(rotate.axes,
+       text(y+label.offset[1], x+label.offset[2], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot),
+       text(x+label.offset[2], y+label.offset[1], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot))
     }
   }
+  invisible(list(ages, probs))
 }
 
