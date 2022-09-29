@@ -7,7 +7,7 @@
 \description{
 The international IntCal research group publishes ratified radiocarbon calibration curves such as IntCal20, Marine20 and SHCal20 (Reimer et al. 2020).
 This data package provides the files of these curves, for use by other R package (reducing the need for replication and the size of other packages that use IntCal curves).
-It also comes with a limited number of relevant functions, to read in calibration curves, translate pMC ages to 14C ages (et vice versa), etc.
+It also comes with functions to read in calibration curves, plot curves or dates, translate pMC ages to 14C ages (et vice versa), etc.
 }
 \author{
 Maarten Blaauw <maarten.blaauw@qub.ac.uk>

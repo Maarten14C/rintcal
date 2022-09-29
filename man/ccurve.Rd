@@ -4,15 +4,17 @@
 \alias{ccurve}
 \title{Copy a calibration curve}
 \usage{
-ccurve(cc = 1, postbomb = FALSE, ccdir = NULL)
+ccurve(cc = 1, postbomb = FALSE, cc.dir = NULL, resample = 0)
 }
 \arguments{
 \item{cc}{Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
-\code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{ccdir} (see below).}
+\code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{cc.dir} (see below).}
 
 \item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}}
 
-\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="ccurves"}.}
+\item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.}
+
+\item{resample}{The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE.}
 }
 \value{
 The calibration curve (invisible).

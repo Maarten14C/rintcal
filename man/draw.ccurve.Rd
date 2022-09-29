@@ -25,7 +25,8 @@ draw.ccurve(
   cc2.fill = rgb(0, 0.5, 0, 0.2),
   add = FALSE,
   bty = "l",
-  ccdir = NULL,
+  cc.dir = NULL,
+  legend = "topleft",
   ...
 )
 }
@@ -70,7 +71,9 @@ draw.ccurve(
 
 \item{bty}{Draw a box around a box of a certain shape. Defaults to \code{bty="l"}.}
 
-\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
+\item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.}
+
+\item{legend}{Location of the legend (only activated if more than one curve is plotted). Plotted in the topleft corner by default. Use \code{legend=c()} to leave empty}
 
 \item{...}{Any additional optional plotting parameters.}
 }

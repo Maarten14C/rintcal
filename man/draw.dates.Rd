@@ -17,18 +17,22 @@ draw.dates(
   prob = 0.95,
   threshold = 0.001,
   BCAD = FALSE,
-  ex = 0.9,
-  normalise = TRUE,
   draw.hpd = TRUE,
   hpd.lwd = 2,
   hpd.col = rgb(0, 0, 1, 0.7),
+  cal.hpd.col = rgb(0, 0.5, 0.5, 0.35),
   mirror = TRUE,
   up = FALSE,
-  on.axis = 1,
   col = rgb(0, 0, 1, 0.3),
   border = rgb(0, 0, 1, 0.5),
+  cal.col = rgb(0, 0.5, 0.5, 0.35),
+  cal.border = rgb(0, 0.5, 0.5, 0.35),
   add = FALSE,
+  ka = FALSE,
   rotate.axes = FALSE,
+  ex = 1,
+  normalise = TRUE,
+  cc.resample = 5,
   age.lab = c(),
   age.lim = c(),
   d.lab = c(),
@@ -42,7 +46,8 @@ draw.dates(
   label.offset = c(0, 0),
   label.adj = c(1, 0),
   label.rot = 0,
-  ccdir = NULL,
+  cc.dir = NULL,
+  dist.res = 100,
   ...
 )
 }
@@ -51,7 +56,7 @@ draw.dates(
 
 \item{error}{Error of the uncalibrated C-14 age (or ages).}
 
-\item{depth}{Depth(s) of the date(s)}
+\item{depth}{Depth(s) of the date(s). Can also be their relative positions if no depths are available.}
 
 \item{cc}{Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., "IntCal20", "Marine20", "SHCal20", "nh1", "sh3", or "mixed"). If there are multiple dates but all use the same calibration curve, one value can be provided.}
 
@@ -71,21 +76,17 @@ draw.dates(
 
 \item{BCAD}{Use BC/AD or cal BP scale (default cal BP).}
 
-\item{ex}{Exaggeration of the height of the distribution}
-
-\item{normalise}{If TRUE, the date is normalised by setting its peak value to 1 (handy for estimating how high to draw it). If there are multiple dates, it is normalised to the peak of the most precise date. Otherwise the peak of each date is at the same height.}
-
 \item{draw.hpd}{Whether or not to draw the hpd ranges as a line}
 
 \item{hpd.lwd}{Width of the line of the hpd ranges}
 
-\item{hpd.col}{Colour of the hpd rectangle}
+\item{hpd.col}{Colour of the hpd rectangle for all dates or radiocarbon dates}
+
+\item{cal.hpd.col}{Colour of the hpd rectangle for cal BP dates}
 
 \item{mirror}{Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.}
 
 \item{up}{If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.}
-
-\item{on.axis}{Which axis to plot on. Defaults to 'x' or 1, but can be set to 'y' or 2.}
 
 \item{col}{Colour of the inside of the distribution}
 
@@ -93,7 +94,15 @@ draw.dates(
 
 \item{add}{Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.}
 
+\item{ka}{Whether or not to plot ages as thousands of years. Defaults to \code{ka=FALSE}.}
+
 \item{rotate.axes}{By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use \code{rotate.axes=TRUE} to rotate the axes.}
+
+\item{ex}{Exaggeration of the height of the distribution, defaults to \code{ex=1}.}
+
+\item{normalise}{If TRUE, the age distributions are normalised by plotting each distribution with the same total area. Precise dates will therefore peak higher than less precise dates (default). If \code{normalise=FALSE}, the peak of each date will be drawn at the same height.}
+
+\item{cc.resample}{The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ. To account for this, resample using, e.g., \code{cc.resample=5}.}
 
 \item{age.lab}{Title of the calendar axis (if present)}
 
@@ -121,7 +130,9 @@ draw.dates(
 
 \item{label.rot}{Rotation of the label. 0 by default (horizontal).}
 
-\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
+\item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.}
+
+\item{dist.res}{Resolution of the distribution polygons. Defaults to \code{dist.res=100}.}
 
 \item{...}{Additional plotting options}
 
@@ -131,7 +142,7 @@ draw.dates(
 A plot of the (calibrated) dates
 }
 \description{
-Add individual calibrated dates to a plot.
+Add individual or multiple calibrated dates to a plot.
 }
 \examples{
   plot(0, xlim=c(500,0), ylim=c(0, 2))

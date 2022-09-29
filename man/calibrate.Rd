@@ -41,7 +41,7 @@ calibrate(
   xaxs = "i",
   yaxs = "i",
   bty = "l",
-  ccdir = NULL,
+  cc.dir = NULL,
   ...
 )
 }
@@ -118,7 +118,7 @@ calibrate(
 
 \item{bty}{Draw a box around the graph ("n" for none, and "l", "7", "c", "u", "]" or "o" for correspondingly shaped boxes).}
 
-\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
+\item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.}
 
 \item{...}{Other plotting parameters.}
 }

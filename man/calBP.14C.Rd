@@ -4,7 +4,7 @@
 \alias{calBP.14C}
 \title{Find the 14C age and error belonging to a cal BP age.}
 \usage{
-calBP.14C(yr, cc = 1, postbomb = FALSE, rule = 1, ccdir = NULL)
+calBP.14C(yr, cc = 1, postbomb = FALSE, rule = 1, cc.dir = NULL)
 }
 \arguments{
 \item{yr}{The cal BP year.}
@@ -15,7 +15,7 @@ calBP.14C(yr, cc = 1, postbomb = FALSE, rule = 1, ccdir = NULL)
 
 \item{rule}{How should R's approx function deal with extrapolation. If \code{rule=1}, the default, then NAs are returned for such points and if it is 2, the value at the closest data extreme is used.}
 
-\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
+\item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.}
 }
 \value{
 The calibration-curve 14C year belonging to the entered cal BP age

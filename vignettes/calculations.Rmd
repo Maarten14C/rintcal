@@ -75,7 +75,7 @@ contam <- seq(0, .1, length=101) # 0 to 10% contamination
 contam.col <- rainbow(length(contam))
 plot(0, type="n", xlim=c(0, 55e3), xlab="real 14C age", ylim=range(real.14C), ylab="observed 14C age")
 for(i in 1:length(contam))
-  lines(real.14C, contamination(real.14C, c(), contam[i], 1, decimals=5), col=contam.col[i])
+  lines(real.14C, contaminate(real.14C, c(), contam[i], 1, decimals=5), col=contam.col[i])
 contam.legend <- seq(0, .1, length=6)
 contam.col <- rainbow(length(contam.legend))
 text(52e3, contaminate(50e3, c(), contam.legend, 1), labels=contam.legend, col=contam.col, cex=.7)
@@ -115,18 +115,18 @@ You can also draw one or more calibrated distributions:
 
 ```{r, fig.width=4, fig.asp=1}
 set.seed(123)
-dates <- sort(runif(5, 100, 1000))
+dates <- sort(sample(1000:2000,5))
 errors <- .05*dates
-depths <- 0:4
-labels <- c("my", "very", "own", "simulated", "dates")
-draw.dates(dates, errors, depths, BCAD=TRUE, labels=labels, age.lim=range(dates, 600, 1700))
+depths <- 1:length(dates)
+my.labels <- c("my", "very", "own", "simulated", "dates")
+draw.dates(dates, errors, depths, BCAD=TRUE, labels=my.labels, age.lim=c(100, 2020))
 ```
 
 or add them to an existing plot:
 
 ```{r, fig.width=4, fig.asp=1}
 plot(0, type="n", xlim=c(600, 1700), ylim=c(5,-1), xlab="AD", ylab="dates")
-draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE, labels=labels)
+draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE, labels=my.labels)
 ```
 
 

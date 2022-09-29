@@ -2,7 +2,7 @@
 #'
 #' @description The international IntCal research group publishes ratified radiocarbon calibration curves such as IntCal20, Marine20 and SHCal20 (Reimer et al. 2020).
 #' This data package provides the files of these curves, for use by other R package (reducing the need for replication and the size of other packages that use IntCal curves).
-#' It also comes with a limited number of relevant functions, to read in calibration curves, translate pMC ages to 14C ages (et vice versa), etc. 
+#' It also comes with functions to read in calibration curves, plot curves or dates, translate pMC ages to 14C ages (et vice versa), etc. 
 #' @docType package
 #' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk>
 #' @importFrom utils read.table write.table packageName
@@ -13,7 +13,7 @@
 #' @name rintcal
 NULL
 
-# todo: make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve, add historical calibration curves such as Libby & Arnold 1951
+# todo: redo normalisation solution in draw.dates by adding an option resample to ccurve (currently all draw.dates plots look like Drosera seeds), make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
 
 # done:
 
@@ -64,20 +64,20 @@ copyCalibrationCurve <- function(cc=1, postbomb=FALSE) {
 #' @name new.ccdir
 #' @title Make directory and fill with calibration curves
 #' @description Make an alternative `curves' directory and fill it with the calibration curves.
-#' @details Copies all calibration curvccdires within the `rintcal' package to the new directory.
-#' @param ccdir Name and location of the new directory. For example, this could be a folder called 'ccurves', living within the current working directory, \code{ccdir="./ccurves"}.
+#' @details Copies all calibration curves within the `rintcal' package to the new directory.
+#' @param cc.dir Name and location of the new directory. For example, this could be a folder called 'ccurves', living within the current working directory, \code{cc.dir="./ccurves"}.
 #' @return A message informing the user the name of the folder into which the calibration curves have been copied.
 #' @examples
 #' new.ccdir(tempdir())
 #' @export
-new.ccdir <- function(ccdir) {
-  if(!dir.exists(ccdir))
-    dir.create(ccdir)
+new.ccdir <- function(cc.dir) {
+  if(!dir.exists(cc.dir))
+    dir.create(cc.dir)
 
   # find all calibration curves (files ending in .14C) and copy them into the new directory
   fl <- list.files(file.path(system.file(package = 'rintcal'), "extdata"), full.names=TRUE, pattern=".14C")
-  file.copy(fl, ccdir)
-  message("Calibration curves placed in folder ", ccdir)
+  file.copy(fl, cc.dir)
+  message("Calibration curves placed in folder ", cc.dir)
 }
 
 
@@ -88,9 +88,10 @@ new.ccdir <- function(ccdir) {
 #' @details Copy the radiocarbon calibration curve defined by cc into memory.
 #' @return The calibration curve (invisible).
 #' @param cc Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
-#' \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{ccdir} (see below).
+#' \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{cc.dir} (see below).
 #' @param postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}
-#' @param ccdir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="ccurves"}.
+#' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
+#' @param resample The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE. 
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -122,7 +123,7 @@ new.ccdir <- function(ccdir) {
 #'
 #' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000–0 cal BP. Radiocarbon 40, 1041-1083. \doi{10.1017/S0033822200019123}
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, ccdir=NULL) {
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0) {
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
@@ -197,10 +198,16 @@ ccurve <- function(cc=1, postbomb=FALSE, ccdir=NULL) {
                                                         if(tolower(cc) == "mixed")
                                                           fl <- "mixed.14C" else
                                                           stop("cannot find this curve", call.=FALSE)
-  if(length(ccdir) == 0)
+  if(length(cc.dir) == 0)
     cc <- system.file("extdata/", fl, package='rintcal') else
-      cc <- file.path(ccdir, fl)
+      cc <- file.path(cc.dir, fl)  
   cc <- fastread(cc)
+  if(resample > 0) {
+    yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)
+    mu <- approx(cc[,1], cc[,2], yr)$y
+    er <- approx(cc[,1], cc[,3], yr)$y
+    cc <- cbind(yr, mu, er)
+  }
   invisible(cc)
 }
 
@@ -208,30 +215,30 @@ ccurve <- function(cc=1, postbomb=FALSE, ccdir=NULL) {
 
 #' @name mix.ccurves
 #' @title Build a custom-made, mixed calibration curve.
-#' @description If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used. The curve will be returned invisibly, or saved in a temporary directory together with the main calibration curves. This temporary directory then has to be specified in further commands, e.g. for rbacon: \code{Bacon(, ccdir=tmpdr)} (see examples). It is advisable to make your own curves folder and have ccdir point to that folder.
+#' @description If two curves need to be `mixed' to calibrate, e.g. for dates of mixed terrestrial and marine carbon sources, then this function can be used. The curve will be returned invisibly, or saved in a temporary directory together with the main calibration curves. This temporary directory then has to be specified in further commands, e.g. for rbacon: \code{Bacon(, cc.dir=tmpdr)} (see examples). It is advisable to make your own curves folder and have cc.dir point to that folder.
 #' @details The proportional contribution of each of both calibration curves has to be set.
 #'
 #' @param proportion Proportion of the first calibration curve required. e.g., change to \code{proportion=0.7} if \code{cc1} should contribute 70\% (and \code{cc2} 30\%) to the mixed curve.
 #' @param cc1 The first calibration curve to be mixed. Defaults to the northern hemisphere terrestrial curve IntCal20.
 #' @param cc2 The second calibration curve to be mixed. Defaults to the marine curve IntCal20.
 #' @param name Name of the new calibration curve.
-#' @param ccdir Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{dir="~/ccurves"} or in your current working directory, \code{dir="."}.
+#' @param cc.dir Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{cc.dir="~/ccurves"} or in your current working directory, \code{cc.dir="."}.
 #' @param save Save the curve in the folder specified by dir. Defaults to FALSE.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0).
 #' @param sep Separator between fields (tab by default, "\\t")
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
 #' tmpdir <- tempdir()
-#' mix.ccurves(ccdir=tmpdir)
+#' mix.ccurves(cc.dir=tmpdir)
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", ccdir=c(), save=FALSE, offset=c(0,0), sep="\t") {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", cc.dir=c(), save=FALSE, offset=c(0,0), sep="\t") {
   # place the IntCal curves within the same folder as the new curve:
-  if(length(ccdir) == 0)
-     ccdir <- tempdir()
+  if(length(cc.dir) == 0)
+     cc.dir <- tempdir()
   curves <- list.files(system.file("extdata", package='rintcal'), pattern=".14C", full.names=TRUE)
-  file.copy(curves, ccdir)
+  file.copy(curves, cc.dir)
 
   cc1 <- ccurve(cc1)
   cc2 <- ccurve(cc2)
@@ -244,8 +251,8 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
   mycc <- cbind(cc1[,1], mu, error)
 
   if(save) {
-    fastwrite(mycc, file.path(ccdir, name), row.names=FALSE, col.names=FALSE, sep=sep)
-    message(name, " saved in folder ", ccdir)
+    fastwrite(mycc, file.path(cc.dir, name), row.names=FALSE, col.names=FALSE, sep=sep)
+    message(name, " saved in folder ", cc.dir)
   }
   invisible(mycc)
 }

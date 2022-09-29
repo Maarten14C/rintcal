@@ -10,13 +10,16 @@ caldist(
   cc = 1,
   postbomb = FALSE,
   yrsteps = FALSE,
+  cc.resample = FALSE,
+  dist.res = 200,
   threshold = 0.001,
   normal = TRUE,
   t.a = 3,
   t.b = 4,
+  normalise = TRUE,
   BCAD = FALSE,
   rule = 1,
-  ccdir = NULL
+  cc.dir = NULL
 )
 }
 \arguments{
@@ -30,6 +33,8 @@ caldist(
 
 \item{yrsteps}{Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve}
 
+\item{dist.res}{As an alternative to yrsteps, provide the amount of 'bins' in the distribution}
+
 \item{threshold}{Report only values above a threshold. Defaults to \code{threshold=1e-6}.}
 
 \item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
@@ -38,11 +43,13 @@ caldist(
 
 \item{t.b}{Value a of the t distribution (defaults to 4).}
 
+\item{normalise}{Sum the entire calibrated distribution to 1. Defaults to \code{normalise=TRUE}.}
+
 \item{BCAD}{Which calendar scale to use. Defaults to cal BP, \code{BCAD=FALSE}.}
 
 \item{rule}{Which extrapolation rule to use. Defaults to \code{rule=1} which returns NAs.}
 
-\item{ccdir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{ccdir="curves"}.}
+\item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.}
 }
 \value{
 The probability distribution(s) as two columns: cal BP ages and their associated probabilities
