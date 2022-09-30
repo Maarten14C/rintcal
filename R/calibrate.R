@@ -45,7 +45,7 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, cc.resample
   # interpolate and normalise calibrated distribution to 1
   if(postbomb)
     if(!yrsteps)
-      yrsteps <- 0.1
+      yrsteps <- 0.05 # enough detail to enable calculation of hpd ranges also for postbomb dates
   if(yrsteps)
     yrsteps <- seq(min(cal[,1]), max(cal[,1]), by=yrsteps) else
       yrsteps <- cal[,1]
