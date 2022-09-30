@@ -5,6 +5,7 @@
 * draw.ccurve now adds a legend if more than one calibration curve is plotted
 * draw.dates should behave a bit faster and draw more consistently sized distributions
 * added legacy 'calibration' data from Arnold & Libby 1951 (Science 113, 111-120)
+* Calibrated dates of postbomb dates are now drawn better
 
 # rintcal 0.4.2
 * made draw.dates more flexible, e.g. can now rotate axes

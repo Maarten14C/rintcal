@@ -43,6 +43,9 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, cc.resample
       cal <- cbind(cc[,1], (t.b + ((age-cc[,2])^2) / (2*(cc[,3]^2 + error^2))) ^ (-1*(t.a+0.5)))
   
   # interpolate and normalise calibrated distribution to 1
+  if(postbomb)
+    if(!yrsteps)
+      yrsteps <- 0.1
   if(yrsteps)
     yrsteps <- seq(min(cal[,1]), max(cal[,1]), by=yrsteps) else
       yrsteps <- cal[,1]

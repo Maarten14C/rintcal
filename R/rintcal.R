@@ -13,7 +13,7 @@
 #' @name rintcal
 NULL
 
-# todo: redo normalisation solution in draw.dates by adding an option resample to ccurve (currently all draw.dates plots look like Drosera seeds), make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
+# todo: make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
 
 # done:
 

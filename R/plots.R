@@ -244,7 +244,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   }
 
   # calculate the raw and calibrated distributions
-  C14.dist <- caldist(age, error, cc=0, BCAD=FALSE)
+  C14.dist <- caldist(age, error, cc=0, BCAD=FALSE) # just to draw a normal dist
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
@@ -404,7 +404,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param rotate.axes By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use \code{rotate.axes=TRUE} to rotate the axes.
 #' @param ex Exaggeration of the height of the distribution, defaults to \code{ex=1}.
 #' @param normalise If TRUE, the age distributions are normalised by plotting each distribution with the same total area. Precise dates will therefore peak higher than less precise dates (default). If \code{normalise=FALSE}, the peak of each date will be drawn at the same height.
-#' @param cc.resample The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ. To account for this, resample using, e.g., \code{cc.resample=5}.
+#' @param cc.resample The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ, as can their total areas (which should ideally all sum to the same size). To account for this, resample to a constant time-span, using, e.g., \code{cc.resample=5} for 5-yr timespanes.
 #' @param age.lab Title of the calendar axis (if present)
 #' @param age.lim Limits of the calendar axis (if present)
 #' @param age.rev Reverse the age axis. Defaults to TRUE
@@ -457,7 +457,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
 
   ages <- array(NA, dim=c(dist.res, length(age))) # later fill with years
   probs <- ages # later fill with probs
-  mx <- 0
+  mx <- rep(0, length(age))
   hpds <- list()
   for(i in 1:length(age)) {
     tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, normalise=normalise, cc.resample=cc.resample, BCAD=BCAD, cc.dir=cc.dir)
@@ -466,33 +466,19 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
     tmp <- approx(tmp[,1], tmp[,2], seq(min(tmp[,1]), max(tmp[,1]), length=dist.res))
 
     if(normalise)
-      tmp <- cbind(tmp$x, tmp$y/sum(tmp$y)) else
+      tmp <- cbind(tmp$x, tmp$y) else
         tmp <- cbind(tmp$x, tmp$y/max(tmp$y))
 
-#    if(cc.resample) {
-#      if(BCAD)
-#        tmp[,1] <- tmp[,1] - 1950 # work in cal BP here...
-#      if(min(tmp[,1]) >= 25e3)
-#        tmp[,2] <- tmp[,2]/20 else
-#          if(min(tmp[,1]) >= 15e3)
-#            tmp[,2] <- tmp[,2]/10 else
-#              if(min(tmp[,1]) >= 5e3)
-#                tmp[,2] <- tmp[,2]/5
-#      if(BCAD)
-#        tmp[,1] <- 1950 + tmp[,1] # ... and back to AD/BC
-#    }
-
-    mx <- max(mx, tmp[,2])
+    mx[i] <- max(tmp[,2])
     ages[,i] <- tmp[,1]
     probs[,i] <- tmp[,2]
   }
   if(normalise)
-    probs <- probs/mx #else # highest prob set to 1 for drawing
-      #probs <- probs / colSums(probs)
+    probs <- probs/median(mx)
 
   if(ka)
     ages <- ages/1e3
-  ages <- cbind(ages)
+ # ages <- cbind(ages)
 
   if(!add) {
     if(length(age.lab) == 0)
@@ -536,7 +522,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
       if(!up)
         probpol <- -1*probpol
     }
-agepol <<- agepol; probpol <<- probpol; ages <<- ages; probs <<- probs
+
   # now draw the dates
   for(i in 1:length(age)) {
     if(rotate.axes)
