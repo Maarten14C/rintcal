@@ -112,8 +112,7 @@ age.F14C <- function(mn, sdev=c(), decimals=3) {
 #' D14C.F14C(-10, 238)
 #' @export
 D14C.F14C <- function(D14C, t)
-  return((1/1000) * (D14C+1) * exp((-t/8267)))
-
+  return( ((D14C/1000)+1) * exp(-t/8267))
 
 
 #' @name F14C.D14C
@@ -135,8 +134,7 @@ D14C.F14C <- function(D14C, t)
 #' lines(cc[,1]/1e3, cc.D14Cmin)
 #' @export
 F14C.D14C <- function(F14C, t)
-  return( (1000 * ( F14C / exp((-t/8267)) ) ) - 1 )
-
+  return( 1000 * ((F14C / exp(-t/8267)) - 1))
 
 
   # calculate the impacts of contamination
