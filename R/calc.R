@@ -12,7 +12,7 @@
 #' @examples
 #'   pMC.age(110, 0.5) # a postbomb date, so with a negative 14C age
 #'   pMC.age(80, 0.5) # prebomb dates can also be calculated
-#'   pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\%), throws a warning, use F14C.age instead
+#'   pMC.age(.8, 0.005, ratio=1) # throws a warning, use F14C.age instead
 #' @export
 pMC.age <- function(mn, sdev=c(), ratio=100, decimals=0) {
   if(ratio !=100)
@@ -106,7 +106,7 @@ age.F14C <- function(mn, sdev=c(), decimals=3) {
 #' @details As explained by Heaton et al. 2020 (Radiocarbon), 14C measurements are commonly expressed in
 #' three domains: Delta14C, F14C and the radiocarbon age. This function translates Delta14C, the historical level of Delta14C in the year t cal BP, to F14C values. Note that per convention, this function uses the Cambridge half-life, not the Libby half-life.
 #' @param D14C The Delta14C value to translate
-#' @param the cal BP age
+#' @param t the cal BP age
 #' @return The corresponding F14C value
 #' @examples
 #' D14C.F14C(-10, 238)
@@ -115,17 +115,18 @@ D14C.F14C <- function(D14C, t)
   return( ((D14C/1000)+1) * exp(-t/8267))
 
 
+
 #' @name F14C.D14C
 #' @title Transform F14C into D14C
 #' @details As explained by Heaton et al. 2020 (Radiocarbon), 14C measurements are commonly expressed in
 #' three domains: Delta14C, F14C and the radiocarbon age. This function translates F14C values into Delta14C, the historical level of Delta14C in the year t cal BP. Note that per convention, this function uses the Cambridge half-life, not the Libby half-life.
 #' @param F14C The F14C value to translate
-#' @param the cal BP age
+#' @param t the cal BP age
 #' @return The corresponding D14C value
 #' @examples
 #' F14C.D14C(0.985, 222)
 #' cc <- ccurve()
-#' plot IntCal20 as D14C:
+#' # plot IntCal20 as D14C:
 #' cc.Fmin <- age.F14C(cc[,2]+cc[,3])
 #' cc.Fmax <- age.F14C(cc[,2]-cc[,3])
 #' cc.D14Cmin <- F14C.D14C(cc.Fmin, cc[,1])
@@ -137,36 +138,39 @@ F14C.D14C <- function(F14C, t)
   return( 1000 * ((F14C / exp(-t/8267)) - 1))
 
 
-  # calculate the impacts of contamination
-  #' @name contaminate
-  #' @title Simulate the impact of contamination on a radiocarbon age
-  #' @description Given a certain radiocarbon age, calculate the observed impact of contamination with a ratio of material with a different 14C content (for example, 1% contamination with modern carbon)
-  #' @return The observed radiocarbon age and error
-  #' @param y the true radiocarbon age
-  #' @param er the error of the true radiocarbon age
-  #' @param fraction Relative amount of contamination. Must be between 0 and 1
-  #' @param F14C the F14C of the contamination. Set at 1 for carbon of modern radiocarbon age, at 0 for 14C-free carbon, or anywhere inbetween.
-  #' @param F14C.er error of the contamination. Defaults to 0.
-  #' @author Maarten Blaauw
-  #' @examples
-  #' contaminate(5000, 20, .01, 1) # 1% contamination with modern carbon
-  #' Impacts of different amounts of contamination with modern carbon:
-  #' real.14C <- seq(0, 50e3, length=200)
-  #' contam <- seq(0, .1, length=101) # 0 to 10% contamination
-  #' contam.col <- rainbow(length(contam))
-  #' plot(0, type="n", xlim=c(0, 55e3), xlab="real 14C age", ylim=range(real.14C), ylab="observed 14C age")
-  #' for(i in 1:length(contam))
-  #'   lines(real.14C, contaminate(real.14C, c(), contam[i], 1, decimals=5), col=contam.col[i])
-  #' contam.legend <- seq(0, .1, length=6)
-  #' contam.col <- rainbow(length(contam.legend))
-  #' text(52e3, contaminate(50e3, c(), contam.legend, 1), labels=contam.legend, col=contam.col, cex=.7)
-  #' @export
-  contaminate <- function(y, sdev=c(), fraction, F14C, F14C.er=0, decimals=5) {
-    y.F <- as.data.frame(age.F14C(y, sdev, decimals))
-    mn <- ((1-fraction)*y.F[,1]) + (fraction*F14C)
-    if(length(sdev) == 0)
-      return(F14C.age(mn, c(), decimals)) else {
-        er <- sqrt(y.F[,2]^2 + F14C.er^2)
-        return(F14C.age(mn, er, decimals))
-      }
-  }
+
+# calculate the impacts of contamination
+#' @name contaminate
+#' @title Simulate the impact of contamination on a radiocarbon age
+#' @description Given a certain radiocarbon age, calculate the observed impact of contamination with a ratio of material with a different 14C content (for example, 1% contamination with modern carbon)
+#' @return The observed radiocarbon age and error
+#' @param y the true radiocarbon age
+#' @param sdev the error of the true radiocarbon age
+#' @param fraction Relative amount of contamination. Must be between 0 and 1
+#' @param F14C the F14C of the contamination. Set at 1 for carbon of modern radiocarbon age, at 0 for 14C-free carbon, or anywhere inbetween.
+#' @param F14C.er error of the contamination. Defaults to 0.
+#' @param decimals Rounding of the output. Since details matter here, the default is to provide 5 decimals.
+#' @author Maarten Blaauw
+#' @examples
+#' contaminate(5000, 20, .01, 1) # 1% contamination with modern carbon
+#' # Impacts of different amounts of contamination with modern carbon:
+#' real.14C <- seq(0, 50e3, length=200)
+#' contam <- seq(0, .1, length=101) # 0 to 10% contamination
+#' contam.col <- rainbow(length(contam))
+#' plot(0, type="n", xlim=c(0, 55e3), 
+#'   xlab="real", ylim=range(real.14C), ylab="observed")
+#' for(i in 1:length(contam))
+#'   lines(real.14C, contaminate(real.14C, c(), contam[i], 1, decimals=5), col=contam.col[i])
+#' contam.legend <- seq(0, .1, length=6)
+#' contam.col <- rainbow(length(contam.legend))
+#' text(52e3, contaminate(50e3, c(), contam.legend, 1), labels=contam.legend, col=contam.col, cex=.7)
+#' @export
+contaminate <- function(y, sdev=c(), fraction, F14C, F14C.er=0, decimals=5) {
+  y.F <- as.data.frame(age.F14C(y, sdev, decimals))
+  mn <- ((1-fraction)*y.F[,1]) + (fraction*F14C)
+  if(length(sdev) == 0)
+    return(F14C.age(mn, c(), decimals)) else {
+      er <- sqrt(y.F[,2]^2 + F14C.er^2)
+      return(F14C.age(mn, er, decimals))
+    }
+}

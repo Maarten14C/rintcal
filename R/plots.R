@@ -399,6 +399,8 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param up If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
+#' @param cal.col Colour of the inside of distribution of non-radiocarbon dates that didn't need calibration
+#' @param cal.border Colour of the border of the distribution of non-radiocarbon dates that didn't need calibration
 #' @param add Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.
 #' @param ka Whether or not to plot ages as thousands of years. Defaults to \code{ka=FALSE}.
 #' @param rotate.axes By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use \code{rotate.axes=TRUE} to rotate the axes.
@@ -426,7 +428,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), cal.hpd.col=rgb(0, 0.5, 0.5, 0.35), mirror=TRUE, up=FALSE, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), cal.col=rgb(0, 0.5, 0.5, 0.35), cal.border=rgb(0, 0.5, 0.5, 0.35), add=FALSE, ka=FALSE, rotate.axes=FALSE, ex=1, normalise=TRUE, cc.resample=5, age.lab=c(), age.lim=c(), d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, cc.dir=NULL, dist.res=100, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), cal.hpd.col=rgb(0, 0.5, 0.5, 0.35), mirror=TRUE, up=FALSE, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), cal.col=rgb(0, 0.5, 0.5, 0.35), cal.border=rgb(0, 0.5, 0.5, 0.35), add=FALSE, ka=FALSE, rotate.axes=FALSE, ex=1, normalise=TRUE, cc.resample=5, age.lab=c(), age.lim=c(), age.rev=FALSE, d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, cc.dir=NULL, dist.res=100, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -464,7 +466,6 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
     hpds[[i]] <- hpd(tmp, prob, return.raw=TRUE)
 
     tmp <- approx(tmp[,1], tmp[,2], seq(min(tmp[,1]), max(tmp[,1]), length=dist.res))
-
     if(normalise)
       tmp <- cbind(tmp$x, tmp$y) else
         tmp <- cbind(tmp$x, tmp$y/max(tmp$y))
@@ -478,7 +479,9 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
 
   if(ka)
     ages <- ages/1e3
- # ages <- cbind(ages)
+
+ages <- cbind(ages)
+probs <- cbind(probs)
 
   if(!add) {
     if(length(age.lab) == 0)
@@ -508,26 +511,40 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
   }
 
   # the heights of the distributions scale with the depth axis limits
-  ex <- ex * (max(d.lim) - min(d.lim)) / 10
+  if(length(age) > 1)
+    ex <- ex * (max(d.lim) - min(d.lim)) / 10
   if(mirror)
     ex <- ex/2
-
-  # prepare for drawing the distributions
-  if(mirror) {
-    agepol <- t(t(ages[c(1:nrow(ages), nrow(ages):1),1:ncol(ages)]))
-    probpol <- ex*rbind(probs[1:nrow(probs),], -probs[nrow(probs):1,])
-  } else { # save time and memory by drawing more simple polygons
-      agepol <- t(t(ages[c(1,1:nrow(ages), nrow(ages)),]))
-      probpol <- ex*rbind(probs[c(1,1:nrow(probs),nrow(probs)),])
-      if(!up)
-        probpol <- -1*probpol
-    }
+  
+  if(length(age) == 1) {
+    if(mirror) {
+      agepol <- ages[c(1:length(ages), length(ages):1)]
+      probpol <- ex * c(probs, -probs[length(probs):1])
+    } else {
+        agepol <- ages[c(1, 1:length(ages), length(ages))]
+        probpol <- ex * c(0, probs, 0)
+      }
+      if(rotate.axes)
+        polygon(depth+probpol, agepol, col=col, border=border) else
+          polygon(agepol, depth+probpol, col=col, border=border)
+    } else {
+      if(mirror) {
+        agepol <- ages[c(1:nrow(ages), nrow(ages):1),]
+        probpol <- ex*rbind(probs[1:nrow(probs),], -1*probs[nrow(probs):1,])
+      } else {
+          agepol <- t(t(ages[c(1,1:nrow(ages), nrow(ages)),]))
+          probpol <- ex*rbind(probs[c(1,1:nrow(probs),nrow(probs)),])
+      }
+    }  
+    if(!up)
+      probpol <- -1*probpol
 
   # now draw the dates
   for(i in 1:length(age)) {
-    if(rotate.axes)
-      polygon(depth[i]+probpol[,i], agepol[,i], col=col[i], border=border[i]) else
-        polygon(agepol[,i], depth[i]+probpol[,i], col=col[i], border=border[i])
+    if(length(age) > 1) # then already drawn before 
+      if(rotate.axes)
+        polygon(depth[i]+probpol[,i], agepol[,i], col=col[i], border=border[i]) else
+          polygon(agepol[,i], depth[i]+probpol[,i], col=col[i], border=border[i])
 
     if(draw.hpd) {
       if(ka)

@@ -25,9 +25,9 @@ point.estimates(
 
 \item{midpoint}{Report the midpoint of the hpd range(s)}
 
-\item{rounded}{Rounding for reported probabilities. Defaults to 1 decimal.}
+\item{prob}{probability range for the hpd range(s)}
 
-\item{probability}{range for the hpd range(s)}
+\item{rounded}{Rounding for reported probabilities. Defaults to 1 decimal.}
 }
 \value{
 The chosen point estimates

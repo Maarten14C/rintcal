@@ -35,6 +35,7 @@ draw.dates(
   cc.resample = 5,
   age.lab = c(),
   age.lim = c(),
+  age.rev = FALSE,
   d.lab = c(),
   d.lim = c(),
   d.rev = TRUE,
@@ -92,6 +93,10 @@ draw.dates(
 
 \item{border}{Colour of the border of the distribution}
 
+\item{cal.col}{Colour of the inside of distribution of non-radiocarbon dates that didn't need calibration}
+
+\item{cal.border}{Colour of the border of the distribution of non-radiocarbon dates that didn't need calibration}
+
 \item{add}{Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.}
 
 \item{ka}{Whether or not to plot ages as thousands of years. Defaults to \code{ka=FALSE}.}
@@ -107,6 +112,8 @@ draw.dates(
 \item{age.lab}{Title of the calendar axis (if present)}
 
 \item{age.lim}{Limits of the calendar axis (if present)}
+
+\item{age.rev}{Reverse the age axis. Defaults to TRUE}
 
 \item{d.lab}{Title of the vertical axis (if present)}
 
@@ -135,8 +142,6 @@ draw.dates(
 \item{dist.res}{Resolution of the distribution polygons. Defaults to \code{dist.res=100}.}
 
 \item{...}{Additional plotting options}
-
-\item{age.rev}{Reverse the age axis. Defaults to TRUE}
 }
 \value{
 A plot of the (calibrated) dates

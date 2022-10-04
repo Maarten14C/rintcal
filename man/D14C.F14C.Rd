@@ -9,7 +9,7 @@ D14C.F14C(D14C, t)
 \arguments{
 \item{D14C}{The Delta14C value to translate}
 
-\item{the}{cal BP age}
+\item{t}{the cal BP age}
 }
 \value{
 The corresponding F14C value

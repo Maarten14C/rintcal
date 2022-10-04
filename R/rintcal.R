@@ -6,7 +6,7 @@
 #' @docType package
 #' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk>
 #' @importFrom utils read.table write.table packageName
-#' @importFrom stats approx dnorm
+#' @importFrom stats approx dnorm median weighted.mean
 #' @importFrom grDevices rgb extendrange
 #' @importFrom graphics axis par legend lines points polygon segments text
 #' @importFrom data.table fread fwrite
@@ -14,6 +14,8 @@
 NULL
 
 # todo: make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
+
+# check dplr dendro
 
 # done:
 

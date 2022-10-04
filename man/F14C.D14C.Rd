@@ -9,7 +9,7 @@ F14C.D14C(F14C, t)
 \arguments{
 \item{F14C}{The F14C value to translate}
 
-\item{the}{cal BP age}
+\item{t}{the cal BP age}
 }
 \value{
 The corresponding D14C value
@@ -24,7 +24,7 @@ three domains: Delta14C, F14C and the radiocarbon age. This function translates 
 \examples{
 F14C.D14C(0.985, 222)
 cc <- ccurve()
-plot IntCal20 as D14C:
+# plot IntCal20 as D14C:
 cc.Fmin <- age.F14C(cc[,2]+cc[,3])
 cc.Fmax <- age.F14C(cc[,2]-cc[,3])
 cc.D14Cmin <- F14C.D14C(cc.Fmin, cc[,1])

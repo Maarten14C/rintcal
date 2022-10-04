@@ -28,5 +28,5 @@ Post-bomb dates are often reported as pMC or percent modern carbon. Since Bacon 
 \examples{
   pMC.age(110, 0.5) # a postbomb date, so with a negative 14C age
   pMC.age(80, 0.5) # prebomb dates can also be calculated
-  pMC.age(.8, 0.005, 1) # pMC expressed against 1 (not against 100\\%), throws a warning, use F14C.age instead
+  pMC.age(.8, 0.005, ratio=1) # throws a warning, use F14C.age instead
 }

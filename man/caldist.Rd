@@ -33,6 +33,8 @@ caldist(
 
 \item{yrsteps}{Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve}
 
+\item{cc.resample}{The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ, as can their total areas (which should ideally all sum to the same size). To account for this, resample to a constant time-span, using, e.g., \code{cc.resample=5} for 5-yr timespanes.}
+
 \item{dist.res}{As an alternative to yrsteps, provide the amount of 'bins' in the distribution}
 
 \item{threshold}{Report only values above a threshold. Defaults to \code{threshold=1e-6}.}
