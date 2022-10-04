@@ -14,9 +14,6 @@
 NULL
 
 # todo: make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
-
-# check dplr dendro
-
 # done:
 
 # internal functions to speed up reading and writing files, using the data.table R package if present
