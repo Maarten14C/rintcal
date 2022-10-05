@@ -35,11 +35,11 @@ and the other way round:
 age.F14C(-2300, 40)
 ```
 
-To transfer D14C (deviations in atmospheric 14C concentration at t cal BP) to F14C, and the other way around:
+To transfer D14C (a proxy for atmospheric 14C concentration at t cal BP) to F14C, and the other way around:
 
 ```{r}
-F14C.D14C(0.711, t=4000)
-D14C.F14C(1152.463, 4000)
+F14C.D14C(0.71, t=4000)
+D14C.F14C(152, 4000)
 ```
 
 These functions can be used to investigate Delta14C over time:
