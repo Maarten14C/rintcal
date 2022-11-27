@@ -1,3 +1,6 @@
+# rintcal 0.5.1
+* the data underlying the IntCal20 curves are now available through downloading a json file (code kindly contributed by Christopher Bronk Ramsey, University of Oxford)
+
 # rintcal 0.5.0
 * added a function point.estimates to calculate the mode, median, weighted mean and midpoint of a calibrated distribution (after a suggestion by Alexandra Rouillard)
 * reading and writing of large files should now go faster if the data.table R package is installed (which doesn't seem to work well on some Macs)

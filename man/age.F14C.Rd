@@ -4,14 +4,14 @@
 \alias{age.F14C}
 \title{Calculate F14C values from C14 ages}
 \usage{
-age.F14C(mn, sdev = c(), decimals = 3)
+age.F14C(mn, sdev = c(), decimals = 5)
 }
 \arguments{
 \item{mn}{Reported mean of the 14C age.}
 
 \item{sdev}{Reported error of the 14C age. If left empty, will translate mn to F14C.}
 
-\item{decimals}{Amount of decimals required for the F14C value.}
+\item{decimals}{Amount of decimals required for the F14C value. Defaults to 5.}
 }
 \value{
 F14C values from C14 ages.

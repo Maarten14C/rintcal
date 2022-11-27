@@ -35,13 +35,13 @@ pMC.age <- function(mn, sdev=c(), ratio=100, decimals=0) {
 #' @param mn Reported mean of the 14C age.
 #' @param sdev Reported error of the 14C age.
 #' @param ratio Most modern-date values are reported against \code{100}. If it is against \code{1} instead, a warning is provided; use \code{age.F14C}.
-#' @param decimals Amount of decimals required for the pMC value.
+#' @param decimals Amount of decimals required for the pMC value. Defaults to 5.
 #' @return pMC values from C14 ages.
 #' @examples
 #'   age.pMC(-2000, 20)
 #'   age.pMC(-2000, 20, 1)
 #' @export
-age.pMC <- function(mn, sdev=c(), ratio=100, decimals=3) {
+age.pMC <- function(mn, sdev=c(), ratio=100, decimals=5) {
   if(ratio !=100)
     warning("age.pMC expects a ratio of 100. For ratio=1, use age.F14C")
   y <- exp(-mn / 8033)
@@ -61,13 +61,13 @@ age.pMC <- function(mn, sdev=c(), ratio=100, decimals=3) {
 #'  this function can be used to calculate radiocarbon ages from F14C values. The reverse function is \link{age.F14C}.
 #' @param mn Reported mean of the F14C
 #' @param sdev Reported error of the F14C. Returns just the mean if left empty.
-#' @param decimals Amount of decimals required for the radiocarbon age.
+#' @param decimals Amount of decimals required for the radiocarbon age. Quite sensitive, defaults to 5.
 #' @return Radiocarbon ages from F14C values. If F14C values are above 100\%, the resulting radiocarbon ages will be negative.
 #' @examples
 #'   F14C.age(1.10, 0.5) # a postbomb date, so with a negative 14C age
 #'   F14C.age(.80, 0.5) # prebomb dates can also be calculated
 #' @export
-F14C.age <- function(mn, sdev=c(), decimals=0) {
+F14C.age <- function(mn, sdev=c(), decimals=5) {
   y <- -8033 * log(mn)
   if(length(sdev) == 0)
     signif(y, decimals) else {
@@ -85,12 +85,12 @@ F14C.age <- function(mn, sdev=c(), decimals=0) {
 #' this function can be used to calculate F14C values from radiocarbon ages. The reverse function of \link{F14C.age}.
 #' @param mn Reported mean of the 14C age.
 #' @param sdev Reported error of the 14C age. If left empty, will translate mn to F14C.
-#' @param decimals Amount of decimals required for the F14C value.
+#' @param decimals Amount of decimals required for the F14C value. Defaults to 5.
 #' @return F14C values from C14 ages.
 #' @examples
 #'   age.F14C(-2000, 20)
 #' @export
-age.F14C <- function(mn, sdev=c(), decimals=3) {
+age.F14C <- function(mn, sdev=c(), decimals=5) {
   y <- exp(-mn / 8033)
   if(length(sdev) == 0)
     signif(y, decimals) else {

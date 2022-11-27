@@ -10,10 +10,12 @@
 #' @importFrom grDevices rgb extendrange
 #' @importFrom graphics axis par legend lines points polygon segments text
 #' @importFrom data.table fread fwrite
+#' @importFrom jsonlite fromJSON toJSON
 #' @name rintcal
 NULL
 
-# todo: make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
+# todo: consider adding smoothing (as in calib.org), calibrate: cal axis should work in BCAD if this option is chosen (it currently works in cal BP), add cc.dir to draw.dates (and check that this still works as expected), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, download json files from IntCal/ORAU, prepare calib function with MCMC ccurve
+
 # done:
 
 # internal functions to speed up reading and writing files, using the data.table R package if present

@@ -500,6 +500,8 @@ probs <- cbind(probs)
       d.lim <- extendrange(depth)
     if(d.rev)
       d.lim <- rev(d.lim)
+    if(age.rev)
+      age.lim <- rev(age.lim)
     if(rotate.axes)
       plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=d.lim, xlab=d.lab, ...) else
         plot(0, type="n", xlim=age.lim, xlab=age.lab, ylim=d.lim, ylab=d.lab, ...)
@@ -533,7 +535,7 @@ probs <- cbind(probs)
         probpol <- ex*rbind(probs[1:nrow(probs),], -1*probs[nrow(probs):1,])
       } else {
           agepol <- t(t(ages[c(1,1:nrow(ages), nrow(ages)),]))
-          probpol <- ex*rbind(probs[c(1,1:nrow(probs),nrow(probs)),])
+          probpol <- ex*rbind(rep(0, ncol(probs)), probs, rep(0, ncol(probs)))
       }
     }  
     if(!up)
