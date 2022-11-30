@@ -1,4 +1,22 @@
-# these functions were kindly contributed by Christopher Bronk Ramsey, University of Oxford
+# these functions were kindly contributed by Christopher Bronk Ramsey, University of Oxford, and modified by Maarten Blaauw, Queen's University Belfast
+
+#' IntCal20 json file
+#'
+#' The IntCal20 calibration curves and their underpinning data. 
+#' This is based on a json file produced by Prof. Christopher Bronk Ramsey, University of Oxford.
+#' @format ## `intcal`
+#' A list with six main entries:
+#' \describe{
+#'   \item{json_application}{IntChron project name}
+#'   \item{records}{a list with 139 entries for each IntCal dataset}
+#'   \item{project_series_list}{a list with 5 entries: IntCal20, Marine20, SHCal20, a list of the underlying datasets, and a GICC vs IntCal20 comparison}
+#'   \item{parameters}{an empty list}
+#'   \item{bibliography}{a list with 141 bibliography entries}
+#'   \item{options}{a list of 17 options (not used)}
+#' }
+#' @source <https://intchron.org/archive/IntCal/IntCal20/index.json>
+#'   
+"intcal"
 
 
 
@@ -6,13 +24,21 @@
 #' @title Read data underlying the IntCal curves.
 #' @description Download the json file that contains the IntCal20 radiocarbon calibration curves and the contributing data series.
 #' @details The intcal curves consist of the IntCal20, SHCal20 and Marine20 calibration curves. The details of these curves can be loaded, as well as the underlying data such as tree-ring records.
-#' @param fname The name of the json file. By default this downloads the json file from the intchron.org site
+#' @param from.jsonfile The name and location of the json file (if used). Defaults to FALSE, and then the data will be loaded from within the rintcal package
+#' @param from.intchron.org Download the IntCal20 json file the inchron.org server. Defaults to FALSE, and then the data will be loaded from within the rintcal package
 #' @examples
-#'  intcal <- intcal.read.data() # from intchron.org
+#'  intcal <- intcal.read.data()
+#'  intcal <- intcal.read.data(from.intchron.org=TRUE)
 #' @export
-intcal.read.data <- function(fname=url('https://intchron.org/archive/IntCal/IntCal20/index.json')) {
-  rtn <- jsonlite::fromJSON(fname, simplifyDataFrame = FALSE)
- 
+intcal.read.data <- function(from.intchron.org=FALSE, from.jsonfile=FALSE) {
+  if(from.intchron.org) {
+    json <- url('https://intchron.org/archive/IntCal/IntCal20/index.json') 
+    intcal <- jsonlite::fromJSON(json, simplifyDataFrame = FALSE) 
+  } else
+    if(from.jsonfile > 0) 
+      intcal <- jsonlite::fromJSON(from.jsonfile, simplifyDataFrame = FALSE) else 
+        intcal <- rintcal::intcal # then read rintcal/data/intcal.rda 
+
   # internal function, only called within intcal.read.data
   intcal.make.data.frame <- function(obj) {
     obj[['data']] <- data.frame(obj[['data']])
@@ -20,59 +46,57 @@ intcal.read.data <- function(fname=url('https://intchron.org/archive/IntCal/IntC
     return(obj)
   }
  
-  if(length(rtn[['json_application']]) == 0)
+  if(length(intcal[['json_application']]) == 0)
     return(FALSE)
-  json_appl <- strsplit(rtn[['json_application']],split='[.:]')
+  json_appl <- strsplit(intcal[['json_application']],split='[.:]')
   if(json_appl[[1]][1] != 'INTCHRON'){return(FALSE) }
   if(json_appl[[1]][2] == 'Record') {
     s <- 1
-    sl <- length(rtn[['series_list']])+1
-    rtn[['refs']] <- I(rtn[['refs']])
+    sl <- length(intcal[['series_list']])+1
+    intcal[['refs']] <- I(intcal[['refs']])
     while(s < sl) {
-      rtn[['series_list']][[s]] <- intcal.make.data.frame(rtn[['series_list']][[s]])
+      intcal[['series_list']][[s]] <- intcal.make.data.frame(intcal[['series_list']][[s]])
       s <- s+1
     }
-    return(rtn)
+    return(intcal)
   }
 
   if(json_appl[[1]][2] == 'Series') {
-    rtn <- intcal.make.data.frame(rtn)
-    return(rtn)
+    intcal <- intcal.make.data.frame(intcal)
+    return(intcal)
   }
 
   if(json_appl[[1]][2] != 'Project') 
-    return(rtn)
+    return(intcal)
 
   r <- 1
-  rl <- length(rtn[['records']])+1
-  while(r < rl) {
+  while(r < (length(intcal[['records']])+1)) {
     s <- 1
-    sl <- length(rtn[['records']][[r]][['file_data']][['series_list']])+1
-    rtn[['records']][[r]][['file_data']][['refs']] <- I(rtn[['records']][[r]][['file_data']][['refs']])
+    sl <- length(intcal[['records']][[r]][['file_data']][['series_list']])+1
+    intcal[['records']][[r]][['file_data']][['refs']] <- I(intcal[['records']][[r]][['file_data']][['refs']])
     while(s < sl) {
-      rtn[['records']][[r]][['file_data']][['series_list']][[s]] <- 
-        intcal.make.data.frame(rtn[['records']][[r]][['file_data']][['series_list']][[s]])
+      intcal[['records']][[r]][['file_data']][['series_list']][[s]] <- 
+        intcal.make.data.frame(intcal[['records']][[r]][['file_data']][['series_list']][[s]])
      s <- s+1
     }
     r <- r+1
    }
 
   s <- 1
-  sl <- length(rtn[['project_series_list']])+1
+  sl <- length(intcal[['project_series_list']])+1
   while(s < sl) {
-    rtn[['project_series_list']][[s]][['file_data']] <- intcal.make.data.frame(rtn[['project_series_list']][[s]][['file_data']])
+    intcal[['project_series_list']][[s]][['file_data']] <- intcal.make.data.frame(intcal[['project_series_list']][[s]][['file_data']])
     s <- s+1
   }
 
   p <- 1
-  pl <- length(rtn[['parameters']])+1
-  while(p < pl){
-    rtn[['parameters']][[p]][['options']] <- I(rtn[['parameters']][[p]][['options']])
-    rtn[['parameters']][[p]][['option_colors']] <- I(rtn[['parameters']][[p]][['option_colors']])
+  while(p < (length(intcal[['parameters']])+1)){
+    intcal[['parameters']][[p]][['options']] <- I(intcal[['parameters']][[p]][['options']])
+    intcal[['parameters']][[p]][['option_colors']] <- I(intcal[['parameters']][[p]][['option_colors']])
     p <- p+1
    }
 
-  return(rtn)
+  return(intcal)
 }
 
 
@@ -83,7 +107,7 @@ intcal.read.data <- function(fname=url('https://intchron.org/archive/IntCal/IntC
 #' @param data intcal variable as obtained from intcal.read.data()
 #' @param fname Name of the file to be written
 #' @examples
-#'  intcal <- intcal.read.data(url('https://intchron.org/archive/IntCal/IntCal20/index.json'))
+#'  intcal <- intcal.read.data()
 #'  myintcal <- tempfile()
 #'  intcal.write.data(intcal, myintcal)
 #' @export
@@ -102,9 +126,8 @@ intcal.write.data <- function(data, fname)
 #'  # all datasets from the Southern Hemisphere:
 #'  sh.data <- intcal.data.frames(intcal, intcal_set_type='SH') 
 #'  head(sh.data)
-#' # read dataset 52
-#'  intcal.52 <- intcal.data.frames(intcal, intcal_set=52) 
-#'  head(intcal.52)
+#'  Irish.oaks <- intcal.data.frames(intcal, intcal_set=3) 
+#'  head(Irish.oaks[[2]]$data)
 #' @export
 intcal.data.frames <- function(obj, ...) {
   params <- list(...)
@@ -112,8 +135,7 @@ intcal.data.frames <- function(obj, ...) {
 
   rtn <- list()
   r <- 1
-  rl <- length(obj[['records']])+1
-  while(r < rl) {
+  while(r < (length(obj[['records']])+1)) {
     s <- 1
     sl <- length(obj[['records']][[r]][['file_data']][['series_list']])+1
     while(s < sl) {

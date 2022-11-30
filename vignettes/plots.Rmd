@@ -17,7 +17,7 @@ We can also plot a calibration curve:
 draw.ccurve()
 ```
 
-You can also compare two calibration curves:
+Or compare two calibration curves:
 
 ```{r, fig.width=4, fig.asp=.8}
 draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1', add.yaxis=TRUE)
@@ -35,7 +35,7 @@ Interesting things happened after 1950, as can be seen by adding a postbomb curv
 draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1')
 ```
 
-The postbomb curve dwarfes the IntCal20 curve, so we could also plot both on separate vertical axes:
+The postbomb curve dwarfs the IntCal20 curve, so we could also plot both on separate vertical axes:
 
 ```{r, fig.width=4, fig.asp=.8}
 draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1', add.yaxis=TRUE)

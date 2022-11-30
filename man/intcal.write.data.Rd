@@ -15,7 +15,7 @@ intcal.write.data(data, fname)
 Write the intcal.json file that comes with the rintcal packages to somewhere local. This can be useful if you want to avoid repeatedly downloading the json file from intchron.org.
 }
 \examples{
- intcal <- intcal.read.data(url('https://intchron.org/archive/IntCal/IntCal20/index.json'))
+ intcal <- intcal.read.data()
  myintcal <- tempfile()
  intcal.write.data(intcal, myintcal)
 }

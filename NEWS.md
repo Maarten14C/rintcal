@@ -1,5 +1,5 @@
 # rintcal 0.5.1
-* the data underlying the IntCal20 curves are now available through downloading a json file (code kindly contributed by Christopher Bronk Ramsey, University of Oxford)
+* the IntCal20 curves and their underpinning data are now available through a json file (code kindly contributed by Christopher Bronk Ramsey, University of Oxford)
 
 # rintcal 0.5.0
 * added a function point.estimates to calculate the mode, median, weighted mean and midpoint of a calibrated distribution (after a suggestion by Alexandra Rouillard)

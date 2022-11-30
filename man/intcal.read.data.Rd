@@ -4,12 +4,12 @@
 \alias{intcal.read.data}
 \title{Read data underlying the IntCal curves.}
 \usage{
-intcal.read.data(
-  fname = url("https://intchron.org/archive/IntCal/IntCal20/index.json")
-)
+intcal.read.data(from.intchron.org = FALSE, from.jsonfile = FALSE)
 }
 \arguments{
-\item{fname}{The name of the json file. By default this downloads the json file from the intchron.org site}
+\item{from.intchron.org}{Download the IntCal20 json file the inchron.org server. Defaults to FALSE, and then the data will be loaded from within the rintcal package}
+
+\item{from.jsonfile}{The name and location of the json file (if used). Defaults to FALSE, and then the data will be loaded from within the rintcal package}
 }
 \description{
 Download the json file that contains the IntCal20 radiocarbon calibration curves and the contributing data series.
@@ -18,5 +18,6 @@ Download the json file that contains the IntCal20 radiocarbon calibration curves
 The intcal curves consist of the IntCal20, SHCal20 and Marine20 calibration curves. The details of these curves can be loaded, as well as the underlying data such as tree-ring records.
 }
 \examples{
- intcal <- intcal.read.data() # from intchron.org
+ intcal <- intcal.read.data()
+ intcal <- intcal.read.data(from.intchron.org=TRUE)
 }

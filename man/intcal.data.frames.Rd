@@ -19,7 +19,6 @@ Extract items from the intcal json file.
  # all datasets from the Southern Hemisphere:
  sh.data <- intcal.data.frames(intcal, intcal_set_type='SH') 
  head(sh.data)
-# read dataset 52
- intcal.52 <- intcal.data.frames(intcal, intcal_set=52) 
- head(intcal.52)
+ Irish.oaks <- intcal.data.frames(intcal, intcal_set=3) 
+ head(Irish.oaks[[2]]$data)
 }
