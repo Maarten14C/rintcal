@@ -15,7 +15,7 @@ intcal.data.frames(obj, ...)
 Extract items from the intcal json file.
 }
 \examples{
- intcal <- intcal.read.data(url('https://intchron.org/archive/IntCal/IntCal20/index.json'))
+ intcal <- intcal.read.data()
  # all datasets from the Southern Hemisphere:
  sh.data <- intcal.data.frames(intcal, intcal_set_type='SH') 
  head(sh.data)

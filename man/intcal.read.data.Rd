@@ -19,5 +19,4 @@ The intcal curves consist of the IntCal20, SHCal20 and Marine20 calibration curv
 }
 \examples{
  intcal <- intcal.read.data()
- intcal <- intcal.read.data(from.intchron.org=TRUE)
 }

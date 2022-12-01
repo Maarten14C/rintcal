@@ -28,7 +28,6 @@
 #' @param from.intchron.org Download the IntCal20 json file the inchron.org server. Defaults to FALSE, and then the data will be loaded from within the rintcal package
 #' @examples
 #'  intcal <- intcal.read.data()
-#'  intcal <- intcal.read.data(from.intchron.org=TRUE)
 #' @export
 intcal.read.data <- function(from.intchron.org=FALSE, from.jsonfile=FALSE) {
   if(from.intchron.org) {
@@ -122,7 +121,7 @@ intcal.write.data <- function(data, fname)
 #' @param obj Name of the object
 #' @param ... Additional options can be provided, see examples
 #' @examples
-#'  intcal <- intcal.read.data(url('https://intchron.org/archive/IntCal/IntCal20/index.json'))
+#'  intcal <- intcal.read.data()
 #'  # all datasets from the Southern Hemisphere:
 #'  sh.data <- intcal.data.frames(intcal, intcal_set_type='SH') 
 #'  head(sh.data)

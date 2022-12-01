@@ -249,6 +249,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
   dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, cc.dir=cc.dir)
+
   cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE, rounded=rounded)
   hpds <- cal.hpd[[2]]
   cal.hpd <- cal.hpd[[1]]
@@ -289,6 +290,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
     cal.lim <- rev(cal.lim)
   } else
     lims <- cal.lim
+
   if(length(C14.lim) == 0) {
     cc.min <- max(1, min(which(Cc[,1] >= min(cal.lim))))
     cc.max <- min(nrow(Cc), max(which(Cc[,1] <= max(cal.lim))))
@@ -304,21 +306,27 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   ccpol <- cbind(c(Cc[,1], rev(Cc[,1])), c(Cc[,2]-Cc[,3], rev(Cc[,2]+Cc[,3])))
 
   # to plot the probability distributions on the age-scales, they need to be transposed
-  prob2age <- function(prob, age1, age2, prob1=min(prob[,2]), prob2=max(prob[,2])) {
-    if(BCAD) {
-      a <- (age1 - age2) / (prob1 - prob2)
-      b <- age1 + (a * prob1)
-      return(cbind(prob[,1], b + dist.height*a*prob[,2]))
-    } else {
+  prob2age <- function(prob, age1, age2, prob1=min(prob[,2]), prob2=max(prob[,2]), bcad=BCAD) {
         a <- (age2 - age1) / (prob2 - prob1)
         b <- age1 + (a * prob1)
         return(cbind(prob[,1], b + dist.height*a*prob[,2]))
-    }
   }
   tC14.dist <- prob2age(C14.dist, cal.lim[1], cal.lim[2])
   tC14.hpd <- prob2age(C14.hpd, cal.lim[1], cal.lim[2])
   tcal.dist <- prob2age(cal.dist, cc.lim[1], cc.lim[2])
   tcal.hpd <- prob2age(cal.hpd, cc.lim[1], cc.lim[2])
+
+  # after all calcs, adapt for anything that has to be as BCAD:
+  if(BCAD) {
+    cal.lim <- 1950-cal.lim
+    cal.dist[,1] <- 1950 - cal.dist[,1]
+    tC14.dist[,2] <- 1950 - tC14.dist[,2]
+    tC14.hpd[,2] <- 1950 - tC14.hpd[,2]
+    tcal.dist[,1] <- 1950-tcal.dist[,1]
+    tcal.hpd[,1] <- 1950 - tcal.hpd[,1]
+    ccpol[,1] <- 1950 - ccpol[,1]
+    hpds[,1:2] <- 1950 - hpds[,1:2]
+  }
 
   # plot
   if(length(cal.lab) == 0)
@@ -330,25 +338,16 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   # adapt axis labels and hpds if BCAD and/or ka
   xaxt <- ifelse(BCAD || ka, "n", "s")
   yaxt <- ifelse(ka, "n", "s")
-  plot(0, type="n", xlim=cal.lim, ylim=cc.lim, xlab=cal.lab, ylab=C14.lab, xaxt=xaxt, yaxt=yaxt, xaxs=xaxs, yaxs=yaxs, bty=bty, mgp=mgp, mar=mar)
-  if(BCAD) {
-    cal.dist[,1] <- 1950 - cal.dist[,1]
-    if(ka) {
-      axis(1, pretty(cal.lim), labels=1.950-pretty(cal.lim/1e3)) 
-      axis(2, pretty(cc.lim), labels=pretty(cc.lim/1e3)) 
-      cal.dist[,1] <- cal.dist[,1]/1e3
-      hpds[,1:2] <- hpds[,1:2]/1e3 
-    } else
-        axis(1, pretty(cal.lim), labels=1950-pretty(cal.lim))
-    hpds[,1:2] <- 1950 - hpds[,1:2]
-    colnames(cal.dist)[1] <- "BC/AD"
-  } else 
-    if(ka) {
-      axis(1, pretty(cal.lim), labels=pretty(cal.lim/1e3)) 
-      axis(2, pretty(cc.lim), labels=pretty(cc.lim/1e3)) 
-      cal.dist[,1] <- cal.dist[,1]/1e3
-      hpds[,1:2] <- hpds[,1:2]/1e3
-    }
+  plot(0, type="n", xlim=cal.lim, ylim=cc.lim, xlab=cal.lab, ylab=C14.lab, xaxt="n", yaxt="n", xaxs=xaxs, yaxs=yaxs, bty=bty, mgp=mgp, mar=mar)
+  if(ka) {
+    axis(1, pretty(cal.lim), labels=pretty(cal.lim/1e3))
+    axis(2, pretty(cc.lim), labels=pretty(cc.lim/1e3))
+    cal.dist[,1] <- cal.dist[,1]/1e3
+    hpds[,1:2] <- hpds[,1:2]/1e3
+  } else {
+     axis(1)
+     axis(2)
+  }
 
   # draw the data
   polygon(ccpol, border=cc.col, col=cc.fill)
@@ -357,6 +356,8 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   polygon(tcal.dist, border=dist.col, col=dist.fill)
   polygon(tcal.hpd, border=dist.col, col=hpd.fill)
   dot <- ifelse(cal.rev, min(lims), max(lims))
+  if(BCAD)
+    dot <- 1950 - dot
   points(dot, age, col=date.col, pch=20)
   segments(dot, age-error, dot, age+error, col=date.col)
 
