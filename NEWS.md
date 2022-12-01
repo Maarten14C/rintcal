@@ -1,5 +1,6 @@
-# rintcal 0.5.1
+# rintcal 0.5.1.1
 * the IntCal20 curves and their underpinning data are now available through a json file (code kindly contributed by Christopher Bronk Ramsey, University of Oxford)
+* calibrate now plots better when working in BC/AD
 
 # rintcal 0.5.0
 * added a function point.estimates to calculate the mode, median, weighted mean and midpoint of a calibrated distribution (after a suggestion by Alexandra Rouillard)
