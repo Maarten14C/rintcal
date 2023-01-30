@@ -108,7 +108,7 @@ new.ccdir <- function(cc.dir) {
 #'
 #' Hua et al. 2013 Atmospheric radiocarbon for the period 1950-2010. Radiocarbon 55(4), \doi{10.2458/azu_js_rc.v55i2.16177}
 #' 
-#' Hua et al. 2021 Atmospheric radiocarbon for the period 1950-2019. Radiocarbon in press,  \doi{10.1017/RDC.2021.95}
+#' Hua et al. 2022 Atmospheric radiocarbon for the period 1950-2019. Radiocarbon 64(4), 723-745, \doi{10.1017/RDC.2021.95}
 #'
 #' Hughen et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62. \doi{10.1017/RDC.2020.68}
 #'

@@ -481,8 +481,8 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
   if(ka)
     ages <- ages/1e3
 
-ages <- cbind(ages)
-probs <- cbind(probs)
+  ages <- cbind(ages)
+  probs <- cbind(probs)
 
   if(!add) {
     if(length(age.lab) == 0)
@@ -574,5 +574,85 @@ probs <- cbind(probs)
     }
   }
   invisible(list(ages, probs))
+}
+
+
+
+#' @name draw.d14C
+#' @title Draw d14C and the calibration curve.
+#' @description Draw a proxy of the atmospheric 14C concentration (d14C) as well as the calibration curve.
+#' @return A plot of d14C and the calibration curve
+#' @param cal1 First calendar year for the plot. Defaults to youngest calendar age of the calibration curve
+#' @param cal2 Last calendar year for the plot. Defaults to oldest calendar age of the calibration curve
+#' @param cc The calibration curve to use. Defaults to IntCal20
+#' @param BCAD The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.
+#' @param mar Plot margins (amount of white space along edges of axes 1-4).
+#' @param mgp Axis text margins (where should titles, labels and tick marks be plotted).
+#' @param xaxs Whether or not to extend the limits of the horizontal axis. Defaults to \code{xaxs="r"} which extends it by R's default.
+#' @param yaxs Whether or not to extend the limits of the vertical axis. Defaults to \code{yaxs="r"} which extends it by R's default.
+#' @param bty Draw a box around the graph ("n" for none, and "l", "7", "c", "u", "]" or "o" for correspondingly shaped boxes).
+#' @param ka Use kcal BP (and C14 kBP). Defaults to FALSE.
+#' @param cal.lab The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.
+#' @param cal.rev Reverse the calendar axis (defaults to FALSE).
+#' @param C14.lab Label for the C-14 axis. Defaults to 14C BP (or 14C kBP if ka=TRUE).
+#' @param C14.lim Limits for the C-14 axis. Calculated automatically by default.
+#' @param cc.col Colour of the calibration curve (fill).
+#' @param cc.border Colour of the calibration curve (border).
+#' @param D14C.lab Label for the D14C axis.
+#' @param D14C.lim Axis limits for the D14C axis. Calculated automatically by default.
+#' @param D14C.col Colour of the D14C curve (fill).
+#' @param D14C.border Colour of the D14C curve (border).
+#' @examples
+#'   draw.D14C()
+#'   draw.D14C(30e3, 55e3, ka=TRUE)
+#'   draw.D14C(cc=ccurve("NH1_monthly"), BCAD=TRUE)
+#' @export
+draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4), mgp=c(2.5,1,0), xaxs="r", yaxs="r", bty="u", ka=FALSE, cal.lab=c(), cal.rev=FALSE, C14.lab=c(), C14.lim=c(), cc.col=rgb(0,.5,0,.5), cc.border=rgb(0,.5,0,.5), D14C.lab=c(), D14C.lim=c(), D14C.col=rgb(0,0,1,.5), D14C.border=rgb(0,0,1,.5)) {
+  if(BCAD)
+    cc[,1] <- 1950 - cc[,1]
+  if(length(cal1) == 0)
+    cal1 <- min(cc[,1])
+  if(length(cal2) == 0)
+    cal2 <- max(cc[,1])
+  yrmin <- max(1, which(cc[,1] <= min(cal1, cal2)))
+  yrmax <- min(nrow(cc), which(cc[,1] >= max(cal1, cal2)))
+  cc <- cc[yrmin:yrmax,]
+  cc.Fmin <- age.F14C(cc[,2]+cc[,3])
+  cc.Fmax <- age.F14C(cc[,2]-cc[,3])
+  cc.D14Cmin <- F14C.D14C(cc.Fmin, cc[,1])
+  cc.D14Cmax <- F14C.D14C(cc.Fmax, cc[,1])
+  op <- par(mar=mar, bty=bty, mgp=mgp, xaxs=xaxs, yaxs=yaxs)
+  on.exit(par(op))
+  kyr <- ifelse(ka, 1e3, 1)
+  cal.lim <- range(cal1, cal2)/kyr
+  if(cal.rev)
+    cal.lim <- rev(cal.lim)
+  if(length(cal.lab) == 0)
+    cal.lab <- ifelse(kyr > 1, "kcal BP", "cal BP")
+  if(length(D14C.lab) == 0)
+    D14C.lab <- expression(paste(Delta, ""^{14}, "C (\u2030)"))
+  if(length(C14.lab) == 0)
+    C14.lab <- ifelse(kyr > 1, expression(""^14*C~kBP), expression(""^14*C~BP))
+  if(length(D14C.lim) == 0)
+    D14C.lim <- range(cc.D14Cmin, cc.D14Cmax)
+  if(length(C14.lim) == 0)
+    C14.lim <- range((cc[,2]-cc[,3]), (cc[,2]+cc[,3]))
+  if(ka)
+    C14.lim <- C14.lim/1e3
+
+  plot(cc[,1]/kyr, cc.D14Cmax, type="n", xlab=cal.lab, yaxt="n", ylab="", xlim=cal.lim, ylim=D14C.lim)
+  pol.D14C <- cbind(c(cc[,1]/kyr, rev(cc[,1]/kyr)), c(cc.D14Cmin, rev(cc.D14Cmax)))
+  polygon(pol.D14C, col=D14C.col, border=D14C.border)
+  axis(2, col=D14C.border, col.axis=D14C.border)
+  mtext(D14C.lab, 2, mgp[1], col=D14C.border)
+
+  op <- par(new=TRUE)
+  on.exit(par(op))
+  plot(cc[,1]/kyr, (cc[,2]+cc[,3])/kyr, type="n", xaxt="n", yaxt="n", col=4, xlim=cal.lim, xlab="", ylab="", ylim=C14.lim)
+  pol.cc <- cbind(c(cc[,1]/kyr, rev(cc[,1]/kyr)), c((cc[,2]+cc[,3])/kyr, rev((cc[,2]-cc[,3])/kyr)))
+  polygon(pol.cc, col=cc.col, border=cc.border)
+
+  axis(4, col=cc.border, col.axis=cc.border)
+  mtext(C14.lab, 4, mgp[1], col=cc.border)
 }
 

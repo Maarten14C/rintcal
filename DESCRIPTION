@@ -6,7 +6,7 @@ Authors@R: c(
   person("Maarten", "Blaauw", email = "maarten.blaauw@qub.ac.uk", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5680-1515")))
 Description: The IntCal20 radiocarbon calibration curves (Reimer et al. 2020 <doi:10.1017/RDC.2020.68>) are provided as a data package, together with previous IntCal curves (IntCal13, IntCal09, IntCal04, IntCal98) and postbomb curves. Also provided are functions to copy the curves into memory, to plot the curves and their underlying data, to calibrate radiocarbon dates and to transform between different radiocarbon 'domains'.
 License: GPL (>= 2)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Suggests: knitr, rmarkdown, utf8
 VignetteBuilder: knitr
 Encoding: UTF-8

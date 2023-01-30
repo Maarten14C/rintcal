@@ -1,4 +1,7 @@
-# rintcal 0.5.1.1
+# rintcal 0.5.3
+* added a function draw.D14C to draw the D14C data together with the calibration curve.
+
+# rintcal 0.5.2
 * the IntCal20 curves and their underpinning data are now available through a json file (code kindly contributed by Christopher Bronk Ramsey, University of Oxford)
 * calibrate now plots better when working in BC/AD
 
