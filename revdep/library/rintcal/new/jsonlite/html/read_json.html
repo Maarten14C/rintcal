@@ -1,0 +1,85 @@
+<!DOCTYPE html><html><head><title>R: Read/write JSON</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>read_json {jsonlite}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read/write JSON</h2>
+
+<h3>Description</h3>
+
+<p>These functions are similar to <code><a href="../../jsonlite/help/toJSON.html">toJSON()</a></code> and <code><a href="../../jsonlite/help/fromJSON.html">fromJSON()</a></code> except they
+explicitly distinguish between path and literal input, and do not simplify
+by default.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>read_json(path, simplifyVector = FALSE, ...)
+
+parse_json(json, simplifyVector = FALSE, ...)
+
+write_json(x, path, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>path</code></td>
+<td>
+<p>file on disk</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>simplifyVector</code></td>
+<td>
+<p>simplifies nested lists into vectors and data frames. See <code><a href="../../jsonlite/help/fromJSON.html">fromJSON()</a></code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>additional conversion arguments, see also <code><a href="../../jsonlite/help/toJSON.html">toJSON()</a></code> or <code><a href="../../jsonlite/help/fromJSON.html">fromJSON()</a></code></p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>json</code></td>
+<td>
+<p>string with literal json or connection object to read from</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>x</code></td>
+<td>
+<p>an object to be serialized to JSON</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../jsonlite/help/fromJSON.html">fromJSON()</a></code>, <code><a href="../../jsonlite/help/stream_in.html">stream_in()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>tmp &lt;- tempfile()
+write_json(iris, tmp)
+
+# Nested lists
+read_json(tmp)
+
+# A data frame
+read_json(tmp, simplifyVector = TRUE)
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>jsonlite</em> version 1.8.4 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

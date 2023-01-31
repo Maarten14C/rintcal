@@ -136,7 +136,7 @@ draw.dates(
 
 \item{label.offset}{Offsets of the positions of the depths/labels, giving the x and y offsets. Defaults to c(0,0).}
 
-\item{label.adj}{Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text.}
+\item{label.adj}{Justification of the labels. Follows R's adj option: A value of "0" produces left-justified text, "0.5" (the default) centered text and "1" right-justified text.}
 
 \item{label.rot}{Rotation of the label. 0 by default (horizontal).}
 

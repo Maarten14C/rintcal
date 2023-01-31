@@ -1,0 +1,95 @@
+<!DOCTYPE html><html><head><title>R: Fill missing values</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>nafill {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Fill missing values</h2>
+
+<h3>Description</h3>
+
+<p>Fast fill missing values using constant value, <em>last observation carried forward</em> or <em>next observation carried backward</em>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>nafill(x, type=c("const","locf","nocb"), fill=NA, nan=NA)
+setnafill(x, type=c("const","locf","nocb"), fill=NA, nan=NA, cols=seq_along(x))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>x</code></td>
+<td>
+<p> vector, list, data.frame or data.table of numeric columns. </p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type</code></td>
+<td>
+<p> character, one of <em>&quot;const&quot;</em>, <em>&quot;locf&quot;</em> or <em>&quot;nocb&quot;</em>. Defaults to <code>"const"</code>. </p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>fill</code></td>
+<td>
+<p> numeric or integer, value to be used to fill when <code>type=="const"</code>. </p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>nan</code></td>
+<td>
+<p> (numeric <code>x</code> only) Either <code>NaN</code> or <code>NA</code>; if the former, <code>NaN</code> is treated as distinct from <code>NA</code>, otherwise, they are treated the same during replacement? </p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cols</code></td>
+<td>
+<p> numeric or character vector specifying columns to be updated. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Only <em>double</em> and <em>integer</em> data types are currently supported.
+</p>
+<p>Note that both <code>nafill</code> and <code>setnafill</code> provide some verbose output when <code>getOption('datatable.verbose')</code> is <code>TRUE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list except when the input is a <code>vector</code> in which case a <code>vector</code> is returned. For <code>setnafill</code> the input argument is returned, updated by reference.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/shift.html">shift</a></code>, <code><a href="../../data.table/help/data.table.html">data.table</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>x = 1:10
+x[c(1:2, 5:6, 9:10)] = NA
+nafill(x, "locf")
+
+dt = data.table(v1=x, v2=shift(x)/2, v3=shift(x, -1L)/2)
+nafill(dt, "nocb")
+
+setnafill(dt, "locf", cols=c("v2","v3"))
+dt
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.6 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html><html><head><title>R: Calculate pMC values from C14 ages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>age.pMC {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Calculate pMC values from C14 ages</h2>
+
+<h3>Description</h3>
+
+<p>Calculate pMC values from radiocarbon ages
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>age.pMC(mn, sdev = c(), ratio = 100, decimals = 5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>mn</code></td>
+<td>
+<p>Reported mean of the 14C age.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>sdev</code></td>
+<td>
+<p>Reported error of the 14C age.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ratio</code></td>
+<td>
+<p>Most modern-date values are reported against <code>100</code>. If it is against <code>1</code> instead, a warning is provided; use <code>age.F14C</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>decimals</code></td>
+<td>
+<p>Amount of decimals required for the pMC value. Defaults to 5.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Post-bomb dates are often reported as pMC or percent modern carbon. Since Bacon expects radiocarbon ages,
+this function can be used to calculate pMC values from radiocarbon ages. The reverse function of <a href="../../rintcal/help/pMC.age.html">pMC.age</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>pMC values from C14 ages.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>  age.pMC(-2000, 20)
+  age.pMC(-2000, 20, 1)
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.5.2 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

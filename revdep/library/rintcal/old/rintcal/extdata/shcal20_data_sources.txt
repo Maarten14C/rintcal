@@ -1,0 +1,9 @@
+1,tPretoria
+2,tSeattle
+3,tWaikato
+4,tBelfast
+5,tSydney
+6,tLivermore
+7,tArizona
+8,tIrvineWaikato
+9,tZurich

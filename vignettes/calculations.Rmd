@@ -23,7 +23,7 @@ and the other way round:
 age.pMC(-2300, 40)
 ```
 
-The same for calculations in the F14C realm:
+The same for calculations in the F^14^C realm:
 
 ```{r}
 F14C.age(.150, .01)
@@ -35,14 +35,14 @@ and the other way round:
 age.F14C(-2300, 40)
 ```
 
-To transfer D14C (a proxy for atmospheric 14C concentration at t cal BP) to F14C, and the other way around:
+To transfer $\Delta^{14}C$ (a proxy for atmospheric ^14^C concentration at t cal BP) to F^14^C, and the other way around:
 
 ```{r}
 F14C.D14C(0.71, t=4000)
 D14C.F14C(152, 4000)
 ```
 
-These functions can be used to investigate Delta14C over time:
+These functions can be used to investigate $\Delta^{14}C$ over time:
 
 ```{r, fig.width=4, fig.asp=.8}
 cc <- ccurve()
@@ -58,10 +58,10 @@ par(new=TRUE)
 plot(cc[,1]/1e3, (cc[,2]+cc[,3])/1e3, type="l", xaxt="n", yaxt="n", col=4, xlab="", ylab="")
 lines(cc[,1]/1e3, (cc[,2]-cc[,3])/1e3, col=4)
 axis(4, col=4, col.axis=4)
-mtext("14C kBP", 4, 1.7, col=4)
+mtext(expression(paste(""^{14}, "C kBP")), 4, 2, col=4)
 ```
 
-The above functions can be used to calculate the effect of contamination on radiocarbon ages, e.g. what age would be observed if material with a 'true' radiocarbon age of 5000 +- 20 14C BP would be contaminated with 1% of modern carbon (F14C=1)?
+The above functions can be used to calculate the effect of contamination on radiocarbon ages, e.g. what age would be observed if material with a "true" radiocarbon age of 5000 +- 20 ^14^C BP would be contaminated with 1% of modern carbon (F^14^C=1)?
 
 ```{r}
 contaminate(5000, 20, .01, 1)
@@ -83,7 +83,7 @@ text(50e3, contaminate(50e3, c(), contam.legend, 1),
 ```
 
 
-Now on to calibration. We can obtain the calibrated probability distributions from radiocarbon dates, e.g. one of 130 +- 20 C14 BP:
+Now on to calibration. We can obtain the calibrated probability distributions from radiocarbon dates, e.g., one of 130 +- 20 C14 BP:
 
 ```{r, fig.width=4, fig.asp=.8}
 calib.130 <- caldist(130, 20, BCAD=TRUE)

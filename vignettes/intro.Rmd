@@ -84,16 +84,16 @@ plot(glued[1:650,1:2], xlab="cal BP", ylab="C-14 BP", pch=".")
 [next (plots) ->](./plots.html)
 <br>
 
-[^1]: Reimer PJ et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0–55 cal kBP). Radiocarbon 62, 725-757 <!-- [doi:10.1017/RDC.2020.41](http://dx.doi.org/10.1017/RDC.2020.41){target="_blank"} -->
+[^1]: Reimer PJ et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62, 725-757
 
-[^2]: Heaton TJ et al., 2020. Marine20—The Marine Radiocarbon Age Calibration Curve (0–55,000 cal BP). Radiocarbon 62, 779-820 <!--[doi:10.1017/RDC.2020.68](http://dx.doi.org/10.1017/RDC.2020.68){target="_blank"} -->
+[^2]: Heaton TJ et al., 2020. Marine20-The Marine Radiocarbon Age Calibration Curve (0-55,000 cal BP). Radiocarbon 62, 779-820
 
-[^3]: Hogg AG et al., 2020. SHCal20 Southern Hemisphere Calibration, 0–55,000 Years cal BP. Radiocarbon 62, 759-778 <!--[doi:10.1017/RDC.2020.59](http://dx.doi.org/10.1017/RDC.2020.59){target="_blank"} -->
+[^3]: Hogg AG et al., 2020. SHCal20 Southern Hemisphere Calibration, 0-55,000 Years cal BP. Radiocarbon 62, 759-778
 
-[^4]: Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46, 1261-1272 <!--[doi:10.1017/S0033822200033130](http://dx.doi.org/10.1017/S0033822200033130){target="_blank"} -->
+[^4]: Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46, 1261-1272
 
-[^5]: Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25, 96-103 <!--[doi:10.1016/j.quageo.2014.10.004](http://dx.doi.org/10.1016/j.quageo.2014.10.004){target="_blank"} -->
+[^5]: Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25, 96-103
 
-[^6]: Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58, 531-548 <!--[doi:10.1017/RDC.2016.32](http://dx.doi.org/10.1017/RDC.2016.32){target="_blank"} -->
+[^6]: Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58, 531-548
 
-[^7]: Hua Q et al. 2021. Atmospheric Radiocarbon for the Period 1950–2019 Radiocarbon <!--[doi:10.2458/azu_js_rc.v55i2.16177](http://dx.doi.org/10.2458/azu_js_rc.v55i2.16177){target="_blank"} -->
+[^7]: Hua Q et al. 2021. Atmospheric Radiocarbon for the Period 1950-2019 Radiocarbon

@@ -421,7 +421,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param label.offset Offsets of the positions of the depths/labels, giving the x and y offsets. Defaults to c(0,0).
 #' @param label.cex Size of labels. 
 #' @param label.col Colour of the labels. Defaults to the colour given to the borders of the dates.
-#' @param label.adj  Justification of the labels. Follows R's adj option: A value of ‘0’ produces left-justified text, ‘0.5’ (the default) centered text and ‘1’ right-justified text. 
+#' @param label.adj  Justification of the labels. Follows R's adj option: A value of "0" produces left-justified text, "0.5" (the default) centered text and "1" right-justified text.
 #' @param label.rot Rotation of the label. 0 by default (horizontal).
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.
 #' @param dist.res Resolution of the distribution polygons. Defaults to \code{dist.res=100}.
@@ -587,7 +587,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
 
 
 
-#' @name draw.d14C
+#' @name draw.D14C
 #' @title Draw d14C and the calibration curve.
 #' @description Draw a proxy of the atmospheric 14C concentration (d14C) as well as the calibration curve.
 #' @return A plot of d14C and the calibration curve
@@ -639,7 +639,7 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
   if(length(cal.lab) == 0)
     cal.lab <- ifelse(kyr > 1, "kcal BP", "cal BP")
   if(length(D14C.lab) == 0)
-    D14C.lab <- expression(paste(Delta, ""^{14}, "C (\u2030)"))
+    D14C.lab <- expression(paste(Delta, ""^{14}, "C (per-mille)"))
   if(length(C14.lab) == 0)
     C14.lab <- ifelse(kyr > 1, expression(""^14*C~kBP), expression(""^14*C~BP))
   if(length(D14C.lim) == 0)

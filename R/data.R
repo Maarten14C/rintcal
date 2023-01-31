@@ -312,11 +312,11 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   segments(cal-cal.err, c14, cal+cal.err, c14, col=set.cols) # cal errors
 
   # add the calibration curve(s)
-  polygon(cc1.pol, col=cc1.fill, border=NA) # calibration curve
+  polygon(cc1.pol, col=cc1.fill, border=NA) # calibration curve
   lines(cc.1[,1], cc.1[,2]-cc.1[,3], col=cc1.col)
   lines(cc.1[,1], cc.1[,2]+cc.1[,3], col=cc1.col)
   if(!is.na(cc2)) {
-    polygon(cc2.pol, col=cc2.fill, border=NA) # calibration curve
+    polygon(cc2.pol, col=cc2.fill, border=NA) # calibration curve
     lines(cc.2[,1], cc.2[,2]-cc.2[,3], col=cc2.col)
     lines(cc.2[,1], cc.2[,2]+cc.2[,3], col=cc2.col)
   }

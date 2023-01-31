@@ -1,0 +1,308 @@
+<!DOCTYPE html><html><head><title>R: Plot individual calibrated dates.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>calibrate {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Plot individual calibrated dates.</h2>
+
+<h3>Description</h3>
+
+<p>Calibrate individual 14C dates, plot them and report calibrated ranges.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>calibrate(
+  age = 2450,
+  error = 50,
+  cc = 1,
+  postbomb = FALSE,
+  reservoir = 0,
+  prob = 0.95,
+  BCAD = FALSE,
+  ka = FALSE,
+  cal.lab = c(),
+  C14.lab = c(),
+  cal.lim = c(),
+  C14.lim = c(),
+  cc.col = rgb(0, 0.5, 0, 0.7),
+  cc.fill = rgb(0, 0.5, 0, 0.7),
+  date.col = "red",
+  dist.col = rgb(0, 0, 0, 0.2),
+  dist.fill = rgb(0, 0, 0, 0.2),
+  hpd.fill = rgb(0, 0, 0, 0.3),
+  dist.height = 0.3,
+  cal.rev = FALSE,
+  yr.steps = FALSE,
+  threshold = 5e-04,
+  edge = TRUE,
+  normal = TRUE,
+  t.a = 3,
+  t.b = 4,
+  rounded = 1,
+  extend.range = 0.05,
+  legend.cex = 0.8,
+  legend1.loc = "topleft",
+  legend2.loc = "topright",
+  mgp = c(2, 1, 0),
+  mar = c(3, 3, 1, 1),
+  xaxs = "i",
+  yaxs = "i",
+  bty = "l",
+  cc.dir = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>age</code></td>
+<td>
+<p>Mean of the uncalibrated C-14 age.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>error</code></td>
+<td>
+<p>Error of the uncalibrated C-14 age.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cc</code></td>
+<td>
+<p>Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., &quot;IntCal20&quot;, &quot;Marine20&quot;, &quot;SHCal20&quot;, &quot;nh1&quot;, &quot;sh3&quot;, or &quot;mixed&quot;).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>postbomb</code></td>
+<td>
+<p>Whether or not this is a postbomb age. Defaults to FALSE.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>reservoir</code></td>
+<td>
+<p>Reservoir age, or reservoir age and age offset.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>prob</code></td>
+<td>
+<p>Probability confidence intervals (between 0 and 1).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>BCAD</code></td>
+<td>
+<p>Use BC/AD or cal BP scale (default cal BP).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ka</code></td>
+<td>
+<p>Use thousands of years instead of years in the plots and hpd ranges. Defaults to FALSE.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cal.lab</code></td>
+<td>
+<p>Label of the calendar/horizontal axis. Defaults to the calendar scale, but alternative names can be provided.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>C14.lab</code></td>
+<td>
+<p>Label of the C-14/vertical axis. Defaults to the 14C scale, but alternative names can be provided.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cal.lim</code></td>
+<td>
+<p>Minimum and maximum of calendar axis (default calculated automatically).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>C14.lim</code></td>
+<td>
+<p>Minimum and maximum of C-14 axis (default calculated automatically).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cc.col</code></td>
+<td>
+<p>Colour of the lines of the calibration curve. Defaults to semi-transparent dark green; <code>cc.col=rgb(0,.5,0,0.7)</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cc.fill</code></td>
+<td>
+<p>Colour of the inner part of the calibration curve. Defaults to semi-transparent dark green; <code>cc.col=rgb(0,.5,0,0.7)</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>date.col</code></td>
+<td>
+<p>Colour of the &quot;dot-bar&quot; plot of the C14 date. Defaults to <code>date.col="red"</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>dist.col</code></td>
+<td>
+<p>Colour of the outer lines of the distributions. Defaults to semi-transparent grey, <code>dist.col=rgb(0,0,0,0.2)</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>dist.fill</code></td>
+<td>
+<p>Colour of the inner part of the distributions. Defaults to semi-transparent grey, <code>dist.col=rgb(0,0,0,0.2)</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>hpd.fill</code></td>
+<td>
+<p>Colour of the highest posterior density. Defaults to semi-transparent grey, <code>dist.col=rgb(0,0,0,0.3)</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>dist.height</code></td>
+<td>
+<p>Maximum height of the C14 and calibrated distributions (as proportion of the invisible secondary axes). Defaults to 0.3.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cal.rev</code></td>
+<td>
+<p>Whether or not to reverse the direction of the calendar axis.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>yr.steps</code></td>
+<td>
+<p>Temporal resolution at which C-14 ages are calibrated (in calendar years). By default follows the spacing in the calibration curve.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>threshold</code></td>
+<td>
+<p>Below which value should probabilities be excluded from calculations.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>edge</code></td>
+<td>
+<p>How to treat dates are at or beyond the edge of the calibration curve. If dates are truncated, a warning is given. If they lie beyond the calibration curve, an error is given.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>normal</code></td>
+<td>
+<p>Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>t.a</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 3).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>t.b</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 4).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>rounded</code></td>
+<td>
+<p>Rounding of the percentages of the reported hpd ranges. Defaults to 1 decimal.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>extend.range</code></td>
+<td>
+<p>Range by which the axes are extended beyond the data limits. Defaults to 5%.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>legend.cex</code></td>
+<td>
+<p>Size of the font of the legends. Defaults to 0.8.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>legend1.loc</code></td>
+<td>
+<p>Where the first legend (with the calibration curve name and the uncalibrated date) is plotted. Defaults to topleft.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>legend2.loc</code></td>
+<td>
+<p>Where the second legend (with the hpd ranges) is plotted. Defaults to topright.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mgp</code></td>
+<td>
+<p>Axis text margins (where should titles, labels and tick marks be plotted).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mar</code></td>
+<td>
+<p>Plot margins (amount of white space along edges of axes 1-4).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>xaxs</code></td>
+<td>
+<p>Whether or not to extend the limits of the horizontal axis. Defaults to <code>xaxs="i"</code> which does not extend the limits.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>yaxs</code></td>
+<td>
+<p>Whether or not to extend the limits of the vertical axis. Defaults to <code>yaxs="i"</code> which does not extend the limits.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>bty</code></td>
+<td>
+<p>Draw a box around the graph (&quot;n&quot; for none, and &quot;l&quot;, &quot;7&quot;, &quot;c&quot;, &quot;u&quot;, &quot;]&quot; or &quot;o&quot; for correspondingly shaped boxes).</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>cc.dir</code></td>
+<td>
+<p>Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., <code>cc.dir="curves"</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Other plotting parameters.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Type <code>calibrate()</code> to see how a date of 2450 +- 50 14C BP gets calibrated (the calibration curve happens to show
+a plateau around this 14C age). To calibrate a different date, provide its reported mean and error (1
+standard deviation error as reported by the radiocarbon laboratory) as follows: <code>calibrate(mean, error)</code>,
+e.g., for a date of 130 +- 20 14C BP, type calibrate<code>(age=130, error=20)</code> or, shorter, <code>calibrate(130,20)</code>.
+</p>
+<p>In case the date has a reservoir effect or age offset, e.g. of 100 14C years, provide this as follows:
+<code>calibrate(130, 20, reservoir=100)</code>. If you want to include an uncertainty for this offset, provide this as follows,
+e.g., for an uncertainty of 50yr, <code>calibrate(130,20,reservoir=c(100, 50))</code>.
+The uncertainty for the age offset will then be added to the error (by taking the square root of the sum
+of the squared error and the squared offset uncertainty). If the carbon of your sample has mixed marine/terrestrial sources,
+instead apply the marine offset using mix.curves and calibrate the date using that custom-built curve (cc=&quot;mixed&quot;).
+</p>
+<p>If you prefer to work with, e.g., 68 % as opposed to the default 95 % confidence intervals,
+type: <code>calibrate(130, 20, prob=0.68)</code> or <code>calibrate(130, 20,, 0.68)</code> (the commas between the brackets indicate the position of the option;
+the standard deviation is the fourth option of the <code>calibrate</code> function). The calibrated distribution can be calculated
+for every single calendar year (<code>yrsteps=1</code>) within a wide range of the 14C date. Probabilities below a threshold (default <code>threshold=0.0005</code>) will be neglected.
+</p>
+<p>By default the northern hemisphere terrestrial calibration curve is used (<code>cc=1 or cc1="IntCal20"</code>).
+To use alternative curves, use <code>cc=2</code> (<code>cc2="Marine20"</code>), <code>cc=3</code> (<code>cc3="SHCal20C"</code>),
+<code>cc=4</code> (<code>cc4="mixed.14C"</code>), or specify a postbomb curve (e.g., <code>cc="nh1"</code>).
+</p>
+<p>Calibrate works in cal BP (calendar years before AD 1950) by default, but can work with cal BC/AD through the option <code>BCAD=TRUE</code>.
+</p>
+<p>By default the Gaussian distribution is used to calibrate dates. For use of the t distribution (Christen and Perez 2016) instead,
+set <code>normal=FALSE</code> provide values for t.a and t.b (defaults to <code>t.a=3</code> and <code>t.b=4</code>).
+</p>
+<p>Calibrated distributions are usually reduced to their 68% or 95% calibrated ranges, taking into account the asymmetric
+and multi-peaked shape of these distributions.
+Calibrated ranges at 68% will obviously result in narrower confidence intervals, and a perceived higher precision, than 95% ranges. However, given the often
+asymmetric and multi-modal nature of calibrated distributions, the probability that the 'true' calendar date
+lies outside the 1 standard deviation hpd ranges is considerable (c. 32%). Therefore the use of 95% calibrated ranges is preferable,
+and default.
+</p>
+<p>Negative radiocarbon ages are calibrated with postbomb curves, but the user needs to tell which curve to use.
+For example, to use the first of the three northern hemisphere curves, provide the option <code>cc="nh1"</code>, <code>cc="nh2"</code>, <code>cc="nh3"</code>,
+while for southern hemisphere samples, use <code>cc="sh1-2"</code> or <code>cc="sh3"</code>.
+</p>
+<p>A graph of the calibration is produced, and it can be adapted in several ways.
+The limits of the horizontal (calendar scale) and vertical (14C scale) axes are calculated automatically
+but can be changed by providing alternative values for the options <code>cal.lim, C14.lim</code>.
+The titles of both axis can be changed by providing alternative titles to <code>cal.lab</code> and/or <code>C14.lab</code>. The heights of the distributions of the 14C and calibrated
+ages can be set to alternative values using <code>dist.height</code> (default <code>0.3</code> which plots the distribution up to 30% of the height of the entire graph).
+Parameters for white space around the
+graph can be changed (default <code>mar=c(3.5, 2, 2, 1</code>) for spacing below, to the left, above and to the right respectively),
+as can the spacing for the axis labels (<code>mgp=c(2,1,0)</code>). By default, the axes are connected at the lower left, <code>bty="l"</code>.
+Check the R documentation of <code>par()</code> for more options.
+</p>
+<p>The colours of the 14C date, the calibration curve, the distributions, and the highest posterior density (hpd)
+ranges, can be changed by providing an alternative colour in <code>date.col</code>, <code>cc.col</code>, <code>dist.col</code>, and/or <code>hpd.col</code>, respectively.
+The default colours are transparent grey for the dates probability distributions (<code>dist.col=rgb(0,0,0, 0.3)</code> and <code>sd.col=rgb(0,0,0, 0.5)</code>;
+change the last value of rgb for different greyscale values), red for the uncalibrated mean and error bars (<code>date.col="red"</code>),
+and transparent green for the calibration curve (<code>cc.col=rgb(0, 0.5, 0, 0.7)</code>). R's rgb() function expects values between <code>0</code> and <code>1</code>
+for red, green and blue, respectively, followed by a value for the semi-transparency (also between 0 and 1). Some graphic devices
+such as postscript are unable to use transparency; in that case provide different colours or leave the fourth value empty.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A graph of the raw and calibrated C-14 date, the calibrated ranges and, invisibly, the calibrated distribution and hpd ranges.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>calibrate()
+calibrate(130, 20)
+cal &lt;- calibrate(2550, 20, reservoir=100)
+cal; plot(cal[[1]])
+calibrate(130, 20, prob=0.68)
+calibrate(age=130, error=20, BCAD=TRUE)
+calibrate(4450, 40, reservoir=c(100, 50))
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.5.2 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>
