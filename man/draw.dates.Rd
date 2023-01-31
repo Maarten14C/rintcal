@@ -23,6 +23,7 @@ draw.dates(
   cal.hpd.col = rgb(0, 0.5, 0.5, 0.35),
   mirror = TRUE,
   up = FALSE,
+  draw.base = TRUE,
   col = rgb(0, 0, 1, 0.3),
   border = rgb(0, 0, 1, 0.5),
   cal.col = rgb(0, 0.5, 0.5, 0.35),
@@ -88,6 +89,8 @@ draw.dates(
 \item{mirror}{Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.}
 
 \item{up}{If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.}
+
+\item{draw.base}{By default, the base of the calibrated distributions is plotted. This can be avoided by supplying \code{draw.base=FALSE} as an option.}
 
 \item{col}{Colour of the inside of the distribution}
 

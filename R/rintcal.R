@@ -8,7 +8,7 @@
 #' @importFrom utils read.table write.table packageName
 #' @importFrom stats approx dnorm median weighted.mean
 #' @importFrom grDevices rgb extendrange
-#' @importFrom graphics axis par legend lines points polygon segments text
+#' @importFrom graphics axis par legend lines points polygon segments text mtext
 #' @importFrom data.table fread fwrite
 #' @importFrom jsonlite fromJSON toJSON
 #' @name rintcal
@@ -16,7 +16,7 @@ NULL
 
 # todo: consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
-# done:
+# done: added a draw.D14C function, added Joy Division plot to vignette
 
 # internal functions to speed up reading and writing files, using the data.table R package if present
 fastread <- function(fl, ...)

@@ -78,5 +78,5 @@ Draw a proxy of the atmospheric 14C concentration (d14C) as well as the calibrat
 \examples{
   draw.D14C()
   draw.D14C(30e3, 55e3, ka=TRUE)
-  draw.D14C(cc=ccurve(postbomb=TRUE), BCAD=TRUE)
+  draw.D14C(cc=ccurve("NH1_monthly"), BCAD=TRUE)
 }

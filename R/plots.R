@@ -398,6 +398,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @param cal.hpd.col Colour of the hpd rectangle for cal BP dates
 #' @param mirror Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.
 #' @param up If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.
+#' @param draw.base By default, the base of the calibrated distributions is plotted. This can be avoided by supplying \code{draw.base=FALSE} as an option.
 #' @param col Colour of the inside of the distribution
 #' @param border Colour of the border of the distribution
 #' @param cal.col Colour of the inside of distribution of non-radiocarbon dates that didn't need calibration
@@ -429,7 +430,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
 #' @export
-draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), cal.hpd.col=rgb(0, 0.5, 0.5, 0.35), mirror=TRUE, up=FALSE, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), cal.col=rgb(0, 0.5, 0.5, 0.35), cal.border=rgb(0, 0.5, 0.5, 0.35), add=FALSE, ka=FALSE, rotate.axes=FALSE, ex=1, normalise=TRUE, cc.resample=5, age.lab=c(), age.lim=c(), age.rev=FALSE, d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, cc.dir=NULL, dist.res=100, ...) {
+draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), cal.hpd.col=rgb(0, 0.5, 0.5, 0.35), mirror=TRUE, up=FALSE, draw.base=TRUE, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), cal.col=rgb(0, 0.5, 0.5, 0.35), cal.border=rgb(0, 0.5, 0.5, 0.35), add=FALSE, ka=FALSE, rotate.axes=FALSE, ex=1, normalise=TRUE, cc.resample=5, age.lab=c(), age.lim=c(), age.rev=FALSE, d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, cc.dir=NULL, dist.res=100, ...) {
   if(length(reservoir) > 0) {
     age <- age - reservoir[1]
     if(length(reservoir) > 1)
@@ -463,7 +464,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
   mx <- rep(0, length(age))
   hpds <- list()
   for(i in 1:length(age)) {
-    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, normalise=normalise, cc.resample=cc.resample, BCAD=BCAD, cc.dir=cc.dir)
+    tmp <- caldist(age[i], error[i], cc=cc[i], postbomb=postbomb[i], normal=normal, t.a=t.a, t.b=t.b, normalise=normalise, cc.resample=cc.resample, threshold=threshold, BCAD=BCAD, cc.dir=cc.dir)
     hpds[[i]] <- hpd(tmp, prob, return.raw=TRUE)
 
     tmp <- approx(tmp[,1], tmp[,2], seq(min(tmp[,1]), max(tmp[,1]), length=dist.res))
@@ -523,9 +524,13 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
     if(mirror) {
       agepol <- ages[c(1:length(ages), length(ages):1)]
       probpol <- ex * c(probs, -probs[length(probs):1])
-    } else {
+    } else
+      if(draw.base) {
         agepol <- ages[c(1, 1:length(ages), length(ages))]
         probpol <- ex * c(0, probs, 0)
+      } else {
+        agepol <- ages
+        probpol <- ex * probs # else
       }
       if(rotate.axes)
         polygon(depth+probpol, agepol, col=col, border=border) else
@@ -545,10 +550,14 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
   # now draw the dates
   for(i in 1:length(age)) {
     if(length(age) > 1) # then already drawn before 
-      if(rotate.axes)
-        polygon(depth[i]+probpol[,i], agepol[,i], col=col[i], border=border[i]) else
-          polygon(agepol[,i], depth[i]+probpol[,i], col=col[i], border=border[i])
-
+      if(draw.base) {
+        if(rotate.axes)
+          polygon(depth[i]+probpol[,i], agepol[,i], col=col[i], border=border[i]) else
+            polygon(agepol[,i], depth[i]+probpol[,i], col=col[i], border=border[i])
+    } else
+        if(rotate.axes) # Jan 2023
+          lines(depth[i]+probpol[,i], agepol[,i], col=col[i]) else
+            lines(agepol[,i], depth[i]+probpol[,i], col=col[i])
     if(draw.hpd) {
       if(ka)
         this.hpd <- hpds[[i]][[2]]/1e3 else
@@ -573,7 +582,7 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
          text(x+label.offset[2], y+label.offset[1], labels[i], cex=label.cex, col=label.col, adj=label.adj, srt=label.rot)#)
     }
   }
-  invisible(list(ages, probs))
+  invisible(list(ages=ages, probs=probs))
 }
 
 
