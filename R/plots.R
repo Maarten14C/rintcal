@@ -192,6 +192,7 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 #' @param dist.fill Colour of the inner part of the distributions. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.2)}.
 #' @param hpd.fill Colour of the highest posterior density. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.3)}.
 #' @param dist.height Maximum height of the C14 and calibrated distributions (as proportion of the invisible secondary axes). Defaults to 0.3.
+#' @param dist.float The probability distributions float a bit above the axes by default. Can be set to distinct heights of the axes, e.g.: \code{dist.float=c(0.05, 0.1)}, or to \code{dist.float=0}.
 #' @param cal.rev Whether or not to reverse the direction of the calendar axis.
 #' @param yr.steps Temporal resolution at which C-14 ages are calibrated (in calendar years). By default follows the spacing in the calibration curve.
 #' @param threshold Below which value should probabilities be excluded from calculations.
@@ -221,13 +222,15 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 #' calibrate(age=130, error=20, BCAD=TRUE)
 #' calibrate(4450, 40, reservoir=c(100, 50))
 #' @export
-calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, ka=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, edge=TRUE, normal=TRUE, t.a=3, t.b=4, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", cc.dir=NULL, ...) {
+calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, ka=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, dist.float=c(.01, .01), cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, edge=TRUE, normal=TRUE, t.a=3, t.b=4, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", cc.dir=NULL, ...) {
   # read the data
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
     error <- sqrt(error^2 + reservoir[2]^2)
   Cc <- ccurve(cc, postbomb, cc.dir)
-  
+  if(BCAD)
+    Cc[,1] <- 1950 - Cc[,1]
+
   # warn/stop if the date lies (partly) beyond the calibration curve
   if(edge) {
     border <- 0
@@ -248,7 +251,11 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
-  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, cc.dir=cc.dir)
+  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, 
+    normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, cc.dir=cc.dir)
+  if(BCAD)
+    dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, 
+  normal=normal, t.a=t.a, t.b=t.b, BCAD=TRUE, postbomb=postbomb, cc.dir=cc.dir) 
 
   cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE, rounded=rounded)
   hpds <- cal.hpd[[2]]
@@ -256,8 +263,13 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   cal.dist <- cal.hpd[,1:2]
 
   # copy entries at edges of calibrated hpds, to ensure rectangular polygons
-  before <- rbind(cal.hpd[which(diff(c(0,cal.hpd[,3])) == 1),])
-  after <- rbind(cal.hpd[which(diff(c(cal.hpd[,3])) == -1),])
+  if(BCAD) {
+      after <- rbind(cal.hpd[which(diff(c(0,cal.hpd[,3])) == 1),])
+      before <- rbind(cal.hpd[which(diff(c(cal.hpd[,3])) == -1),])
+  } else {
+    before <- rbind(cal.hpd[which(diff(c(0,cal.hpd[,3])) == 1),])
+    after <- rbind(cal.hpd[which(diff(c(cal.hpd[,3])) == -1),])
+  }
   if(length(before) > 2) {
     before[,3] <- 0 # and set their hpds to 0
     cal.hpd <- rbind(before, cal.hpd)
@@ -270,14 +282,13 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   }
 
   # deal with drawing ages truncated by the calibration curve
-  cal.hpd[which(cal.hpd[,3] == 0),2] <- 0
+  cal.hpd[which(cal.hpd[,3] == 0),2] <- 0 # outside hpd ranges
   if(cal.hpd[nrow(cal.hpd),1] == Cc[nrow(Cc),1])
     cal.hpd <- rbind(cal.hpd, c(cal.hpd[nrow(cal.hpd),1],0,0))
   if(cal.hpd[1,1] == Cc[1,1])
     cal.hpd <- rbind(c(cal.hpd[1,1],0,1), cal.hpd)
   if(cal.dist[nrow(cal.dist),1] == Cc[nrow(Cc),1])
     cal.dist <- rbind(cal.dist, c(cal.dist[nrow(cal.dist),1],0))
-#  if(cal.dist[1,1] == Cc[1,1])
   cal.dist <- rbind(c(cal.dist[1,1],0), cal.dist)
   cal.dist <- rbind(cal.dist, c(cal.dist[nrow(cal.dist),1],0))
 
@@ -286,58 +297,59 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
     cal.lim <- range(dat[,1])
   lims <- cal.lim
   cal.lim <- rev(extendrange(cal.lim, f=extend.range))
+  if(BCAD)
+    cal.lim <- rev(cal.lim)
   if(cal.rev)
     cal.lim <- rev(cal.lim)
-  } else
-    lims <- cal.lim
+  } 
 
   if(length(C14.lim) == 0) {
-    cc.min <- max(1, min(which(Cc[,1] >= min(cal.lim))))
-    cc.max <- min(nrow(Cc), max(which(Cc[,1] <= max(cal.lim))))
+    if(BCAD) {
+      cc.min <- max(1, min(which(Cc[,1] <= max(cal.lim))))
+      cc.max <- min(nrow(Cc), max(which(Cc[,1] >= min(cal.lim))))
+    } else {  
+        cc.min <- max(1, min(which(Cc[,1] >= min(cal.lim))))
+        cc.max <- min(nrow(Cc), max(which(Cc[,1] <= max(cal.lim))))
+      }
     # we don't need the entire calibration curve
     Cc <- Cc[cc.min:cc.max,]
-    cc.lim <- extendrange(c(Cc[,2]-Cc[,3], Cc[,2]+Cc[,3], C14.dist[,1]), f=extend.range)
+    if(BCAD)
+      cc.lim <- extendrange(c(Cc[,2]-Cc[,3], Cc[,2]+Cc[,3]), f=extend.range) else
+        cc.lim <- extendrange(c(Cc[,2]-Cc[,3], Cc[,2]+Cc[,3], C14.dist[,1]), f=extend.range)
   } else {
-     cc.min <- min(1, which(Cc[,2] >= min(C14.lim)))
-     cc.max <- max(nrow(Cc), which(Cc[,2] <= max(C14.lim)))
+     cc.min <- max(1, which(Cc[,2] >= min(C14.lim)))
+     cc.max <- min(nrow(Cc), which(Cc[,2] <= max(C14.lim)))
      Cc <- Cc[cc.min:cc.max,]
      cc.lim <- range(C14.lim)
   }
   ccpol <- cbind(c(Cc[,1], rev(Cc[,1])), c(Cc[,2]-Cc[,3], rev(Cc[,2]+Cc[,3])))
 
-  # to plot the probability distributions on the age-scales, they need to be transposed
+  # transpose the probability distributions onto the age-scales
   prob2age <- function(prob, age1, age2, prob1=min(prob[,2]), prob2=max(prob[,2]), bcad=BCAD) {
         a <- (age2 - age1) / (prob2 - prob1)
         b <- age1 + (a * prob1)
         return(cbind(prob[,1], b + dist.height*a*prob[,2]))
   }
-  tC14.dist <- prob2age(C14.dist, cal.lim[1], cal.lim[2])
-  tC14.hpd <- prob2age(C14.hpd, cal.lim[1], cal.lim[2])
-  tcal.dist <- prob2age(cal.dist, cc.lim[1], cc.lim[2])
-  tcal.hpd <- prob2age(cal.hpd, cc.lim[1], cc.lim[2])
+  if(length(dist.float) == 1)
+    dist.float[2] <- dist.float[1] 
+  callim <- cal.lim[1]+dist.float[2]*(cal.lim[2]-cal.lim[1])
+  cclim <- cc.lim[1]+dist.float[1]*(cc.lim[2]-cc.lim[1])
+  
+  tC14.dist <- prob2age(C14.dist, callim, cal.lim[2])
+  tC14.hpd <- prob2age(C14.hpd, callim, cal.lim[2])
+  tcal.dist <- prob2age(cal.dist, cclim, cc.lim[2])
+  tcal.hpd <- prob2age(cal.hpd, cclim, cc.lim[2])
 
-  # after all calcs, adapt for anything that has to be as BCAD:
-  if(BCAD) {
-    cal.lim <- 1950-cal.lim
-    cal.dist[,1] <- 1950 - cal.dist[,1]
-    tC14.dist[,2] <- 1950 - tC14.dist[,2]
-    tC14.hpd[,2] <- 1950 - tC14.hpd[,2]
-    tcal.dist[,1] <- 1950-tcal.dist[,1]
-    tcal.hpd[,1] <- 1950 - tcal.hpd[,1]
-    ccpol[,1] <- 1950 - ccpol[,1]
-    hpds[,1:2] <- 1950 - hpds[,1:2]
-  }
-
-  # plot
+  # adapt axis titles, labels and hpds if BCAD and/or ka
   if(length(cal.lab) == 0)
-    if(BCAD)
-      cal.lab <- "BC/AD" else
-        cal.lab <- "cal BP"
+    if(ka) 
+      cal.lab <- ifelse(BCAD, "k BC/AD", "kcal BP") else 
+        cal.lab <- ifelse(BCAD, "BC/AD", "cal BP")
   if(length(C14.lab) == 0)
-    C14.lab <- expression(""^14*C~BP)
-  # adapt axis labels and hpds if BCAD and/or ka
+    C14.lab <- ifelse(ka, expression(""^14*C~kBP), expression(""^14*C~BP))
   xaxt <- ifelse(BCAD || ka, "n", "s")
   yaxt <- ifelse(ka, "n", "s")
+
   plot(0, type="n", xlim=cal.lim, ylim=cc.lim, xlab=cal.lab, ylab=C14.lab, xaxt="n", yaxt="n", xaxs=xaxs, yaxs=yaxs, bty=bty, mgp=mgp, mar=mar)
   if(ka) {
     axis(1, pretty(cal.lim), labels=pretty(cal.lim/1e3))
@@ -355,9 +367,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   polygon(tC14.hpd[,2:1], border=NA, col=hpd.fill)
   polygon(tcal.dist, border=dist.col, col=dist.fill)
   polygon(tcal.hpd, border=dist.col, col=hpd.fill)
-  dot <- ifelse(cal.rev, min(lims), max(lims))
-  if(BCAD)
-    dot <- 1950 - dot
+  dot <- ifelse(cal.rev, min(lims), callim)
   points(dot, age, col=date.col, pch=20)
   segments(dot, age-error, dot, age+error, col=date.col)
 
@@ -639,7 +649,7 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
   if(length(cal.lab) == 0)
     cal.lab <- ifelse(kyr > 1, "kcal BP", "cal BP")
   if(length(D14C.lab) == 0)
-    D14C.lab <- expression(paste(Delta, ""^{14}, "C (per-mille)"))
+    D14C.lab <- expression(Delta^14*C*" (\u{2030})") # assuming UTF8 capabilities
   if(length(C14.lab) == 0)
     C14.lab <- ifelse(kyr > 1, expression(""^14*C~kBP), expression(""^14*C~BP))
   if(length(D14C.lim) == 0)
@@ -665,3 +675,71 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
   mtext(C14.lab, 4, mgp[1], col=cc.border)
 }
 
+
+
+#' @name draw.contamination
+#' @title Draw contamination impacts
+#' @description Show how contamination with different fractions of modern carbon affect observed C-14 ages.
+#' @return A plot of real and observed (contamination-impacted) C14 ages.
+#' @param from Minimum 14C age for the plot. Defaults to 0
+#' @param to Maximum 14C age for the plot. Defaults to 50e3.
+#' @param ka Use C14 kBP. Defaults to TRUE.
+#' @param age.res Resolution of age scale. Defaults to 500, which results in smooth curves. Higher numbers will take longer to draw.
+#' @param colours Colours of the percentages. Defaults to rainbow colours.
+#' @param max.contam Maximum contamination level as a fraction of the sample. Defaults to 0.1 (10\%).
+#' @param contam.F14C 14C activity of the sample. Defaults to 'modern' 14C, F14C=1.
+#' @param contam.legend Percentages for which numbers will be plotted.
+#' @param legend.pos horizontal position beyond which the percentage values will be plotted
+#' @param grid Whether to plot a grid. Defaults to TRUE
+#' @param xaxs Whether or not to extend the limits of the horizontal axis. Defaults to \code{xaxs="i"} which does not extend.
+#' @param yaxs Whether or not to extend the limits of the vertical axis. Defaults to \code{yaxs="i"} which does not extend.
+#' @examples
+#'   draw.contamination()
+#'   draw.contamination(40e3, 50e3, ka=FALSE)
+#' @export
+draw.contamination <- function(from=0, to=50e3, ka=TRUE, age.res=500, xlim=c(), ylim=c(),  colours=rainbow(age.res), max.contam=0.1, contam.F14C=1, contam.legend=max.contam*c(1/100, (1:5)/50, (1:4)/5, 1), legend.pos=.07, grid=TRUE, xaxs="i", yaxs="i") {
+  real.14C <- seq(from, to, length=age.res)
+  observed.14C <- seq(0, to, by=diff(real.14C)[1])
+
+  fraction.contaminated <- function(real, observed, F14C=contam.F14C, decimals=5) {
+    real.F <- age.F14C(real, decimals=decimals)
+    observed.F <- age.F14C(observed, decimals=decimals)
+    return((observed.F - real.F ) / (F14C - real.F))
+  }
+  fractions <- outer(real.14C, observed.14C, fraction.contaminated)
+
+  for(i in 1:length(real.14C))
+    for(j in 1:length(observed.14C))
+      if(real.14C[i] <= observed.14C[j])
+        fractions[i,j] <- NA # only >0 contamination and with F14C>0
+  fractions[fractions > max.contam] <- NA # calculate up to a fraction of contamination
+
+  if(ka) {
+    ka <- 1e3
+    xlab <- expression("real "^14*C~kBP)
+    ylab <- expression("observed "^14*C~kBP)
+    } else {
+      ka <- 1
+      xlab <- expression("real "^14*C~BP)
+      ylab <- expression("observed "^14*C~BP)
+    }
+
+  if(length(xlim) == 0)
+    xlim <- extendrange(c(from, to), f=c(0, .1))/ka
+  if(length(ylim) == 0)
+    ylim <- extendrange(c(to, contaminate(real.14C,, max(contam.legend), contam.F14C)),
+    f=c(0,0.05))/ka
+
+  plot(0, type="n", xlim=xlim, xlab=xlab, ylim=ylim, ylab=ylab, xaxs=xaxs, yaxs=yaxs)
+  if(grid)
+    grid(lty=2, col=rgb(0,0,0,.2))
+  image(real.14C/ka, observed.14C/ka, fractions, col=colours, add=TRUE)
+  abline(0, 1, lty=2)
+
+  for(i in contam.legend) {
+    contam <- contaminate(real.14C,, i, contam.F14C)
+    lines(real.14C/ka, contam/ka, lty=3, col=grey(.7))
+    text((to+(legend.pos*(to-from)))/ka, max(contam)/ka, labels=paste0(100*i, "%"), cex=.8, adj=c(1,.5))
+  }
+
+}

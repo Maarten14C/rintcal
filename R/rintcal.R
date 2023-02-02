@@ -14,9 +14,9 @@
 #' @name rintcal
 NULL
 
-# todo: consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
+# todo: check that intcal.data plots all data series (e.g., intcal.data(14e3, 18e3) looks very empty), ensure draw.contaminate with contam.F14C=0, check how BCAD works in all plots incl. calibrate, make draw.contamination function (w image, not lines), consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
-# done: added a draw.D14C function, added Joy Division plot to vignette
+# done: made draw.contamination function
 
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server

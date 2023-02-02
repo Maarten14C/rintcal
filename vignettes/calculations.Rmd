@@ -82,6 +82,11 @@ text(50e3, contaminate(50e3, c(), contam.legend, 1),
   labels=contam.legend, col=contam.col, cex=.7, offset=0, adj=c(0,.8))
 ```
 
+If that is too much code for you, try this function instead:
+
+```{r, fig.width=6, fig.asp=.8}
+draw.contamination()
+```
 
 Now on to calibration. We can obtain the calibrated probability distributions from radiocarbon dates, e.g., one of 130 +- 20 C14 BP:
 

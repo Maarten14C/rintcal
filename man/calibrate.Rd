@@ -24,6 +24,7 @@ calibrate(
   dist.fill = rgb(0, 0, 0, 0.2),
   hpd.fill = rgb(0, 0, 0, 0.3),
   dist.height = 0.3,
+  dist.float = c(0.01, 0.01),
   cal.rev = FALSE,
   yr.steps = FALSE,
   threshold = 5e-04,
@@ -83,6 +84,8 @@ calibrate(
 \item{hpd.fill}{Colour of the highest posterior density. Defaults to semi-transparent grey, \code{dist.col=rgb(0,0,0,0.3)}.}
 
 \item{dist.height}{Maximum height of the C14 and calibrated distributions (as proportion of the invisible secondary axes). Defaults to 0.3.}
+
+\item{dist.float}{The probability distributions float a bit above the axes by default. Can be set to distinct heights of the axes, e.g.: \code{dist.float=c(0.05, 0.1)}, or to \code{dist.float=0}.}
 
 \item{cal.rev}{Whether or not to reverse the direction of the calendar axis.}
 

@@ -1,3 +1,8 @@
+# rintcal 0.5.4
+* 0 BC/AD (which does not exist) is now dealt with better
+* added a function draw.contamination
+* the calibrate function now deals better with BC/AD (e.g., new items can be added afterward in the expected locations) 
+
 # rintcal 0.5.3
 * added a function draw.D14C to draw the D14C data together with the calibration curve.
 * added an option draw.base to draw.dates
