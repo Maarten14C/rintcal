@@ -14,9 +14,11 @@
 #' @name rintcal
 NULL
 
-# todo: check that intcal.data plots all data series (e.g., intcal.data(14e3, 18e3) looks very empty), ensure draw.contaminate with contam.F14C=0, check how BCAD works in all plots incl. calibrate, make draw.contamination function (w image, not lines), consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
+# todo: write more detail as to what can be found in the intcal.data.frames, check that intcal.data plots all data series (e.g., intcal.data(14e3, 18e3) looks very empty), make more interactive so that specific data can be selected and plotted (e.g., Hulu vs Suigetsu), allow for draw.contaminate with contam.F14C=0, check how BCAD works in all plots, make draw.contamination function (w image, not lines), consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
-# done: made draw.contamination function
+# todo: make package 'howmany' (or such), including accumulate (to make sediment records, with e.g. random walk, a function, reading from a file, ...), simulate dating (extrapolation, scatter, outliers, ccurves, offsets; random depths, Andres's code, equal spacing), write Bacon/clam/bchron/oxcal files, cost/benefit plots, proxy simulator
+
+# done: made draw.contamination function, redid calibrate function to deal better with BCAD
 
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server

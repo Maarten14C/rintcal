@@ -8,19 +8,20 @@
 #' @param sdev Reported error of the pMC.
 #' @param ratio Most modern-date values are reported against \code{100}. If it is against \code{1} instead, use \code{1} here.
 #' @param decimals Amount of decimals required for the radiocarbon age.
+#' @param lambda The mean-life of radiocarbon (based on Libby half-life of 5568 years)
 #' @return Radiocarbon ages from pMC values. If pMC values are above 100\%, the resulting radiocarbon ages will be negative.
 #' @examples
 #'   pMC.age(110, 0.5) # a postbomb date, so with a negative 14C age
 #'   pMC.age(80, 0.5) # prebomb dates can also be calculated
 #'   pMC.age(.8, 0.005, ratio=1) # throws a warning, use F14C.age instead
 #' @export
-pMC.age <- function(mn, sdev=c(), ratio=100, decimals=0) {
+pMC.age <- function(mn, sdev=c(), ratio=100, decimals=0, lambda=8033) {
   if(ratio !=100)
     warning("pMC.age expects a ratio of 100. For ratio=1, use F14C.age")
-  y <- -8033 * log(mn/ratio)
+  y <- -lambda * log(mn/ratio)
   if(length(sdev) == 0)
     signif(y, decimals) else {
-    sdev <- y - -8033 * log((mn+sdev)/ratio)
+    sdev <- y - -lambda * log((mn+sdev)/ratio)
     round(c(y, sdev), decimals)
   }
 }
@@ -36,18 +37,19 @@ pMC.age <- function(mn, sdev=c(), ratio=100, decimals=0) {
 #' @param sdev Reported error of the 14C age.
 #' @param ratio Most modern-date values are reported against \code{100}. If it is against \code{1} instead, a warning is provided; use \code{age.F14C}.
 #' @param decimals Amount of decimals required for the pMC value. Defaults to 5.
+#' @param lambda The mean-life of radiocarbon (based on Libby half-life of 5568 years)
 #' @return pMC values from C14 ages.
 #' @examples
 #'   age.pMC(-2000, 20)
 #'   age.pMC(-2000, 20, 1)
 #' @export
-age.pMC <- function(mn, sdev=c(), ratio=100, decimals=5) {
+age.pMC <- function(mn, sdev=c(), ratio=100, decimals=5, lambda=8033) {
   if(ratio !=100)
     warning("age.pMC expects a ratio of 100. For ratio=1, use age.F14C")
-  y <- exp(-mn / 8033)
+  y <- exp(-mn / lambda)
   if(length(sdev) == 0)
     signif(ratio*y, decimals) else {
-    sdev <- y - exp(-(mn + sdev) / 8033)
+    sdev <- y - exp(-(mn + sdev) / lambda)
     signif(ratio*cbind(y, sdev), decimals)
   }
 }
@@ -62,16 +64,17 @@ age.pMC <- function(mn, sdev=c(), ratio=100, decimals=5) {
 #' @param mn Reported mean of the F14C
 #' @param sdev Reported error of the F14C. Returns just the mean if left empty.
 #' @param decimals Amount of decimals required for the radiocarbon age. Quite sensitive, defaults to 5.
+#' @param lambda The mean-life of radiocarbon (based on Libby half-life of 5568 years)
 #' @return Radiocarbon ages from F14C values. If F14C values are above 100\%, the resulting radiocarbon ages will be negative.
 #' @examples
 #'   F14C.age(1.10, 0.5) # a postbomb date, so with a negative 14C age
 #'   F14C.age(.80, 0.5) # prebomb dates can also be calculated
 #' @export
-F14C.age <- function(mn, sdev=c(), decimals=5) {
-  y <- -8033 * log(mn)
+F14C.age <- function(mn, sdev=c(), decimals=5, lambda=8033) {
+  y <- -lambda * log(mn)
   if(length(sdev) == 0)
     signif(y, decimals) else {
-    sdev <- y - -8033 * log((mn+sdev))
+    sdev <- y - -lambda * log((mn+sdev))
     signif(cbind(y, sdev), decimals)
   }
 }
@@ -86,15 +89,16 @@ F14C.age <- function(mn, sdev=c(), decimals=5) {
 #' @param mn Reported mean of the 14C age.
 #' @param sdev Reported error of the 14C age. If left empty, will translate mn to F14C.
 #' @param decimals Amount of decimals required for the F14C value. Defaults to 5.
+#' @param lambda The mean-life of radiocarbon (based on Libby half-life of 5568 years)
 #' @return F14C values from C14 ages.
 #' @examples
 #'   age.F14C(-2000, 20)
 #' @export
-age.F14C <- function(mn, sdev=c(), decimals=5) {
-  y <- exp(-mn / 8033)
+age.F14C <- function(mn, sdev=c(), decimals=5, lambda=8033) {
+  y <- exp(-mn / lambda)
   if(length(sdev) == 0)
     signif(y, decimals) else {
-      sdev <- y - exp(-(mn + sdev) / 8033)
+      sdev <- y - exp(-(mn + sdev) / lambda)
       signif(cbind(y, sdev), decimals)
     }
 }

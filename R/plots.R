@@ -283,9 +283,9 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 
   # deal with drawing ages truncated by the calibration curve
   cal.hpd[which(cal.hpd[,3] == 0),2] <- 0 # outside hpd ranges
-  if(cal.hpd[nrow(cal.hpd),1] == Cc[nrow(Cc),1])
+#  if(cal.hpd[nrow(cal.hpd),1] == Cc[nrow(Cc),1])
     cal.hpd <- rbind(cal.hpd, c(cal.hpd[nrow(cal.hpd),1],0,0))
-  if(cal.hpd[1,1] == Cc[1,1])
+#  if(cal.hpd[1,1] == Cc[1,1])
     cal.hpd <- rbind(c(cal.hpd[1,1],0,1), cal.hpd)
   if(cal.dist[nrow(cal.dist),1] == Cc[nrow(Cc),1])
     cal.dist <- rbind(cal.dist, c(cal.dist[nrow(cal.dist),1],0))
@@ -690,6 +690,7 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
 #' @param contam.F14C 14C activity of the sample. Defaults to 'modern' 14C, F14C=1.
 #' @param contam.legend Percentages for which numbers will be plotted.
 #' @param legend.pos horizontal position beyond which the percentage values will be plotted
+#' @param legend.cex font size of the legend
 #' @param grid Whether to plot a grid. Defaults to TRUE
 #' @param xaxs Whether or not to extend the limits of the horizontal axis. Defaults to \code{xaxs="i"} which does not extend.
 #' @param yaxs Whether or not to extend the limits of the vertical axis. Defaults to \code{yaxs="i"} which does not extend.
@@ -697,7 +698,7 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
 #'   draw.contamination()
 #'   draw.contamination(40e3, 50e3, ka=FALSE)
 #' @export
-draw.contamination <- function(from=0, to=50e3, ka=TRUE, age.res=500, xlim=c(), ylim=c(),  colours=rainbow(age.res), max.contam=0.1, contam.F14C=1, contam.legend=max.contam*c(1/100, (1:5)/50, (1:4)/5, 1), legend.pos=.07, grid=TRUE, xaxs="i", yaxs="i") {
+draw.contamination <- function(from=0, to=50e3, ka=TRUE, age.res=500, xlim=c(), ylim=c(),  colours=rainbow(age.res), max.contam=0.1, contam.F14C=1, contam.legend=max.contam*c(1/100, (1:5)/50, (1:4)/5, 1), legend.pos=.07, legend.cex=0.6, grid=TRUE, xaxs="i", yaxs="i") {
   real.14C <- seq(from, to, length=age.res)
   observed.14C <- seq(0, to, by=diff(real.14C)[1])
 
@@ -739,7 +740,7 @@ draw.contamination <- function(from=0, to=50e3, ka=TRUE, age.res=500, xlim=c(), 
   for(i in contam.legend) {
     contam <- contaminate(real.14C,, i, contam.F14C)
     lines(real.14C/ka, contam/ka, lty=3, col=grey(.7))
-    text((to+(legend.pos*(to-from)))/ka, max(contam)/ka, labels=paste0(100*i, "%"), cex=.8, adj=c(1,.5))
+    text((to+(legend.pos*(to-from)))/ka, max(contam)/ka, labels=paste0(100*i, "%"), cex=legend.cex, adj=c(1,.5))
   }
 
 }
