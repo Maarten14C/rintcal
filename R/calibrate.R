@@ -28,7 +28,7 @@
 caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, cc.resample=FALSE, dist.res=200, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, normalise=TRUE, BCAD=FALSE, rule=1, cc.dir=NULL) {
   # deal with cal BP and negative ages	
   if(cc == 0) { # no ccurve needed
-    xseq <- seq(age-5*error, age+5*error, length=1e3) # hard-coded values
+    xseq <- seq(age-8*error, age+8*error, length=2e3) # hard-coded values, hmmm
     cc <- cbind(xseq, xseq, rep(0, length(xseq)))
   } else {
     if(age < 0)

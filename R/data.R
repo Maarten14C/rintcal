@@ -201,7 +201,7 @@
 #' [82] Boentgen et al. 2018 Tree rings reveal globally coherent signature of cosmogenic radiocarbon events in 774 and 993 CE. Nature Communications, 9: 3605. doi:10.1038/s41467-018-06036-0.
 #' [83] Sookdeo et al. 2020 Quality Dating: A well-defined protocol implemented at ETH Zurich for high-precision 14C dates tested on Late Glacial wood. Radiocarbon. \doi{10.1017/RDC.2019.132}
 #' @export
-intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=1:8, data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
+intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
 
   # read the data
   if(tolower(calcurve.data) == "intcal20") {
@@ -220,16 +220,16 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     dat$cal <- 1950 - dat$cal
 
   # find the data corresponding to the period of interest
-  mindat <- dat$cal >= min(cal1, cal2)
-  maxdat <- dat$cal <= max(cal1, cal2)
+  mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
+  maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
   dat <- dat[which( mindat * maxdat == 1),]
 
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1)
   if(BCAD)
     cc.1[,1] <- 1950 - cc.1[,1]
-  mindat <- cc.1[,1] >= min(cal1, cal2)
-  maxdat <- cc.1[,1] <= max(cal1, cal2)
+  mindat <- cc.1[,1] >= (min(cal1, cal2)/1.01) # adding some extra space
+  maxdat <- cc.1[,1] <= (max(cal1, cal2)*1.01) # adding some extra space
   cc.1 <- cc.1[which(mindat * maxdat == 1),]
   if(ka)
     cc.1 <- cc.1/1e3
@@ -251,8 +251,19 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   sets <- dat$set
   set.cols <- NA; set.pchs <- NA
   these.sets <- sort(unique(sets))
-  these.cols <- data.cols[1:length(sets)]
-  these.pchs <- data.pch[1:length(sets)]
+  # but possibly reorder if important dataset, e.g. Suigetsu...
+
+  if(length(data.cols) == 0)
+    if(length(these.sets) > 8) {
+    # then add 16 distinct colours (taken from the randomcoloR package)
+    data.cols <- c(1:8, "#739B7E", "#DCA97C", "#D3DECE", "#D19CE2", "#DB58BB",
+    "#DDC3D4", "#B042E4", "#DB6240", "#CD788F", "#7972D3", "#D2E49D",
+    "#87EB55", "#7FB0D9", "#77E299", "#DAD950", "#80E6DC")
+    data.pch <- rep(data.pch, 5)
+    } else
+      data.cols <- 1:8
+    these.cols <- data.cols[1:length(sets)]
+    these.pchs <- data.pch[1:length(sets)]
   for(i in 1:length(these.sets)) {
     set.cols[sets %in% these.sets[i]] <- these.cols[i]
     set.pchs[sets %in% these.sets[i]] <- these.pchs[i]
@@ -298,7 +309,7 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     cal.lim <- cal.lim/1e3
   }
 
-  if(is.na(c14.lim))
+  if(is.na(c14.lim)[1])
     if(is.na(cc2))
       c14.lim <- range(c14-c14.err, c14+c14.err, cc1.pol[,2]) else
         c14.lim <- range(c14-c14.err, c14+c14.err, cc1.pol[,2], cc2.pol[,2])
