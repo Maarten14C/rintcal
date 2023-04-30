@@ -16,6 +16,7 @@ draw.contamination(
   contam.F14C = 1,
   contam.legend = max.contam * c(1/100, (1:5)/50, (1:4)/5, 1),
   legend.pos = 0.07,
+  legend.cex = 0.6,
   grid = TRUE,
   xaxs = "i",
   yaxs = "i"
@@ -30,6 +31,10 @@ draw.contamination(
 
 \item{age.res}{Resolution of age scale. Defaults to 500, which results in smooth curves. Higher numbers will take longer to draw.}
 
+\item{xlim}{Limits of the horizontal axis.}
+
+\item{ylim}{Limits of the vertical axis.}
+
 \item{colours}{Colours of the percentages. Defaults to rainbow colours.}
 
 \item{max.contam}{Maximum contamination level as a fraction of the sample. Defaults to 0.1 (10\%).}
@@ -39,6 +44,8 @@ draw.contamination(
 \item{contam.legend}{Percentages for which numbers will be plotted.}
 
 \item{legend.pos}{horizontal position beyond which the percentage values will be plotted}
+
+\item{legend.cex}{font size of the legend}
 
 \item{grid}{Whether to plot a grid. Defaults to TRUE}
 

@@ -7,23 +7,22 @@
 #' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk>
 #' @importFrom utils read.table write.table packageName
 #' @importFrom stats approx dnorm median weighted.mean
-#' @importFrom grDevices rgb extendrange
-#' @importFrom graphics axis par legend lines points polygon segments text mtext
+#' @importFrom grDevices rgb extendrange grey rainbow
+#' @importFrom graphics axis par legend lines points polygon segments text mtext abline image
 #' @importFrom data.table fread fwrite
 #' @importFrom jsonlite fromJSON toJSON
 #' @name rintcal
 NULL
 
-# todo: write more detail as to what can be found in the intcal.data.frames, check that intcal.data plots all data series (e.g., intcal.data(14e3, 18e3) looks very empty), make more interactive so that specific data can be selected and plotted (e.g., Hulu vs Suigetsu), allow for draw.contaminate with contam.F14C=0, check how BCAD works in all plots, make draw.contamination function (w image, not lines), consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
+# todo: write more detail as to what can be found in the intcal.data.frames, check that intcal.data plots all data series (e.g., intcal.data(14e3, 18e3) looks very empty), make more interactive so that specific data can be selected and plotted (e.g., Hulu vs Suigetsu), allow for draw.contaminate with contam.F14C=0, check how BCAD works in all plots, consider adding smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
 # todo: adapt colouring scheme intcal.data (plot overlap on cal BP series to see how many colour/icon combinations needed), make package 'howmany' (or such), including accumulate (to make sediment records, with e.g. random walk, a function, reading from a file, ...), simulate dating (extrapolation, scatter, outliers, ccurves, offsets; random depths, Andres's code, equal spacing), write Bacon/clam/bchron/oxcal files, cost/benefit plots, proxy simulator
-
-# done: made draw.contamination function, redid calibrate function to deal better with BCAD
 
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server
 # save(intcal, file="~/Dropbox/devsoftware/rintcal/data/intcal.rda")
 # tools::resaveRdaFiles("~/Dropbox/devsoftware/rintcal/data/intcal.rda") # to compress
+
 
 
 # internal functions to speed up reading and writing files, using the data.table R package if present

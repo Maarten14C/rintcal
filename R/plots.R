@@ -685,6 +685,8 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
 #' @param to Maximum 14C age for the plot. Defaults to 50e3.
 #' @param ka Use C14 kBP. Defaults to TRUE.
 #' @param age.res Resolution of age scale. Defaults to 500, which results in smooth curves. Higher numbers will take longer to draw.
+#' @param xlim Limits of the horizontal axis.
+#' @param ylim Limits of the vertical axis.
 #' @param colours Colours of the percentages. Defaults to rainbow colours.
 #' @param max.contam Maximum contamination level as a fraction of the sample. Defaults to 0.1 (10\%).
 #' @param contam.F14C 14C activity of the sample. Defaults to 'modern' 14C, F14C=1.

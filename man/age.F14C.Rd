@@ -4,7 +4,7 @@
 \alias{age.F14C}
 \title{Calculate F14C values from C14 ages}
 \usage{
-age.F14C(mn, sdev = c(), decimals = 5)
+age.F14C(mn, sdev = c(), decimals = 5, lambda = 8033)
 }
 \arguments{
 \item{mn}{Reported mean of the 14C age.}
@@ -12,6 +12,8 @@ age.F14C(mn, sdev = c(), decimals = 5)
 \item{sdev}{Reported error of the 14C age. If left empty, will translate mn to F14C.}
 
 \item{decimals}{Amount of decimals required for the F14C value. Defaults to 5.}
+
+\item{lambda}{The mean-life of radiocarbon (based on Libby half-life of 5568 years)}
 }
 \value{
 F14C values from C14 ages.

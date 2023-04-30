@@ -21,7 +21,7 @@ intcal.data(
   cc1.fill = rgb(0, 0, 1, 0.2),
   cc2.col = rgb(0, 0.5, 0, 0.5),
   cc2.fill = rgb(0, 0.5, 0, 0.2),
-  data.cols = 1:8,
+  data.cols = c(),
   data.pch = c(1, 2, 5, 6, 15:19),
   pch.cex = 0.5,
   legend.loc = "topleft",

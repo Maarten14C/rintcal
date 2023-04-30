@@ -4,7 +4,7 @@
 \alias{pMC.age}
 \title{Calculate C14 ages from pMC values.}
 \usage{
-pMC.age(mn, sdev = c(), ratio = 100, decimals = 0)
+pMC.age(mn, sdev = c(), ratio = 100, decimals = 0, lambda = 8033)
 }
 \arguments{
 \item{mn}{Reported mean of the pMC.}
@@ -14,6 +14,8 @@ pMC.age(mn, sdev = c(), ratio = 100, decimals = 0)
 \item{ratio}{Most modern-date values are reported against \code{100}. If it is against \code{1} instead, use \code{1} here.}
 
 \item{decimals}{Amount of decimals required for the radiocarbon age.}
+
+\item{lambda}{The mean-life of radiocarbon (based on Libby half-life of 5568 years)}
 }
 \value{
 Radiocarbon ages from pMC values. If pMC values are above 100\%, the resulting radiocarbon ages will be negative.
