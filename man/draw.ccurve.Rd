@@ -5,8 +5,8 @@
 \title{Draw a calibration curve.}
 \usage{
 draw.ccurve(
-  cal1 = -50,
-  cal2 = 55000,
+  cal1 = c(),
+  cal2 = c(),
   cc1 = "IntCal20",
   cc2 = NA,
   cc1.postbomb = FALSE,
@@ -31,9 +31,9 @@ draw.ccurve(
 )
 }
 \arguments{
-\item{cal1}{First calendar year for the plot}
+\item{cal1}{First calendar year for the plot. Defaults to 0 cal BP.}
 
-\item{cal2}{Last calendar year for the plot}
+\item{cal2}{Last calendar year for the plot. Defaults to 55,000 cal BP.}
 
 \item{cc1}{Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "nh1_monthly", "nh1_monthly", "nh2_monthly", "nh3_monthly", "sh1-2_monthly", "sh3_monthly", "Kure", "LevinKromer" or "Santos" for postbomb curves.}
 

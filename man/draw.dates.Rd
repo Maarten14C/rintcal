@@ -155,4 +155,11 @@ Add individual or multiple calibrated dates to a plot.
 \examples{
   plot(0, xlim=c(500,0), ylim=c(0, 2))
   draw.dates(130, 20, depth=1) 
+  x <- sort(runif(10, 1000, 10000)) # draw 10 random calendar ages
+  cc <- ccurve() # get the calibration curve
+  y <- approx(cc[,1], cc[,2], x)$y # find the IntCal 14C ages
+  er <- .01 * y
+  draw.dates(y, er, 1:length(x))
+  draw.dates(y, er, y, d.lab="Radiocarbon age (BP)")
+  draw.ccurve(add=TRUE, cc1.col=rgb(0,.5,0,.5))
 }

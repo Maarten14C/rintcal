@@ -11,7 +11,7 @@ mix.ccurves(
   name = "mixed.14C",
   cc.dir = c(),
   save = FALSE,
-  offset = c(0, 0),
+  offset = cbind(0, 0),
   sep = "\\t"
 )
 }
@@ -28,7 +28,7 @@ mix.ccurves(
 
 \item{save}{Save the curve in the folder specified by dir. Defaults to FALSE.}
 
-\item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0).}
+\item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row).}
 
 \item{sep}{Separator between fields (tab by default, "\\t")}
 }
@@ -44,6 +44,9 @@ The proportional contribution of each of both calibration curves has to be set.
 \examples{
 tmpdir <- tempdir()
 mix.ccurves(cc.dir=tmpdir)
+# now assume the offset is constant but its uncertainty increases over time:
+cc <- ccurve()
+offset <- cbind(rep(100, nrow(cc)),  seq(0, 1e3, length=nrow(cc)))
 # clean up:
 unlink(tmpdir)
 }

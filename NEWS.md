@@ -4,6 +4,8 @@
 * 0 BC/AD (which does not exist) is now dealt with better
 * added a function draw.contamination
 * the calibrate function now deals better with BC/AD (e.g., new items can be added afterward in the expected locations) 
+* mix.ccurves now handles varying offsets (mean and/or uncertainty)
+* intcal.data now has more colours, returns datasets (invisibly) and can plot selected datasets
 
 # rintcal 0.5.3
 * added a function draw.D14C to draw the D14C data together with the calibration curve.

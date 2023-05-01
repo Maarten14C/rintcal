@@ -47,6 +47,13 @@ We can also visualise the data underlying parts of the IntCal calibration curve,
 intcal.data(0, 500)
 ```
 
+Want to plot only some specific datasets over a period of time? 
+
+```{r, fig.width=5, fig.asp=1}
+dat <- intcal.data(20e3, 25e3)
+unique(dat$set)
+dat <- intcal.data(20e3, 25e3, select.sets=c(109, 120), data.cols=c(1,2))
+```
 
 Legacy calibration data such as Arnold & Libby 1951 (Science 113, p. 111-120) can be compared with the latest calibration curves. Only included here are those radiocarbon dates of Arnold and Libby which come with independent (historical, archaeological or dendrochronological) age estimates. Note that Arnold and Libby did not define their 'calendar years' explicitly, so the ages have to be taken with a degree of caution.
 

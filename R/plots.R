@@ -2,8 +2,8 @@
 #' @title Draw a calibration curve.
 #' @description Draw one or two of the calibration curves, or add a calibration curve to an existing plot.
 #' @return A plot of the calibration curve
-#' @param cal1 First calendar year for the plot
-#' @param cal2 Last calendar year for the plot
+#' @param cal1 First calendar year for the plot. Defaults to 0 cal BP.
+#' @param cal2 Last calendar year for the plot. Defaults to 55,000 cal BP.
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Can also be "nh1", "nh2", "nh3", "sh1-2", "sh3", "nh1_monthly", "nh1_monthly", "nh2_monthly", "nh3_monthly", "sh1-2_monthly", "sh3_monthly", "Kure", "LevinKromer" or "Santos" for postbomb curves.
 #' @param cc2 Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.
 #' @param cc1.postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve for cc1 (default \code{cc1.postbomb=FALSE}).
@@ -31,29 +31,37 @@
 #' draw.ccurve(1800, 2020, BCAD=TRUE, cc2="nh1", cc2.postbomb=TRUE)
 #' draw.ccurve(1800, 2010, BCAD=TRUE, cc2="nh1", add.yaxis=TRUE)
 #' @export
-draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbomb=FALSE, cc2.postbomb=FALSE, BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, add.yaxis=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), add=FALSE, bty="l", cc.dir=NULL, legend="topleft", ...) {
+draw.ccurve <- function(cal1=c(), cal2=c(), cc1="IntCal20", cc2=NA, cc1.postbomb=FALSE, cc2.postbomb=FALSE, BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, add.yaxis=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), add=FALSE, bty="l", cc.dir=NULL, legend="topleft", ...) {
 
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1, cc1.postbomb, cc.dir)
-  if(BCAD)
-    cc.1[,1] <- 1950 - cc.1[,1] 
-  mindat <- cc.1[,1] >= min(cal1, cal2)
-  maxdat <- cc.1[,1] <= max(cal1, cal2)
+  cc.cal <- 1 # which column to use for calendar ages
+  if(BCAD) {
+    cc.1[,4] <- 1950 - cc.1[,1] # add a column...
+    cc.cal <- 4 # ... and use it
+  }
+  if(length(cal1) == 0)
+    cal1 <- cc.1[1,cc.cal]
+  if(length(cal2) == 0)
+    cal2 <- cc.1[nrow(cc.1),cc.cal]
+  
+  mindat <- cc.1[,cc.cal] >= min(cal1, cal2)
+  maxdat <- cc.1[,cc.cal] <= max(cal1, cal2)
   cc.1 <- cc.1[which(mindat * maxdat == 1),]
   if(ka)
     cc.1 <- cc.1/1e3
-  cc1.pol <- cbind(c(cc.1[,1], rev(cc.1[,1])), c(cc.1[,2]-cc.1[,3], rev(cc.1[,2]+cc.1[,3])))
+  cc1.pol <- cbind(c(cc.1[,cc.cal], rev(cc.1[,cc.cal])), c(cc.1[,2]-cc.1[,3], rev(cc.1[,2]+cc.1[,3])))
   
   if(!is.na(cc2)) {
     cc.2 <- ccurve(cc2, cc2.postbomb, cc.dir)
-    if(BCAD)
-      cc.2[,1] <- 1950 - cc.2[,1] 
-    mindat <- cc.2[,1] >= min(cal1, cal2)
-    maxdat <- cc.2[,1] <= max(cal1, cal2)
+    if(BCAD) 
+      cc.2[,4] <- 1950 - cc.2[,1] 
+    mindat <- cc.2[,cc.cal] >= min(cal1, cal2)
+    maxdat <- cc.2[,cc.cal] <= max(cal1, cal2)
     cc.2 <- cc.2[which(mindat * maxdat == 1),]
     if(ka)
       cc.2 <- cc.2/1e3
-    cc2.pol <- cbind(c(cc.2[,1], rev(cc.2[,1])), c(cc.2[,2]-cc.2[,3], rev(cc.2[,2]+cc.2[,3])))
+    cc2.pol <- cbind(c(cc.2[,cc.cal], rev(cc.2[,cc.cal])), c(cc.2[,2]-cc.2[,3], rev(cc.2[,2]+cc.2[,3])))
   }
 
   if(!add) { # then prepare plotting parameters
@@ -92,8 +100,8 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
 
   # add the calibration curve
   polygon(cc1.pol, col=cc1.fill, border=NA) # calibration curve
-  lines(cc.1[,1], cc.1[,2]-cc.1[,3], col=cc1.col)
-  lines(cc.1[,1], cc.1[,2]+cc.1[,3], col=cc1.col)
+  lines(cc.1[,cc.cal], cc.1[,2]-cc.1[,3], col=cc1.col)
+  lines(cc.1[,cc.cal], cc.1[,2]+cc.1[,3], col=cc1.col)
 
   # add a second curve?
   if(!is.na(cc2)) {
@@ -104,8 +112,8 @@ draw.ccurve <- function(cal1=-50, cal2=55e3, cc1="IntCal20", cc2=NA, cc1.postbom
       plot(cc2.pol, type="n", xlim=cal.lim, xlab="", ylab="", bty="n", xaxt="n", yaxt="n")
     }
     polygon(cc2.pol, col=cc2.fill, border=NA) # calibration curve
-    lines(cc.2[,1], cc.2[,2]-cc.2[,3], col=cc2.col)
-    lines(cc.2[,1], cc.2[,2]+cc.2[,3], col=cc2.col)
+    lines(cc.2[,cc.cal], cc.2[,2]-cc.2[,3], col=cc2.col)
+    lines(cc.2[,cc.cal], cc.2[,2]+cc.2[,3], col=cc2.col)
     if(add.yaxis)
       axis(4, col=cc2.col, col.axis=cc2.col)
     if(length(legend) > 0)
@@ -228,9 +236,11 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   if(length(reservoir) > 1)
     error <- sqrt(error^2 + reservoir[2]^2)
   Cc <- ccurve(cc, postbomb, cc.dir)
-  if(BCAD)
-    Cc[,1] <- 1950 - Cc[,1]
-
+  cc.cal <- 1
+  if(BCAD) {
+    Cc[,4] <- 1950 - Cc[,1]
+    cc.cal <- 4
+  }
   # warn/stop if the date lies (partly) beyond the calibration curve
   if(edge) {
     border <- 0
@@ -305,8 +315,8 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 
   if(length(C14.lim) == 0) {
     if(BCAD) {
-      cc.min <- max(1, min(which(Cc[,1] <= max(cal.lim))))
-      cc.max <- min(nrow(Cc), max(which(Cc[,1] >= min(cal.lim))))
+      cc.min <- max(1, min(which(Cc[,4] <= max(cal.lim))))
+      cc.max <- min(nrow(Cc), max(which(Cc[,4] >= min(cal.lim))))
     } else {  
         cc.min <- max(1, min(which(Cc[,1] >= min(cal.lim))))
         cc.max <- min(nrow(Cc), max(which(Cc[,1] <= max(cal.lim))))
@@ -322,7 +332,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
      Cc <- Cc[cc.min:cc.max,]
      cc.lim <- range(C14.lim)
   }
-  ccpol <- cbind(c(Cc[,1], rev(Cc[,1])), c(Cc[,2]-Cc[,3], rev(Cc[,2]+Cc[,3])))
+  ccpol <- cbind(c(Cc[,cc.cal], rev(Cc[,cc.cal])), c(Cc[,2]-Cc[,3], rev(Cc[,2]+Cc[,3])))
 
   # transpose the probability distributions onto the age-scales
   prob2age <- function(prob, age1, age2, prob1=min(prob[,2]), prob2=max(prob[,2]), bcad=BCAD) {
@@ -439,6 +449,14 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
 #' @examples
 #'   plot(0, xlim=c(500,0), ylim=c(0, 2))
 #'   draw.dates(130, 20, depth=1) 
+#'   x <- sort(runif(10, 1000, 10000)) # draw 10 random calendar ages
+#'   cc <- ccurve() # get the calibration curve
+#'   y <- approx(cc[,1], cc[,2], x)$y # find the IntCal 14C ages
+#'   er <- .01 * y
+#'   draw.dates(y, er, 1:length(x))
+#    # or draw on the calibration curve
+#'   draw.dates(y, er, y, d.lab="Radiocarbon age (BP)")
+#'   draw.ccurve(add=TRUE, cc1.col=rgb(0,.5,0,.5))
 #' @export
 draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), normal=TRUE, t.a=3, t.b=4, prob=0.95, threshold=.001, BCAD=FALSE, draw.hpd=TRUE, hpd.lwd=2, hpd.col=rgb(0,0,1,.7), cal.hpd.col=rgb(0, 0.5, 0.5, 0.35), mirror=TRUE, up=FALSE, draw.base=TRUE, col=rgb(0,0,1,.3), border=rgb(0,0,1,.5), cal.col=rgb(0, 0.5, 0.5, 0.35), cal.border=rgb(0, 0.5, 0.5, 0.35), add=FALSE, ka=FALSE, rotate.axes=FALSE, ex=1, normalise=TRUE, cc.resample=5, age.lab=c(), age.lim=c(), age.rev=FALSE, d.lab=c(), d.lim=c(), d.rev=TRUE, labels=c(), label.x=1, label.y=c(), label.cex=0.8, label.col=border, label.offset=c(0,0), label.adj=c(1,0), label.rot=0, cc.dir=NULL, dist.res=100, ...) {
   if(length(reservoir) > 0) {
@@ -627,12 +645,22 @@ draw.dates <- function(age, error, depth, cc=1, postbomb=FALSE, reservoir=c(), n
 #'   draw.D14C(cc=ccurve("NH1_monthly"), BCAD=TRUE)
 #' @export
 draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4), mgp=c(2.5,1,0), xaxs="r", yaxs="r", bty="u", ka=FALSE, cal.lab=c(), cal.rev=FALSE, C14.lab=c(), C14.lim=c(), cc.col=rgb(0,.5,0,.5), cc.border=rgb(0,.5,0,.5), D14C.lab=c(), D14C.lim=c(), D14C.col=rgb(0,0,1,.5), D14C.border=rgb(0,0,1,.5)) {
-  if(BCAD)
-    cc[,1] <- 1950 - cc[,1]
+  if(BCAD) {
+    cc[,4] <- 1950 - cc[,1] # add a column
+    cc.cal <- 4
   if(length(cal1) == 0)
-    cal1 <- min(cc[,1])
+    cal1 <- min(cc[,1]) else
+      cal1 <- cc[min(1, which(cc[,4] >= cal1)),1] # find the cal BP values
   if(length(cal2) == 0)
-    cal2 <- max(cc[,1])
+    cal2 <- max(cc[,1]) else
+      cal2 <- cc[max(nrow(cc), which(cc[,4 <= cal1])),1]
+  } else {
+      cc.cal <- 1
+      if(length(cal1) == 0)
+        cal1 <- min(cc[,1])
+      if(length(cal2) == 0)
+        cal2 <- max(cc[,1])
+    }
   yrmin <- max(1, which(cc[,1] <= min(cal1, cal2)))
   yrmax <- min(nrow(cc), which(cc[,1] >= max(cal1, cal2)))
   cc <- cc[yrmin:yrmax,]
@@ -644,10 +672,14 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
   on.exit(par(op))
   kyr <- ifelse(ka, 1e3, 1)
   cal.lim <- range(cal1, cal2)/kyr
+  if(BCAD)
+    cal.lim <- 1950/kyr - cal.lim 
   if(cal.rev)
     cal.lim <- rev(cal.lim)
   if(length(cal.lab) == 0)
-    cal.lab <- ifelse(kyr > 1, "kcal BP", "cal BP")
+    if(BCAD)
+      cal.lab <- ifelse(kyr > 1, "kcal BC/AD", "cal BC/AD") else
+        cal.lab <- ifelse(kyr > 1, "kcal BP", "cal BP")
   if(length(D14C.lab) == 0)
     D14C.lab <- expression(Delta^14*C*" (\u{2030})") # assuming UTF8 capabilities
   if(length(C14.lab) == 0)
@@ -658,17 +690,16 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
     C14.lim <- range((cc[,2]-cc[,3]), (cc[,2]+cc[,3]))
   if(ka)
     C14.lim <- C14.lim/1e3
-
-  plot(cc[,1]/kyr, cc.D14Cmax, type="n", xlab=cal.lab, yaxt="n", ylab="", xlim=cal.lim, ylim=D14C.lim)
-  pol.D14C <- cbind(c(cc[,1]/kyr, rev(cc[,1]/kyr)), c(cc.D14Cmin, rev(cc.D14Cmax)))
+  plot(cc[,cc.cal]/kyr, cc.D14Cmax, type="n", xlab=cal.lab, yaxt="n", ylab="", xlim=cal.lim, ylim=D14C.lim)
+  pol.D14C <- cbind(c(cc[,cc.cal]/kyr, rev(cc[,cc.cal]/kyr)), c(cc.D14Cmin, rev(cc.D14Cmax)))
   polygon(pol.D14C, col=D14C.col, border=D14C.border)
   axis(2, col=D14C.border, col.axis=D14C.border)
   mtext(D14C.lab, 2, mgp[1], col=D14C.border)
 
   op <- par(new=TRUE)
   on.exit(par(op))
-  plot(cc[,1]/kyr, (cc[,2]+cc[,3])/kyr, type="n", xaxt="n", yaxt="n", col=4, xlim=cal.lim, xlab="", ylab="", ylim=C14.lim)
-  pol.cc <- cbind(c(cc[,1]/kyr, rev(cc[,1]/kyr)), c((cc[,2]+cc[,3])/kyr, rev((cc[,2]-cc[,3])/kyr)))
+  plot(cc[,cc.cal]/kyr, (cc[,2]+cc[,3])/kyr, type="n", xaxt="n", yaxt="n", col=4, xlim=cal.lim, xlab="", ylab="", ylim=C14.lim)
+  pol.cc <- cbind(c(cc[,cc.cal]/kyr, rev(cc[,cc.cal]/kyr)), c((cc[,2]+cc[,3])/kyr, rev((cc[,2]-cc[,3])/kyr)))
   polygon(pol.cc, col=cc.col, border=cc.border)
 
   axis(4, col=cc.border, col.axis=cc.border)
@@ -744,5 +775,4 @@ draw.contamination <- function(from=0, to=50e3, ka=TRUE, age.res=500, xlim=c(), 
     lines(real.14C/ka, contam/ka, lty=3, col=grey(.7))
     text((to+(legend.pos*(to-from)))/ka, max(contam)/ka, labels=paste0(100*i, "%"), cex=legend.cex, adj=c(1,.5))
   }
-
 }

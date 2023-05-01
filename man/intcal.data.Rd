@@ -10,6 +10,7 @@ intcal.data(
   cc1 = "IntCal20",
   cc2 = NA,
   calcurve.data = "IntCal20",
+  select.sets = c(),
   BCAD = FALSE,
   cal.lab = NA,
   cal.rev = FALSE,
@@ -42,6 +43,8 @@ intcal.data(
 \item{cc2}{Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.}
 
 \item{calcurve.data}{Which dataset to use. Defaults to \code{calcurve.data="IntCal20"}, but can also be \code{calcurve.data="SHCal20"}. Note that Marine20 is based on IntCal20 and a marine carbon cycle model.}
+
+\item{select.sets}{Which datasets to plot. Defaults to all datasets within the selected period.}
 
 \item{BCAD}{The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.}
 
@@ -84,7 +87,7 @@ intcal.data(
 \item{...}{Any additional optional plotting parameters.}
 }
 \value{
-A plot of the IntCal curve and the underlying data
+A plot of the IntCal curve and the underlying data, as well as (invisibly) the data themselves
 }
 \description{
 plot the C14 ages underpinning the IntCal20/Marine20/SHCal20 calibration curves
@@ -99,6 +102,10 @@ The southern hemisphere calibration curve SHCal20 is mostly modelled on IntCal20
 \examples{
   intcal.data(100, 200)
   intcal.data(40e3, 55e3, ka=TRUE)
+  # plot Suigetsu and Cariaco data only
+  dat <- intcal.data(20e3, 25e3)
+  unique(dat$set) # ordered against their appearance in the plot's legend
+  dat <- intcal.data(20e3, 25e3, selectsets=c(109, 120), data.cols=c(1,2))
 }
 \references{
 [1]Stuiver, M, and Braziunas, TF. 1993. Sun, ocean, climate and atmospheric 14CO2: an evaluation of causal and spectral relationships. Holocene 3: 289-305.

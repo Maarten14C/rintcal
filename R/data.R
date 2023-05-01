@@ -6,12 +6,13 @@
 #' Additionally, there are some floating tree-ring datasets with imprecisely known calendar ages; tAdolphy (50) and tTurney (51-52). For these and the following datasets, horizontal error bars indicate their 1 sd calendar age uncertainties.
 #' Beside trees, other datasets include lake sediment (lSuigestu, 53-54), corals (cBard 55-56, cFairbanks 57, cCutler 58 and cDurand 61, marine sediment (mCariaco 59-60, 62-63, mBard 64-65) and speleothems (sSouthon 66-67, sHoffman 68, sBeck 69).
 #' The southern hemisphere calibration curve SHCal20 is mostly modelled on IntCal20, but it contains datasets from the southern hemisphere; tPretoria (70), tWaikato (72-75), tBelfast (76-67), tSydney (78-80), tLivermore (81), tArizona, tIrvineWaikato and tZurich (82-83).
-#' @return A plot of the IntCal curve and the underlying data
+#' @return A plot of the IntCal curve and the underlying data, as well as (invisibly) the data themselves
 #' @param cal1 First calendar year for the plot
 #' @param cal2 Last calendar year for the plot
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13".
 #' @param cc2 Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.
 #' @param calcurve.data Which dataset to use. Defaults to \code{calcurve.data="IntCal20"}, but can also be \code{calcurve.data="SHCal20"}. Note that Marine20 is based on IntCal20 and a marine carbon cycle model.
+#' @param select.sets Which datasets to plot. Defaults to all datasets within the selected period.
 #' @param BCAD The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.
 #' @param cal.lab The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.
 #' @param cal.rev Reverse the calendar axis.
@@ -35,6 +36,10 @@
 #' @examples
 #'   intcal.data(100, 200)
 #'   intcal.data(40e3, 55e3, ka=TRUE)
+#'   # plot Suigetsu and Cariaco data only
+#'   dat <- intcal.data(20e3, 25e3)
+#'   unique(dat$set) # ordered against their appearance in the plot's legend
+#'   dat <- intcal.data(20e3, 25e3, selectsets=c(109, 120), data.cols=c(1,2))
 #' @references
 #' [1]Stuiver, M, and Braziunas, TF. 1993. Sun, ocean, climate and atmospheric 14CO2: an evaluation of causal and spectral relationships. Holocene 3: 289-305.
 #'
@@ -201,7 +206,7 @@
 #' [82] Boentgen et al. 2018 Tree rings reveal globally coherent signature of cosmogenic radiocarbon events in 774 and 993 CE. Nature Communications, 9: 3605. doi:10.1038/s41467-018-06036-0.
 #' [83] Sookdeo et al. 2020 Quality Dating: A well-defined protocol implemented at ETH Zurich for high-precision 14C dates tested on Late Glacial wood. Radiocarbon. \doi{10.1017/RDC.2019.132}
 #' @export
-intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
+intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", select.sets=c(), BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
 
   # read the data
   if(tolower(calcurve.data) == "intcal20") {
@@ -223,6 +228,8 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
   maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
   dat <- dat[which( mindat * maxdat == 1),]
+  if(length(select.sets) > 0)
+    dat <- dat[which(dat$set %in% select.sets),]
 
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1)
@@ -362,6 +369,6 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
       }
     legend(cc.legend, legend=nm, text.col=cc.col, cex=legend.cex, bty="n", xjust=0)
   }
-
+  invisible(dat)
 }
 
