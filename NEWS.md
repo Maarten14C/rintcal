@@ -1,7 +1,6 @@
-# rintcal 0.5.5
-* the files containing the NH and SH postbomb curves are now printed with the youngest cal BP years at the top
 
-# rintcal 0.5.4
+# rintcal 0.6.0
+* the files containing the NH and SH postbomb curves are now printed with the youngest cal BP years at the top 
 * 0 BC/AD (which does not exist) is now dealt with better
 * added a function draw.contamination
 * the calibrate function now deals better with BC/AD (e.g., new items can be added afterward in the expected locations) 

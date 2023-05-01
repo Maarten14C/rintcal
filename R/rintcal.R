@@ -22,6 +22,11 @@ NULL
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server
 # save(intcal, file="~/Dropbox/devsoftware/rintcal/data/intcal.rda")
 # tools::resaveRdaFiles("~/Dropbox/devsoftware/rintcal/data/intcal.rda") # to compress
+# some platforms complain about non-ASCII characters in the datafilestringi::stri_enc_mark
+
+# stringi::stri_enc_mark(intcal)
+# [1] "ASCII"  "native" "ASCII"  "ASCII"  "native" "ASCII" 
+# stringi::stri_enc_mark(intcal[[2]]) shows which entries contain non-ASCII chars
 
 
 
