@@ -31,13 +31,12 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, cc.resample
     xseq <- seq(age-8*error, age+8*error, length=2e3) # hard-coded values, hmmm
     cc <- cbind(xseq, xseq, rep(0, length(xseq)))
   } else {
-    if(age < 0)
-      if(!postbomb)
-        if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
-          stop("This appears to be a postbomb age. Please provide a postbomb curve")
-    cc <- ccurve(cc, postbomb, cc.dir, resample=cc.resample)
-  }
-
+      if(age < 0)
+        if(!postbomb)
+          if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
+            stop("This appears to be a postbomb age. Please provide a postbomb curve")
+      cc <- ccurve(cc, postbomb=postbomb, cc.dir, resample=cc.resample)
+    }
   # calibrate; find how far age (measurement) is from cc[,2] of calibration curve
   if(normal)
     cal <- cbind(cc[,1], dnorm(cc[,2], age, sqrt(error^2+cc[,3]^2))) else

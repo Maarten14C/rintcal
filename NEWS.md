@@ -1,3 +1,6 @@
+# rintcal 0.6.1
+* calibration of dates close to 0 14C BP now uses both prebomb and postbomb curves by default (if postbomb is provided)
+
 
 # rintcal 0.6.0
 * the files containing the NH and SH postbomb curves are now printed with the youngest cal BP years at the top 

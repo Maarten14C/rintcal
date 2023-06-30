@@ -241,6 +241,12 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
     Cc[,4] <- 1950 - Cc[,1]
     cc.cal <- 4
   }
+
+  if((age - 3*error) < 0)
+    if(!postbomb)
+      if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
+        stop("This appears to be a postbomb age (or is close to being one). Please provide a postbomb curve")
+
   # warn/stop if the date lies (partly) beyond the calibration curve
   if(edge) {
     border <- 0
@@ -257,7 +263,7 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   }
 
   # calculate the raw and calibrated distributions
-  C14.dist <- caldist(age, error, cc=0, BCAD=FALSE) # just to draw a normal dist
+  C14.dist <- caldist(age, error, cc=0, BCAD=FALSE, postbomb=FALSE) # just to draw a normal dist
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
