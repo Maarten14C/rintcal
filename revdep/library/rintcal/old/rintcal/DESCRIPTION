@@ -1,0 +1,24 @@
+Package: rintcal
+Type: Package
+Title: Radiocarbon Calibration Curves
+Version: 0.6.0
+Author: Maarten Blaauw [aut, cre] (<https://orcid.org/0000-0002-5680-1515>)
+Authors@R: c(
+  person("Maarten", "Blaauw", email = "maarten.blaauw@qub.ac.uk",
+    role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5680-1515")))
+Maintainer: Maarten Blaauw <maarten.blaauw@qub.ac.uk>
+Description: The IntCal20 radiocarbon calibration curves (Reimer et al. 2020 <doi:10.1017/RDC.2020.68>) are provided as a data package, together with previous IntCal curves (IntCal13, IntCal09, IntCal04, IntCal98) and postbomb curves. Also provided are functions to copy the curves into memory, to plot the curves and their underlying data, to calibrate radiocarbon dates and to transform between different radiocarbon 'domains'.
+License: GPL (>= 2)
+RoxygenNote: 7.2.3
+Suggests: knitr, rmarkdown, utf8
+VignetteBuilder: knitr
+Encoding: UTF-8
+NeedsCompilation: no
+Imports: data.table, jsonlite
+Language: en-GB
+Depends: R (>= 3.5.0)
+LazyData: true
+Packaged: 2023-05-01 10:07:09 UTC; maarten
+Repository: CRAN
+Date/Publication: 2023-05-01 10:40:02 UTC
+Built: R 4.3.0; ; 2023-05-16 15:17:53 UTC; unix

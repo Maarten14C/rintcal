@@ -1,0 +1,89 @@
+<!DOCTYPE html><html><head><title>R: Combine pages into a single data frame</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>rbind_pages {jsonlite}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='rbind_pages'>Combine pages into a single data frame</h2>
+
+<h3>Description</h3>
+
+<p>The <code>rbind_pages</code> function is used to combine a list of data frames into a single
+data frame. This is often needed when working with a JSON API that limits the amount
+of data per request. If we need more data than what fits in a single request, we need to
+perform multiple requests that each retrieve a fragment of data, not unlike pages in a
+book. In practice this is often implemented using a <code>page</code> parameter in the API. The
+<code>rbind_pages</code> function can be used to combine these pages back into a single dataset.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>rbind_pages(pages)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="rbind_pages_:_pages">pages</code></td>
+<td>
+<p>a list of data frames, each representing a <em>page</em> of data</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>rbind_pages</code> function uses <code><a href="../../vctrs/help/vec_bind.html">vctrs::vec_rbind()</a></code>
+to bind the pages together. This generalizes <code><a href="../../base/help/cbind.html">base::rbind()</a></code> in two
+ways:
+</p>
+
+<ul>
+<li><p> Not each column has to be present in each of the individual data frames; missing
+columns will be filled up in <code>NA</code> values.
+</p>
+</li>
+<li><p> Data frames can be nested (can contain other data frames).
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'># Basic example
+x &lt;- data.frame(foo = rnorm(3), bar = c(TRUE, FALSE, TRUE))
+y &lt;- data.frame(foo = rnorm(2), col = c("blue", "red"))
+rbind_pages(list(x, y))
+
+
+baseurl &lt;- "https://projects.propublica.org/nonprofits/api/v2/search.json"
+pages &lt;- list()
+for(i in 0:20){
+  mydata &lt;- fromJSON(paste0(baseurl, "?order=revenue&amp;sort_order=desc&amp;page=", i))
+  message("Retrieving page ", i)
+  pages[[i+1]] &lt;- mydata$organizations
+}
+organizations &lt;- rbind_pages(pages)
+nrow(organizations)
+colnames(organizations)
+
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>jsonlite</em> version 1.8.7 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

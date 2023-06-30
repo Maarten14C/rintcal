@@ -1,0 +1,129 @@
+<!DOCTYPE html><html><head><title>R: Draw contamination impacts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>draw.contamination {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='draw.contamination'>Draw contamination impacts</h2>
+
+<h3>Description</h3>
+
+<p>Show how contamination with different fractions of modern carbon affect observed C-14 ages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>draw.contamination(
+  from = 0,
+  to = 50000,
+  ka = TRUE,
+  age.res = 500,
+  xlim = c(),
+  ylim = c(),
+  colours = rainbow(age.res),
+  max.contam = 0.1,
+  contam.F14C = 1,
+  contam.legend = max.contam * c(1/100, (1:5)/50, (1:4)/5, 1),
+  legend.pos = 0.07,
+  legend.cex = 0.6,
+  grid = TRUE,
+  xaxs = "i",
+  yaxs = "i"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="draw.contamination_:_from">from</code></td>
+<td>
+<p>Minimum 14C age for the plot. Defaults to 0</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_to">to</code></td>
+<td>
+<p>Maximum 14C age for the plot. Defaults to 50e3.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_ka">ka</code></td>
+<td>
+<p>Use C14 kBP. Defaults to TRUE.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_age.res">age.res</code></td>
+<td>
+<p>Resolution of age scale. Defaults to 500, which results in smooth curves. Higher numbers will take longer to draw.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_xlim">xlim</code></td>
+<td>
+<p>Limits of the horizontal axis.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_ylim">ylim</code></td>
+<td>
+<p>Limits of the vertical axis.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_colours">colours</code></td>
+<td>
+<p>Colours of the percentages. Defaults to rainbow colours.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_max.contam">max.contam</code></td>
+<td>
+<p>Maximum contamination level as a fraction of the sample. Defaults to 0.1 (10%).</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_contam.F14C">contam.F14C</code></td>
+<td>
+<p>14C activity of the sample. Defaults to 'modern' 14C, F14C=1.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_contam.legend">contam.legend</code></td>
+<td>
+<p>Percentages for which numbers will be plotted.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_legend.pos">legend.pos</code></td>
+<td>
+<p>horizontal position beyond which the percentage values will be plotted</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_legend.cex">legend.cex</code></td>
+<td>
+<p>font size of the legend</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_grid">grid</code></td>
+<td>
+<p>Whether to plot a grid. Defaults to TRUE</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_xaxs">xaxs</code></td>
+<td>
+<p>Whether or not to extend the limits of the horizontal axis. Defaults to <code>xaxs="i"</code> which does not extend.</p>
+</td></tr>
+<tr><td><code id="draw.contamination_:_yaxs">yaxs</code></td>
+<td>
+<p>Whether or not to extend the limits of the vertical axis. Defaults to <code>yaxs="i"</code> which does not extend.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A plot of real and observed (contamination-impacted) C14 ages.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>  draw.contamination()
+  draw.contamination(40e3, 50e3, ka=FALSE)
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

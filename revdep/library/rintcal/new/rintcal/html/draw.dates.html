@@ -1,0 +1,291 @@
+<!DOCTYPE html><html><head><title>R: add calibrated distributions to a plot.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>draw.dates {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='draw.dates'>add calibrated distributions to a plot.</h2>
+
+<h3>Description</h3>
+
+<p>Add individual or multiple calibrated dates to a plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>draw.dates(
+  age,
+  error,
+  depth,
+  cc = 1,
+  postbomb = FALSE,
+  reservoir = c(),
+  normal = TRUE,
+  t.a = 3,
+  t.b = 4,
+  prob = 0.95,
+  threshold = 0.001,
+  BCAD = FALSE,
+  draw.hpd = TRUE,
+  hpd.lwd = 2,
+  hpd.col = rgb(0, 0, 1, 0.7),
+  cal.hpd.col = rgb(0, 0.5, 0.5, 0.35),
+  mirror = TRUE,
+  up = FALSE,
+  draw.base = TRUE,
+  col = rgb(0, 0, 1, 0.3),
+  border = rgb(0, 0, 1, 0.5),
+  cal.col = rgb(0, 0.5, 0.5, 0.35),
+  cal.border = rgb(0, 0.5, 0.5, 0.35),
+  add = FALSE,
+  ka = FALSE,
+  rotate.axes = FALSE,
+  ex = 1,
+  normalise = TRUE,
+  cc.resample = 5,
+  age.lab = c(),
+  age.lim = c(),
+  age.rev = FALSE,
+  d.lab = c(),
+  d.lim = c(),
+  d.rev = TRUE,
+  labels = c(),
+  label.x = 1,
+  label.y = c(),
+  label.cex = 0.8,
+  label.col = border,
+  label.offset = c(0, 0),
+  label.adj = c(1, 0),
+  label.rot = 0,
+  cc.dir = NULL,
+  dist.res = 100,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="draw.dates_:_age">age</code></td>
+<td>
+<p>Mean of the uncalibrated C-14 age (or multiple ages).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_error">error</code></td>
+<td>
+<p>Error of the uncalibrated C-14 age (or ages).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_depth">depth</code></td>
+<td>
+<p>Depth(s) of the date(s). Can also be their relative positions if no depths are available.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_cc">cc</code></td>
+<td>
+<p>Calibration curve for C-14 dates (1, 2, 3, or 4, or, e.g., &quot;IntCal20&quot;, &quot;Marine20&quot;, &quot;SHCal20&quot;, &quot;nh1&quot;, &quot;sh3&quot;, or &quot;mixed&quot;). If there are multiple dates but all use the same calibration curve, one value can be provided.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_postbomb">postbomb</code></td>
+<td>
+<p>Whether or not this is a postbomb age. Defaults to FALSE.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_reservoir">reservoir</code></td>
+<td>
+<p>Reservoir age, or reservoir age and age offset.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_normal">normal</code></td>
+<td>
+<p>Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2009).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_t.a">t.a</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 3).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_t.b">t.b</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 4).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_prob">prob</code></td>
+<td>
+<p>Probability confidence intervals (between 0 and 1).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_threshold">threshold</code></td>
+<td>
+<p>Report only values above a threshold. Defaults to <code>threshold=0.001</code>.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_BCAD">BCAD</code></td>
+<td>
+<p>Use BC/AD or cal BP scale (default cal BP).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_draw.hpd">draw.hpd</code></td>
+<td>
+<p>Whether or not to draw the hpd ranges as a line</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_hpd.lwd">hpd.lwd</code></td>
+<td>
+<p>Width of the line of the hpd ranges</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_hpd.col">hpd.col</code></td>
+<td>
+<p>Colour of the hpd rectangle for all dates or radiocarbon dates</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_cal.hpd.col">cal.hpd.col</code></td>
+<td>
+<p>Colour of the hpd rectangle for cal BP dates</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_mirror">mirror</code></td>
+<td>
+<p>Plot distributions mirrored, a bit like a swan. Confuses some people but looks nice to the author so is the default.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_up">up</code></td>
+<td>
+<p>If mirror is set to FALSE, the distribution can be plotted up or down, depending on the direction of the axis.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_draw.base">draw.base</code></td>
+<td>
+<p>By default, the base of the calibrated distributions is plotted. This can be avoided by supplying <code>draw.base=FALSE</code> as an option.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_col">col</code></td>
+<td>
+<p>Colour of the inside of the distribution</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_border">border</code></td>
+<td>
+<p>Colour of the border of the distribution</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_cal.col">cal.col</code></td>
+<td>
+<p>Colour of the inside of distribution of non-radiocarbon dates that didn't need calibration</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_cal.border">cal.border</code></td>
+<td>
+<p>Colour of the border of the distribution of non-radiocarbon dates that didn't need calibration</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_add">add</code></td>
+<td>
+<p>Whether or not to add the dates to an existing plot. If set to FALSE (default), a plot will be set up.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_ka">ka</code></td>
+<td>
+<p>Whether or not to plot ages as thousands of years. Defaults to <code>ka=FALSE</code>.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_rotate.axes">rotate.axes</code></td>
+<td>
+<p>By default, the calendar age axis is plotted on the horizontal axis, and depth/position on the vertical one. Use <code>rotate.axes=TRUE</code> to rotate the axes.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_ex">ex</code></td>
+<td>
+<p>Exaggeration of the height of the distribution, defaults to <code>ex=1</code>.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_normalise">normalise</code></td>
+<td>
+<p>If TRUE, the age distributions are normalised by plotting each distribution with the same total area. Precise dates will therefore peak higher than less precise dates (default). If <code>normalise=FALSE</code>, the peak of each date will be drawn at the same height.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_cc.resample">cc.resample</code></td>
+<td>
+<p>The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ, as can their total areas (which should ideally all sum to the same size). To account for this, resample to a constant time-span, using, e.g., <code>cc.resample=5</code> for 5-yr timespanes.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_age.lab">age.lab</code></td>
+<td>
+<p>Title of the calendar axis (if present)</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_age.lim">age.lim</code></td>
+<td>
+<p>Limits of the calendar axis (if present)</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_age.rev">age.rev</code></td>
+<td>
+<p>Reverse the age axis. Defaults to TRUE</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_d.lab">d.lab</code></td>
+<td>
+<p>Title of the vertical axis (if present)</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_d.lim">d.lim</code></td>
+<td>
+<p>Limits of the vertical axis (if present)</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_d.rev">d.rev</code></td>
+<td>
+<p>Reverse the y-axis. Defaults to TRUE</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_labels">labels</code></td>
+<td>
+<p>Add labels to the dates. Empty by default.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.x">label.x</code></td>
+<td>
+<p>Horizontal position of the date labels. By default draws them before the youngest age (1), but can also draw them after the oldest age (2), or above its mean (3).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.y">label.y</code></td>
+<td>
+<p>Vertical positions of the depths/labels. Defaults to 0 (or 1 if label.x is 3 or 4).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.cex">label.cex</code></td>
+<td>
+<p>Size of labels.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.col">label.col</code></td>
+<td>
+<p>Colour of the labels. Defaults to the colour given to the borders of the dates.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.offset">label.offset</code></td>
+<td>
+<p>Offsets of the positions of the depths/labels, giving the x and y offsets. Defaults to c(0,0).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.adj">label.adj</code></td>
+<td>
+<p>Justification of the labels. Follows R's adj option: A value of &quot;0&quot; produces left-justified text, &quot;0.5&quot; (the default) centered text and &quot;1&quot; right-justified text.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_label.rot">label.rot</code></td>
+<td>
+<p>Rotation of the label. 0 by default (horizontal).</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_cc.dir">cc.dir</code></td>
+<td>
+<p>Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., <code>cc.dir="curves"</code>.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_dist.res">dist.res</code></td>
+<td>
+<p>Resolution of the distribution polygons. Defaults to <code>dist.res=100</code>.</p>
+</td></tr>
+<tr><td><code id="draw.dates_:_...">...</code></td>
+<td>
+<p>Additional plotting options</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A plot of the (calibrated) dates
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>  plot(0, xlim=c(500,0), ylim=c(0, 2))
+  draw.dates(130, 20, depth=1) 
+  x &lt;- sort(runif(10, 1000, 10000)) # draw 10 random calendar ages
+  cc &lt;- ccurve() # get the calibration curve
+  y &lt;- approx(cc[,1], cc[,2], x)$y # find the IntCal 14C ages
+  er &lt;- .01 * y
+  draw.dates(y, er, 1:length(x))
+  draw.dates(y, er, y, d.lab="Radiocarbon age (BP)")
+  draw.ccurve(add=TRUE, cc1.col=rgb(0,.5,0,.5))
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

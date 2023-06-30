@@ -1,0 +1,171 @@
+<!DOCTYPE html><html><head><title>R: Draw a calibration curve.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>draw.ccurve {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='draw.ccurve'>Draw a calibration curve.</h2>
+
+<h3>Description</h3>
+
+<p>Draw one or two of the calibration curves, or add a calibration curve to an existing plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>draw.ccurve(
+  cal1 = c(),
+  cal2 = c(),
+  cc1 = "IntCal20",
+  cc2 = NA,
+  cc1.postbomb = FALSE,
+  cc2.postbomb = FALSE,
+  BCAD = FALSE,
+  cal.lab = NA,
+  cal.rev = FALSE,
+  c14.lab = NA,
+  c14.lim = NA,
+  c14.rev = FALSE,
+  ka = FALSE,
+  add.yaxis = FALSE,
+  cc1.col = rgb(0, 0, 1, 0.5),
+  cc1.fill = rgb(0, 0, 1, 0.2),
+  cc2.col = rgb(0, 0.5, 0, 0.5),
+  cc2.fill = rgb(0, 0.5, 0, 0.2),
+  add = FALSE,
+  bty = "l",
+  cc.dir = NULL,
+  legend = "topleft",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="draw.ccurve_:_cal1">cal1</code></td>
+<td>
+<p>First calendar year for the plot. Defaults to 0 cal BP.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cal2">cal2</code></td>
+<td>
+<p>Last calendar year for the plot. Defaults to 55,000 cal BP.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc1">cc1</code></td>
+<td>
+<p>Name of the calibration curve. Can be &quot;IntCal20&quot;, &quot;Marine20&quot;, &quot;SHCal20&quot;, or for the previous curves &quot;IntCal13&quot;, &quot;Marine13&quot; or &quot;SHCal13&quot;. Can also be &quot;nh1&quot;, &quot;nh2&quot;, &quot;nh3&quot;, &quot;sh1-2&quot;, &quot;sh3&quot;, &quot;nh1_monthly&quot;, &quot;nh1_monthly&quot;, &quot;nh2_monthly&quot;, &quot;nh3_monthly&quot;, &quot;sh1-2_monthly&quot;, &quot;sh3_monthly&quot;, &quot;Kure&quot;, &quot;LevinKromer&quot; or &quot;Santos&quot; for postbomb curves.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc2">cc2</code></td>
+<td>
+<p>Optional second calibration curve to plot. Can be &quot;IntCal20&quot;, &quot;Marine20&quot;, &quot;SHCal20&quot;, or for the previous curves &quot;IntCal13&quot;, &quot;Marine13&quot; or &quot;SHCal13&quot;. Defaults to nothing, NA.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc1.postbomb">cc1.postbomb</code></td>
+<td>
+<p>Use <code>postbomb=TRUE</code> to get a postbomb calibration curve for cc1 (default <code>cc1.postbomb=FALSE</code>).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc2.postbomb">cc2.postbomb</code></td>
+<td>
+<p>Use <code>postbomb=TRUE</code> to get a postbomb calibration curve for cc2 (default <code>cc2.postbomb=FALSE</code>).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_BCAD">BCAD</code></td>
+<td>
+<p>The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using <code>BCAD=TRUE</code>.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cal.lab">cal.lab</code></td>
+<td>
+<p>The labels for the calendar axis (default <code>age.lab="cal BP"</code> or <code>"BC/AD"</code> if <code>BCAD=TRUE</code>), or to <code>age.lab="kcal BP"</code> etc. if ka=TRUE.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cal.rev">cal.rev</code></td>
+<td>
+<p>Reverse the calendar axis.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_c14.lab">c14.lab</code></td>
+<td>
+<p>Label for the C-14 axis. Defaults to 14C BP (or 14C kBP if ka=TRUE).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_c14.lim">c14.lim</code></td>
+<td>
+<p>Axis limits for the C-14 axis. Calculated automatically by default.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_c14.rev">c14.rev</code></td>
+<td>
+<p>Reverse the C-14 axis.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_ka">ka</code></td>
+<td>
+<p>Use kcal BP (and C14 kBP).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_add.yaxis">add.yaxis</code></td>
+<td>
+<p>Whether or not to plot the second calibration. Defaults to <code>add.yaxis=FALSE</code>.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc1.col">cc1.col</code></td>
+<td>
+<p>Colour of the calibration curve (outline).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc1.fill">cc1.fill</code></td>
+<td>
+<p>Colour of the calibration curve (fill).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc2.col">cc2.col</code></td>
+<td>
+<p>Colour of the calibration curve (outline), if activated (default cc2=NA).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc2.fill">cc2.fill</code></td>
+<td>
+<p>Colour of the calibration curve (fill), if activated (default cc2=NA).</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_add">add</code></td>
+<td>
+<p>Whether or not to add the curve(s) to an existing plot. Defaults to FALSE, which draws a new plot</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_bty">bty</code></td>
+<td>
+<p>Draw a box around a box of a certain shape. Defaults to <code>bty="l"</code>.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_cc.dir">cc.dir</code></td>
+<td>
+<p>Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., <code>cc.dir="curves"</code>.</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_legend">legend</code></td>
+<td>
+<p>Location of the legend (only activated if more than one curve is plotted). Plotted in the topleft corner by default. Use <code>legend=c()</code> to leave empty</p>
+</td></tr>
+<tr><td><code id="draw.ccurve_:_...">...</code></td>
+<td>
+<p>Any additional optional plotting parameters.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A plot of the calibration curve
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>draw.ccurve()
+draw.ccurve(1000, 3000, cc2="Marine20")
+draw.ccurve(1800, 2020, BCAD=TRUE, cc2="nh1", cc2.postbomb=TRUE)
+draw.ccurve(1800, 2010, BCAD=TRUE, cc2="nh1", add.yaxis=TRUE)
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html><html><head><title>R: Calculate calibrated distribution</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>caldist {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='caldist'>Calculate calibrated distribution</h2>
+
+<h3>Description</h3>
+
+<p>Calculate the calibrated distribution of a radiocarbon date.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>caldist(
+  age,
+  error,
+  cc = 1,
+  postbomb = FALSE,
+  yrsteps = FALSE,
+  cc.resample = FALSE,
+  dist.res = 200,
+  threshold = 0.001,
+  normal = TRUE,
+  t.a = 3,
+  t.b = 4,
+  normalise = TRUE,
+  BCAD = FALSE,
+  rule = 1,
+  cc.dir = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="caldist_:_age">age</code></td>
+<td>
+<p>Uncalibrated radiocarbon age</p>
+</td></tr>
+<tr><td><code id="caldist_:_error">error</code></td>
+<td>
+<p>Lab error of the radiocarbon age</p>
+</td></tr>
+<tr><td><code id="caldist_:_cc">cc</code></td>
+<td>
+<p>Calibration curve to use. Defaults to IntCal20 (<code>cc=1</code>).</p>
+</td></tr>
+<tr><td><code id="caldist_:_postbomb">postbomb</code></td>
+<td>
+<p>Whether or not to use a postbomb curve. Required for negative radiocarbon ages.</p>
+</td></tr>
+<tr><td><code id="caldist_:_yrsteps">yrsteps</code></td>
+<td>
+<p>Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve</p>
+</td></tr>
+<tr><td><code id="caldist_:_cc.resample">cc.resample</code></td>
+<td>
+<p>The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ, as can their total areas (which should ideally all sum to the same size). To account for this, resample to a constant time-span, using, e.g., <code>cc.resample=5</code> for 5-yr timespanes.</p>
+</td></tr>
+<tr><td><code id="caldist_:_dist.res">dist.res</code></td>
+<td>
+<p>As an alternative to yrsteps, provide the amount of 'bins' in the distribution</p>
+</td></tr>
+<tr><td><code id="caldist_:_threshold">threshold</code></td>
+<td>
+<p>Report only values above a threshold. Defaults to <code>threshold=1e-6</code>.</p>
+</td></tr>
+<tr><td><code id="caldist_:_normal">normal</code></td>
+<td>
+<p>Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).</p>
+</td></tr>
+<tr><td><code id="caldist_:_t.a">t.a</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 3).</p>
+</td></tr>
+<tr><td><code id="caldist_:_t.b">t.b</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 4).</p>
+</td></tr>
+<tr><td><code id="caldist_:_normalise">normalise</code></td>
+<td>
+<p>Sum the entire calibrated distribution to 1. Defaults to <code>normalise=TRUE</code>.</p>
+</td></tr>
+<tr><td><code id="caldist_:_BCAD">BCAD</code></td>
+<td>
+<p>Which calendar scale to use. Defaults to cal BP, <code>BCAD=FALSE</code>.</p>
+</td></tr>
+<tr><td><code id="caldist_:_rule">rule</code></td>
+<td>
+<p>Which extrapolation rule to use. Defaults to <code>rule=1</code> which returns NAs.</p>
+</td></tr>
+<tr><td><code id="caldist_:_cc.dir">cc.dir</code></td>
+<td>
+<p>Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., <code>cc.dir="curves"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The probability distribution(s) as two columns: cal BP ages and their associated probabilities
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>calib &lt;- caldist(130,20)
+plot(calib, type="l")
+postbomb &lt;- caldist(-3030, 20, "nh1", BCAD=TRUE)
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.6.0 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>
