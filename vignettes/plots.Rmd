@@ -20,7 +20,7 @@ draw.ccurve()
 Or compare two calibration curves:
 
 ```{r, fig.width=4, fig.asp=.8}
-draw.ccurve(1600, 2020, BCAD=TRUE, cc2='nh1', add.yaxis=TRUE)
+draw.ccurve(1000, 2020, BCAD=TRUE, cc2='marine20', add.yaxis=TRUE)
 ```
 
 Or zoom in to between AD 1600 and 2000 (using the BCAD scale):
