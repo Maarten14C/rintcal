@@ -1,3 +1,6 @@
+# rintcal 0.6.2
+* a bug in ccurves causing problems with plotting and cc=4 has been corrected
+
 # rintcal 0.6.1
 * calibration of dates close to 0 14C BP now uses both prebomb and postbomb curves by default (if postbomb is provided)
 
