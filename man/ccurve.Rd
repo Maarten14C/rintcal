@@ -4,7 +4,7 @@
 \alias{ccurve}
 \title{Copy a calibration curve}
 \usage{
-ccurve(cc = 1, postbomb = FALSE, cc.dir = NULL, resample = 0, glue = TRUE)
+ccurve(cc = 1, postbomb = FALSE, cc.dir = NULL, resample = 0, glue = FALSE)
 }
 \arguments{
 \item{cc}{Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
@@ -16,7 +16,7 @@ ccurve(cc = 1, postbomb = FALSE, cc.dir = NULL, resample = 0, glue = TRUE)
 
 \item{resample}{The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE.}
 
-\item{glue}{If a postbomb curve is requested, by default it will be 'glued' to the pre-bomb curve. Set to \code{glue=FALSE} to only return the postbomb curve.}
+\item{glue}{If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead}
 }
 \value{
 The calibration curve (invisible).

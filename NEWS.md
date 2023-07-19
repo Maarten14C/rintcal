@@ -1,9 +1,12 @@
+# rintcal 0.6.3
+* further enhancements to functions ccurves, calibrate and caldist, especially for young dates close to the prebomb limits
+* updated vignette
+
 # rintcal 0.6.2
 * a bug in ccurves causing problems with plotting and cc=4 has been corrected
 
 # rintcal 0.6.1
 * calibration of dates close to 0 14C BP now uses both prebomb and postbomb curves by default (if postbomb is provided)
-
 
 # rintcal 0.6.0
 * the files containing the NH and SH postbomb curves are now printed with the youngest cal BP years at the top 

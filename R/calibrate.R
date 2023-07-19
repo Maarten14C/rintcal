@@ -9,6 +9,7 @@
 #' @param error Lab error of the radiocarbon age
 #' @param cc Calibration curve to use. Defaults to IntCal20 (\code{cc=1}).
 #' @param postbomb Whether or not to use a postbomb curve. Required for negative radiocarbon ages.
+#' @param thiscurve As an alternative to providing cc and/or postbomb, the data of a specific curve can be provided (3 columns: cal BP, C14 age, error). Defaults to FALSE. 
 #' @param yrsteps Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve
 #' @param cc.resample The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ, as can their total areas (which should ideally all sum to the same size). To account for this, resample to a constant time-span, using, e.g., \code{cc.resample=5} for 5-yr timespanes.
 #' @param dist.res As an alternative to yrsteps, provide the amount of 'bins' in the distribution
@@ -25,18 +26,23 @@
 #' plot(calib, type="l")
 #' postbomb <- caldist(-3030, 20, "nh1", BCAD=TRUE)
 #' @export
-caldist <- function(age, error, cc=1, postbomb=FALSE, yrsteps=FALSE, cc.resample=FALSE, dist.res=200, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, normalise=TRUE, BCAD=FALSE, rule=1, cc.dir=NULL) {
-  # deal with cal BP and negative ages	
-  if(cc == 0) { # no ccurve needed
-    xseq <- seq(age-8*error, age+8*error, length=2e3) # hard-coded values, hmmm
-    cc <- cbind(xseq, xseq, rep(0, length(xseq)))
-  } else {
-      if(age < 0)
-        if(!postbomb)
-          if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
-            stop("This appears to be a postbomb age. Please provide a postbomb curve")
-      cc <- ccurve(cc, postbomb=postbomb, cc.dir, resample=cc.resample)
-    }
+caldist <- function(age, error, cc=1, postbomb=FALSE, thiscurve=c(), yrsteps=FALSE, cc.resample=FALSE, dist.res=200, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, normalise=TRUE, BCAD=FALSE, rule=1, cc.dir=NULL) {
+	
+  if(length(thiscurve) == 0) {
+    if(cc == 0) { # no ccurve needed
+      xseq <- seq(age-8*error, age+8*error, length=2e3) # hard-coded values, hmmm
+      cc <- cbind(xseq, xseq, rep(0, length(xseq)))
+    } else
+        if(age < 3*error) { # was age - error < 0
+          if(!postbomb)
+            if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
+              stop("This appears to be a postbomb age or close to being so. Please provide a postbomb curve")
+		  cc <- glue.ccurves(cc, postbomb, cc.dir)
+	    } else
+          cc <- ccurve(cc, postbomb=postbomb, cc.dir, resample=cc.resample)
+    } else
+      cc <- thiscurve
+  
   # calibrate; find how far age (measurement) is from cc[,2] of calibration curve
   if(normal)
     cal <- cbind(cc[,1], dnorm(cc[,2], age, sqrt(error^2+cc[,3]^2))) else

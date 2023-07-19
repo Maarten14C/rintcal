@@ -14,6 +14,9 @@
 #' @name rintcal
 NULL
 
+# repair ccurve glue bug. calibrate(60,30, postbomb=1, C14.lim=c(-100,300), BCAD=T, cal.lim=c(1500, 2023)) should include the prebomb calibrated distributions as well
+# calibrate(60,10, postbomb=1) looks weird - have a mycurve option or so for caldist, to provide e.g. glued curve
+
 # todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
 # done: dates close to 0 14C BP now use both prebomb and postbomb curves
@@ -107,7 +110,7 @@ new.ccdir <- function(cc.dir) {
 #' @param postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param resample The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE. 
-#' @param glue If a postbomb curve is requested, by default it will be 'glued' to the pre-bomb curve. Set to \code{glue=FALSE} to only return the postbomb curve.
+#' @param glue If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -139,7 +142,7 @@ new.ccdir <- function(cc.dir) {
 #'
 #' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000-0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=TRUE) {
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
@@ -158,10 +161,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=TRUE) {
                   if(tolower(cc) == "santos")
                     fl <- "Santos.14C" else
                       stop("cannot find this postbomb curve\n", call.=FALSE)
-    if(glue)
-      fl.post <- fl
-  }
-  if(glue)
+  } else
     if(cc==1 || tolower(cc) == "intcal20")
       fl <- "3Col_intcal20.14C" else
       if(cc==2 || tolower(cc) == "marine20")
@@ -217,26 +217,12 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=TRUE) {
                                                         if(tolower(cc) == "mixed")
                                                           fl <- "mixed.14C" else
                                                           stop("cannot find this curve", call.=FALSE)
-  fl.post <- fl
-  if(postbomb && glue) {
-    fl.pre <- fl
-    if(length(cc.dir) == 0) {
-      cc.pre <- system.file("extdata/", fl.pre, package='rintcal')
-      cc.post <- system.file("extdata/", fl.post, package='rintcal')
-    } else {
-      cc.pre <- file.path(cc.dir, fl.pre)
-      cc.post <- file.path(cc.dir, fl.post)
-      }
-    cc.pre <- fastread(cc.pre)
-    cc.post <- fastread(cc.post)
-    cc <- rbind(cc.post, cc.pre)
-    cc <- cc[order(cc[,1]),]
-  } else {
-    if(length(cc.dir) == 0)
-      cc.fl <- system.file("extdata/", fl, package='rintcal') else
-        cc.fl <- file.path(cc.dir, fl)
-    cc <- fastread(cc.fl)
-  }
+
+  if(length(cc.dir) == 0)
+    cc <- system.file("extdata/", fl, package='rintcal') else
+      cc <- file.path(cc.dir, fl)
+  cc <- fastread(cc)
+
   if(resample > 0) {
     yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)
     mu <- approx(cc[,1], cc[,2], yr)$y
@@ -299,7 +285,7 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
 
 
 #' @name glue.ccurves
-#' @title Glue prebomb and postbomb curves
+#' @title Glue calibration curves
 #' @description Produce a custom curve by merging two calibration curves, e.g. a prebomb and a postbomb one for dates which straddle both curves.
 #' @return The custom-made curve (invisibly)
 #' @param prebomb The prebomb curve. Defaults to "IntCal20"

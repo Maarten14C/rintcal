@@ -2,7 +2,7 @@
 % Please edit documentation in R/rintcal.R
 \name{glue.ccurves}
 \alias{glue.ccurves}
-\title{Glue prebomb and postbomb curves}
+\title{Glue calibration curves}
 \usage{
 glue.ccurves(prebomb = "IntCal20", postbomb = "NH1", cc.dir = c())
 }

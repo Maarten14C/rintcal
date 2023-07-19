@@ -235,17 +235,23 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
     error <- sqrt(error^2 + reservoir[2]^2)
-  Cc <- ccurve(cc, postbomb, cc.dir)
+  youngest.cc <- c(95,603,118,0,0) # youngest C14 ages of IntCal20, Marine20, SHCal20, and extra entries
+  if((age - (3*error)) < youngest.cc[cc]) { # at or beyond younger IntCal limit 
+    if(!postbomb) # note that there are no postbomb curves for Marine20
+      if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
+        stop("This appears to be a postbomb age (or is close to being one). Please provide a postbomb curve")
+	Cc <- glue.ccurves(cc, postbomb, cc.dir) # doesn't do resample
+  } else {
+      if(postbomb > 0) # postbomb has been defined
+        Cc <- glue.ccurves(cc, postbomb, cc.dir) else
+          Cc <- ccurve(cc, postbomb=FALSE, cc.dir)
+    }
+
   cc.cal <- 1
   if(BCAD) {
     Cc[,4] <- 1950 - Cc[,1]
     cc.cal <- 4
   }
-
-  if((age - 3*error) < 0)
-    if(!postbomb)
-      if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
-        stop("This appears to be a postbomb age (or is close to being one). Please provide a postbomb curve")
 
   # warn/stop if the date lies (partly) beyond the calibration curve
   if(edge) {
@@ -267,11 +273,11 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
-  dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, 
-    normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, cc.dir=cc.dir)
   if(BCAD)
     dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, 
-  normal=normal, t.a=t.a, t.b=t.b, BCAD=TRUE, postbomb=postbomb, cc.dir=cc.dir) 
+  normal=normal, t.a=t.a, t.b=t.b, BCAD=TRUE, postbomb=postbomb, cc.dir=cc.dir) else
+      dat <- caldist(age, error, thiscurve=Cc, cc=cc, yrsteps=yr.steps, threshold=threshold, 
+        normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, cc.dir=cc.dir)
 
   cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE, rounded=rounded)
   hpds <- cal.hpd[[2]]
