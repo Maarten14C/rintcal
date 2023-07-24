@@ -22,9 +22,9 @@
 #' @param rule Which extrapolation rule to use. Defaults to \code{rule=1} which returns NAs.
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="curves"}.
 #' @examples
-#' calib <- caldist(130,20)
+#' calib <- caldist(130,10)
 #' plot(calib, type="l")
-#' postbomb <- caldist(-3030, 20, "nh1", BCAD=TRUE)
+#' postbomb <- caldist(-3030, 20, postbomb=1, BCAD=TRUE)
 #' @export
 caldist <- function(age, error, cc=1, postbomb=FALSE, thiscurve=c(), yrsteps=FALSE, cc.resample=FALSE, dist.res=200, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, normalise=TRUE, BCAD=FALSE, rule=1, cc.dir=NULL) {
 	

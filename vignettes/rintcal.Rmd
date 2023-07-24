@@ -39,11 +39,12 @@ library(rintcal)
 
 ## Loading curves
 
-Now you can load a calibration curve into the memory, for example the default curve IntCal20, and check the first few entries:
+Now you can load a calibration curve into the memory, for example the default curve IntCal20, and check the first and last few entries:
 
 ```{r}
 ic20 <- ccurve()
 head(ic20)
+tail(ic20)
 ```
 
 The files have three columns: cal BP, the corresponding IntCal C14 BP ages, and the uncertainties (1 standard deviation). 
@@ -284,7 +285,7 @@ plot(300*1:5, 1:5, xlim=c(0, 1800), ylim=c(5,0), xlab="AD", ylab="dates")
 draw.dates(dates, errors, depths, BCAD=TRUE, add=TRUE, labels=my.labels, mirror=FALSE)
 ```
 
-or get creative (inspired by Jocelyn Bell Burnell, Joy Division and the Hallstatt Plateau):
+or get creative (inspired by Jocelyn Bell Burnell[^8], Joy Division[^9] and the Hallstatt Plateau[^10]):
 
 ```{r, fig.width=4, fig.asp=1}
 par(bg="black", mar=rep(1, 4))
@@ -294,16 +295,22 @@ draw.dates(rnorm(n, 2450, 30), rep(25, n), n:1,
   threshold=1e-28, age.lim=c(2250, 2800), ex=.8)
 ```
 
-[^1]: Reimer PJ et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62, 725-757
+[^1]: Reimer PJ et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). *Radiocarbon* 62, 725-757
 
-[^2]: Heaton TJ et al., 2020. Marine20-The Marine Radiocarbon Age Calibration Curve (0-55,000 cal BP). Radiocarbon 62, 779-820
+[^2]: Heaton TJ et al., 2020. Marine20-The Marine Radiocarbon Age Calibration Curve (0-55,000 cal BP). *Radiocarbon* 62, 779-820
 
-[^3]: Hogg AG et al., 2020. SHCal20 Southern Hemisphere Calibration, 0-55,000 Years cal BP. Radiocarbon 62, 759-778
+[^3]: Hogg AG et al., 2020. SHCal20 Southern Hemisphere Calibration, 0-55,000 Years cal BP. *Radiocarbon* 62, 759-778
 
-[^4]: Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), Radiocarbon 46, 1261-1272
+[^4]: Levin I, Kromer, B,  2004. The Tropospheric 14CO2 Level in Mid-Latitudes of the Northern Hemisphere (1959-2003), *Radiocarbon* 46, 1261-1272
 
-[^5]: Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. Quaternary Geochronology 25, 96-103
+[^5]: Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. *Quaternary Geochronology* 25, 96-103
 
-[^6]: Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. Radiocarbon 58, 531-548
+[^6]: Andrews H, Siciliano D, Potts DC, DeMartini EE, Covarrubias S, 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. *Radiocarbon* 58, 531-548
 
-[^7]: Hua Q et al. 2021. Atmospheric Radiocarbon for the Period 1950-2019 Radiocarbon
+[^7]: Hua Q et al. 2021. Atmospheric Radiocarbon for the Period 1950-2019. *Radiocarbon* 64, 723-745
+
+[^8]: https://www.cam.ac.uk/stories/journeysofdiscovery-pulsars
+
+[^9]: https://www.radiox.co.uk/artists/joy-division/cover-joy-division-unknown-pleasures-meaning/
+
+[^10]: https://en.wikipedia.org/wiki/Hallstatt_plateau

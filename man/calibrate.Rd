@@ -135,17 +135,17 @@ Calibrate individual 14C dates, plot them and report calibrated ranges.
 Type \code{calibrate()} to see how a date of 2450 +- 50 14C BP gets calibrated (the calibration curve happens to show
 a plateau around this 14C age). To calibrate a different date, provide its reported mean and error (1
 standard deviation error as reported by the radiocarbon laboratory) as follows: \code{calibrate(mean, error)},
-e.g., for a date of 130 +- 20 14C BP, type calibrate\code{(age=130, error=20)} or, shorter, \code{calibrate(130,20)}.
+e.g., for a date of 130 +- 10 14C BP, type calibrate\code{(age=130, error=10)} or, shorter, \code{calibrate(130,10)}.
 
 In case the date has a reservoir effect or age offset, e.g. of 100 14C years, provide this as follows:
-\code{calibrate(130, 20, reservoir=100)}. If you want to include an uncertainty for this offset, provide this as follows,
-e.g., for an uncertainty of 50yr, \code{calibrate(130,20,reservoir=c(100, 50))}.
+\code{calibrate(130, 10, reservoir=100)}. If you want to include an uncertainty for this offset, provide this as follows,
+e.g., for an uncertainty of 50yr, \code{calibrate(130,10,reservoir=c(100, 50))}.
 The uncertainty for the age offset will then be added to the error (by taking the square root of the sum
 of the squared error and the squared offset uncertainty). If the carbon of your sample has mixed marine/terrestrial sources,
 instead apply the marine offset using mix.curves and calibrate the date using that custom-built curve (cc="mixed").
 
 If you prefer to work with, e.g., 68 \% as opposed to the default 95 \% confidence intervals,
-type: \code{calibrate(130, 20, prob=0.68)} or \code{calibrate(130, 20,, 0.68)} (the commas between the brackets indicate the position of the option;
+type: \code{calibrate(130, 10, prob=0.68)} or \code{calibrate(130, 10,, 0.68)} (the commas between the brackets indicate the position of the option;
 the standard deviation is the fourth option of the \code{calibrate} function). The calibrated distribution can be calculated
 for every single calendar year (\code{yrsteps=1}) within a wide range of the 14C date. Probabilities below a threshold (default \code{threshold=0.0005}) will be neglected.
 
@@ -189,10 +189,10 @@ such as postscript are unable to use transparency; in that case provide differen
 }
 \examples{
 calibrate()
-calibrate(130, 20)
+calibrate(130, 10)
 cal <- calibrate(2550, 20, reservoir=100)
 cal; plot(cal[[1]])
-calibrate(130, 20, prob=0.68)
-calibrate(age=130, error=20, BCAD=TRUE)
+calibrate(130, 10, prob=0.68)
+calibrate(age=130, error=10, BCAD=TRUE)
 calibrate(4450, 40, reservoir=c(100, 50))
 }
