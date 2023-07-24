@@ -27,7 +27,7 @@ The following curves are included:
 
 The formats of the curves were adapted to plain-text files with three columns separated by spaces: cal BP, and 14C BP sigma. The values are ordered according to increasing cal BP age, and any commented lines were removed. See TranslateCal20.R for details. 
 
-Professor Paula Reimer, head of the IntCal steering group until 2020, kindly gave permission to include the IntCal curves into a single package.
+Professor Paula Reimer, head of the IntCal steering group until 2020, kindly gave permission to combine the IntCal curves into a single package.
 
 Additionally, the following postbomb curves were downloaded from calib.org/CALIBomb/ and are included in this data package:
 
