@@ -14,9 +14,6 @@
 #' @name rintcal
 NULL
 
-# repair ccurve glue bug. calibrate(60,30, postbomb=1, C14.lim=c(-100,300), BCAD=T, cal.lim=c(1500, 2023)) should include the prebomb calibrated distributions as well
-# calibrate(60,10, postbomb=1) looks weird - have a mycurve option or so for caldist, to provide e.g. glued curve
-
 # todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
 # done: dates close to 0 14C BP now use both prebomb and postbomb curves
