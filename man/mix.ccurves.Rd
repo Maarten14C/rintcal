@@ -12,7 +12,8 @@ mix.ccurves(
   cc.dir = c(),
   save = FALSE,
   offset = cbind(0, 0),
-  sep = "\\t"
+  round = c(),
+  sep = " "
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ mix.ccurves(
 \item{save}{Save the curve in the folder specified by dir. Defaults to FALSE.}
 
 \item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row).}
+
+\item{round}{The entries can be rounded to a specified amount of decimals. Defaults to no rounding.}
 
 \item{sep}{Separator between fields (tab by default, "\\t")}
 }

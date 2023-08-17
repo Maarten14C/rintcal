@@ -16,7 +16,7 @@ NULL
 
 # todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
-# done: dates close to 0 14C BP now use both prebomb and postbomb curves
+# done: mix.ccurves now doesn't fail if a provided cc.dir folder does not yet exist. By default mix.ccurves now saves the calibration curves with values separated by a single space, not by a tab.
 
 # todo: make package 'howmany' (or such), including accumulate (to make sediment records, with e.g. random walk, a function, reading from a file, ...), simulate dating (extrapolation, scatter, outliers, ccurves, offsets; random depths, Andres's code, equal spacing), write Bacon/clam/bchron/oxcal files, cost/benefit plots, proxy simulator
 
@@ -243,6 +243,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
 #' @param cc.dir Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{cc.dir="~/ccurves"} or in your current working directory, \code{cc.dir="."}.
 #' @param save Save the curve in the folder specified by dir. Defaults to FALSE.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row).
+#' @param round The entries can be rounded to a specified amount of decimals. Defaults to no rounding.
 #' @param sep Separator between fields (tab by default, "\\t")
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
@@ -255,10 +256,12 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", cc.dir=c(), save=FALSE, offset=cbind(0,0), sep="\t") {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", cc.dir=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ") {
   # place the IntCal curves within the same folder as the new curve:
   if(length(cc.dir) == 0)
-     cc.dir <- tempdir()
+    cc.dir <- tempdir()
+  if(!dir.exists(cc.dir))
+    dir.create(cc.dir)
   curves <- list.files(system.file("extdata", package='rintcal'), pattern=".14C", full.names=TRUE)
   file.copy(curves, cc.dir)
 
@@ -271,6 +274,8 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
   error <- proportion * cc1[,3] + (1-proportion) * cc2.error
 
   mycc <- cbind(cc1[,1], mu, error)
+  if(length(round) > 0)
+	mycc <- round(mycc)  
 
   if(save) {
     fastwrite(mycc, file.path(cc.dir, name), row.names=FALSE, col.names=FALSE, sep=sep)

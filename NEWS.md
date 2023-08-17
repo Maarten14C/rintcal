@@ -1,3 +1,7 @@
+# rintcal 0.6.4
+* mix.ccurves now doesn't fail if a provided cc.dir folder does not yet exist
+* mix.ccurves now saves the calibration curves with values separated by a single space, not by a tab
+
 # rintcal 0.6.3
 * further enhancements to functions ccurves, calibrate and caldist, especially for young dates close to the prebomb limits
 * updated vignette
