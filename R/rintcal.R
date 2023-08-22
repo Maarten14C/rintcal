@@ -1,18 +1,3 @@
-#' rintcal
-#'
-#' @description The international IntCal research group publishes ratified radiocarbon calibration curves such as IntCal20, Marine20 and SHCal20 (Reimer et al. 2020).
-#' This data package provides the files of these curves, for use by other R package (reducing the need for replication and the size of other packages that use IntCal curves).
-#' It also comes with functions to read in calibration curves, plot curves or dates, translate pMC ages to 14C ages (et vice versa), etc. 
-#' @docType package
-#' @author Maarten Blaauw <maarten.blaauw@qub.ac.uk>
-#' @importFrom utils read.table write.table packageName
-#' @importFrom stats approx dnorm median weighted.mean
-#' @importFrom grDevices rgb extendrange grey rainbow
-#' @importFrom graphics axis par legend lines points polygon segments text mtext abline image
-#' @importFrom data.table fread fwrite
-#' @importFrom jsonlite fromJSON toJSON
-#' @name rintcal
-NULL
 
 # todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
