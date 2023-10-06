@@ -28,7 +28,7 @@ Professor Paula Reimer, head of the IntCal steering group, kindly gave permissio
 
 Additionally, the following postbomb curves were downloaded from calib.org/CALIBomb/ and are included in this data package:
 
-filename						postbomb calibration curve
+filename				postbomb calibration curve
 postbomb_NH1.14C		postbomb NH zone 1 (Hua et al. 2021) (yearly and monthly curves)
 postbomb_NH2.14C		postbomb NH zone 2 (Hua et al. 2021) (yearly and monthly curves)
 postbomb_NH3.14C		postbomb NH zone 3 (Hua et al. 2021) (yearly and monthly curves)

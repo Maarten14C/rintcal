@@ -13,7 +13,7 @@ caldist(
   yrsteps = FALSE,
   cc.resample = FALSE,
   dist.res = 200,
-  threshold = 0.001,
+  threshold = c(),
   normal = TRUE,
   t.a = 3,
   t.b = 4,
@@ -40,7 +40,7 @@ caldist(
 
 \item{dist.res}{As an alternative to yrsteps, provide the amount of 'bins' in the distribution}
 
-\item{threshold}{Report only values above a threshold. Defaults to \code{threshold=1e-6}.}
+\item{threshold}{Report only values above a threshold. Defaults to \code{threshold=1e-3} for prebomb dates and \code{threshold=1e-7} for postbomb dates.}
 
 \item{normal}{Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).}
 

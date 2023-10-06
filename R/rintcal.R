@@ -136,13 +136,23 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
             fl <- "postbomb_SH1-2.14C" else
             if(cc==5 || tolower(cc) == "sh3")
               fl <- "postbomb_SH3.14C" else
-              if(tolower(cc) == "kure")
-                fl <- "Kure.14C" else
-                if(tolower(cc) == "levinkromer")
-                  fl <- "LevinKromer.14C" else
-                  if(tolower(cc) == "santos")
-                    fl <- "Santos.14C" else
-                      stop("cannot find this postbomb curve\n", call.=FALSE)
+              if(tolower(cc) == "nh1_monthly")
+                fl <- "postbomb_NH1_monthly.14C" else
+                if(tolower(cc) == "nh2_monthly")
+                  fl <- "postbomb_NH2_monthly.14C" else
+                  if(tolower(cc) == "nh3_monthly")
+                    fl <- "postbomb_NH3_monthly.14C" else
+                    if(tolower(cc) == "sh1-2_monthly")
+                      fl <- "postbomb_SH1-2_monthly.14C" else
+                      if(tolower(cc) == "sh3_monthly")
+                        fl <- "postbomb_SH3_monthly.14C" else
+                        if(tolower(cc) == "kure")
+                          fl <- "Kure.14C" else
+                          if(tolower(cc) == "levinkromer")
+                            fl <- "LevinKromer.14C" else
+                            if(tolower(cc) == "santos")
+                            fl <- "Santos.14C" else
+                              stop("cannot find this postbomb curve\n", call.=FALSE)
   } else
     if(cc==1 || tolower(cc) == "intcal20")
       fl <- "3Col_intcal20.14C" else
@@ -260,7 +270,7 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
 
   mycc <- cbind(cc1[,1], mu, error)
   if(length(round) > 0)
-	mycc <- round(mycc)  
+    mycc <- round(mycc)
 
   if(save) {
     fastwrite(mycc, file.path(cc.dir, name), row.names=FALSE, col.names=FALSE, sep=sep)

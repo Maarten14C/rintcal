@@ -1,0 +1,94 @@
+<!DOCTYPE html><html><head><title>R: Find the calibrated probability of a calendar age for a 14C...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>l.calib {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='l.calib'>Find the calibrated probability of a calendar age for a 14C date.</h2>
+
+<h3>Description</h3>
+
+<p>Find the calibrated probability of a cal BP age for a radiocarbon date. Can handle either multiple calendar ages for a single radiocarbon date, or a single calendar age for multiple radiocarbon dates.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>l.calib(yr, y, er, cc = ccurve(1, FALSE), normal = TRUE, t.a = 3, t.b = 4)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="l.calib_:_yr">yr</code></td>
+<td>
+<p>The cal BP year.</p>
+</td></tr>
+<tr><td><code id="l.calib_:_y">y</code></td>
+<td>
+<p>The radiocarbon date's mean.</p>
+</td></tr>
+<tr><td><code id="l.calib_:_er">er</code></td>
+<td>
+<p>The radiocarbon date's lab error.</p>
+</td></tr>
+<tr><td><code id="l.calib_:_cc">cc</code></td>
+<td>
+<p>calibration curve for the radiocarbon date(s) (see <code>ccurve()</code>).</p>
+</td></tr>
+<tr><td><code id="l.calib_:_normal">normal</code></td>
+<td>
+<p>Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).</p>
+</td></tr>
+<tr><td><code id="l.calib_:_t.a">t.a</code></td>
+<td>
+<p>Value a of the t distribution (defaults to 3).</p>
+</td></tr>
+<tr><td><code id="l.calib_:_t.b">t.b</code></td>
+<td>
+<p>Value b of the t distribution (defaults to 4).</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The function cannot deal with multiple calibration curves if multiple calendar years or radiocarbon dates are entered.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The calibrated probability of a calendar age for a 14C age
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Maarten Blaauw
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>l.calib(100, 130, 20)
+l.calib(100:110, 130, 20) # multiple calendar ages of a single date
+l.calib(100, c(130,150), c(15,20)) # multiple radiocarbon ages and a single calendar age
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.6.4 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

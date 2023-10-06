@@ -27,7 +27,7 @@ calibrate(
   dist.float = c(0.01, 0.01),
   cal.rev = FALSE,
   yr.steps = FALSE,
-  threshold = 5e-04,
+  threshold = c(),
   edge = TRUE,
   normal = TRUE,
   t.a = 3,

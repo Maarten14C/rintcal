@@ -1,0 +1,204 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "clam"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('clam')
+Loading required package: rintcal
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("add.dates")
+> ### * add.dates
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: add.dates
+> ### Title: Add dates to age-depth plots
+> ### Aliases: add.dates
+> 
+> ### ** Examples
+> 
+>   clam(coredir=tempfile())
+The run's files will be put in this folder: /tmp/RtmpmLlmSV/file1126f456701e9/Example
+
+ Warning, some dates lie partly outside the calibration curve! 
+ Calibrating dates... 
+ Interpolating, sampling.....
+Example's 95% confidence ranges span from 20 to 528 yr (average 230 yr)
+  Fit (-log, lower is better): 6.51
+>   add.dates(5000, 100, 60)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("calib.t")
+> ### * calib.t
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: calib.t
+> ### Title: Comparison dates calibrated using both the t distribution
+> ###   (Christen and Perez 2009) and the normal distribution.
+> ### Aliases: calib.t
+> 
+> ### ** Examples
+> 
+> calib.t() 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("clam")
+> ### * clam
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: clam
+> ### Title: clam
+> ### Aliases: clam
+> 
+> ### ** Examples
+> 
+>  clam(, coredir=tempdir()) # Create the example in Cores/Example folder
+The run's files will be put in this folder: /tmp/RtmpmLlmSV/Example
+
+ Warning, some dates lie partly outside the calibration curve! 
+ Calibrating dates... 
+ Interpolating, sampling.....
+Example's 95% confidence ranges span from 20 to 528 yr (average 230 yr)
+  Fit (-log, lower is better): 6.51
+>  clam(, coredir=tempdir(), extradates=470) 
+The run's files will be put in this folder: /tmp/RtmpmLlmSV/Example
+
+ Warning, some dates lie partly outside the calibration curve! 
+ Calibrating dates... 
+ Interpolating, sampling.....
+Example's 95% confidence ranges span from 2 to 521 yr (average 223 yr)
+  Fit (-log, lower is better): Inf
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("deptime.age")
+> ### * deptime.age
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: deptime.age
+> ### Title: Calculates the slope of a straight curve at the desired age.
+> ### Aliases: deptime.age
+> 
+> ### ** Examples
+> 
+>   clam(coredir=tempdir(), storedat=TRUE)
+The run's files will be put in this folder: /tmp/RtmpmLlmSV/Example
+
+ Warning, some dates lie partly outside the calibration curve! 
+ Calibrating dates... 
+ Interpolating, sampling.....
+Example's 95% confidence ranges span from 20 to 528 yr (average 230 yr)
+  Fit (-log, lower is better): 6.51
+>   dp <- deptime.age(5000)
+95% ranges: -28.60585 to 177.3786 yr/cm
+>   summary(dp)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00    0.00   69.89   74.24  148.07  155.93 
+>   deptime.age(5000, yrcm=FALSE) # to calculate sedimentation times in cm/yr, so accumulation rates
+95% ranges: -0.001293388 to 0.008055483 cm/yr
+> 
+> 
+> 
+> cleanEx()
+> nameEx("deptime.depth")
+> ### * deptime.depth
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: deptime.depth
+> ### Title: Calculates *for each iteration* the slope of a straight curve
+> ###   between depths just above and below the desired point.
+> ### Aliases: deptime.depth
+> 
+> ### ** Examples
+> 
+>   clam(coredir=tempdir(), storedat=TRUE) 
+The run's files will be put in this folder: /tmp/RtmpmLlmSV/Example
+
+ Warning, some dates lie partly outside the calibration curve! 
+ Calibrating dates... 
+ Interpolating, sampling.....
+Example's 95% confidence ranges span from 20 to 528 yr (average 230 yr)
+  Fit (-log, lower is better): 6.51
+>   dp <- deptime.depth(20)
+95% ranges: 1.74457 to 10.647 yr/cm
+>   summary(dp)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.742   3.605   5.274   5.800   8.677  10.871 
+>   deptime.depth(20, FALSE) # to calculate accumulation rates in cm/yr
+95% ranges: 0.06336592 to 0.4008978 cm/yr
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plot_proxies")
+> ### * plot_proxies
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plot_proxies
+> ### Title: Produce a plot of proxy values against calendar age.
+> ### Aliases: plot_proxies
+> 
+> ### ** Examples
+> 
+> clam(coredir=tempdir(), proxies=TRUE)
+The run's files will be put in this folder: /tmp/RtmpmLlmSV/Example
+
+ Warning, some dates lie partly outside the calibration curve! 
+ Calibrating dates... 
+ extrapolating beyond dated levels, dangerous!
+  Interpolating, sampling.....
+Example's 95% confidence ranges span from 20 to 1460 yr (average 232 yr)
+  Fit (-log, lower is better): 6.51
+> plot_proxies(3)
+> plot_proxies(3, revyr=FALSE)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  1.076 0.043 1.119 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

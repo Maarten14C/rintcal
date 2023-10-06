@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><title>R: Efficient xts to as.data.table conversion</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>as.data.table.xts {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='as.data.table.xts'>Efficient xts to as.data.table conversion</h2>
+
+<h3>Description</h3>
+
+<p>Efficient conversion xts to data.table.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>## S3 method for class 'xts'
+as.data.table(x, keep.rownames = TRUE, key=NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="as.data.table.xts_:_x">x</code></td>
+<td>
+<p>xts to convert to data.table</p>
+</td></tr>
+<tr><td><code id="as.data.table.xts_:_keep.rownames">keep.rownames</code></td>
+<td>
+<p>Default is <code>TRUE</code>. If <code>TRUE</code>, adds the xts input's index as a separate column named <code>"index"</code>. <code>keep.rownames = "id"</code> names the index column <code>"id"</code> instead.</p>
+</td></tr>
+<tr><td><code id="as.data.table.xts_:_key">key</code></td>
+<td>
+<p> Character vector of one or more column names which is passed to <code><a href="../../data.table/help/setkeyv.html">setkeyv</a></code>. </p>
+</td></tr>
+<tr><td><code id="as.data.table.xts_:_...">...</code></td>
+<td>
+<p>ignored, just for consistency with <code>as.data.table</code></p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+ <p><code><a href="../../data.table/help/as.xts.data.table.html">as.xts.data.table</a></code> </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>if (requireNamespace("xts", quietly = TRUE)) {
+  data(sample_matrix, package = "xts")
+  sample.xts &lt;- xts::as.xts(sample_matrix) # xts might not be attached on search path
+  # print head of xts
+  print(head(sample.xts))
+  # print data.table
+  print(as.data.table(sample.xts))
+}
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.8 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

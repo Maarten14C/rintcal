@@ -13,7 +13,7 @@
 #' @param yrsteps Steps to use for interpolation. Defaults to the cal BP steps in the calibration curve
 #' @param cc.resample The IntCal20 curves have different densities (every year between 0 and 5 kcal BP, then every 5 yr up to 15 kcal BP, then every 10 yr up to 25 kcal BP, and then every 20 yr up to 55 kcal BP). If calibrated ages span these density ranges, their drawn heights can differ, as can their total areas (which should ideally all sum to the same size). To account for this, resample to a constant time-span, using, e.g., \code{cc.resample=5} for 5-yr timespanes.
 #' @param dist.res As an alternative to yrsteps, provide the amount of 'bins' in the distribution
-#' @param threshold Report only values above a threshold. Defaults to \code{threshold=1e-6}.
+#' @param threshold Report only values above a threshold. Defaults to \code{threshold=1e-3} for prebomb dates and \code{threshold=1e-7} for postbomb dates.
 #' @param normal Use the normal distribution to calibrate dates (default TRUE). The alternative is to use the t model (Christen and Perez 2016).
 #' @param t.a Value a of the t distribution (defaults to 3).
 #' @param t.b Value a of the t distribution (defaults to 4).
@@ -26,8 +26,8 @@
 #' plot(calib, type="l")
 #' postbomb <- caldist(-3030, 20, postbomb=1, BCAD=TRUE)
 #' @export
-caldist <- function(age, error, cc=1, postbomb=FALSE, thiscurve=c(), yrsteps=FALSE, cc.resample=FALSE, dist.res=200, threshold=1e-3, normal=TRUE, t.a=3, t.b=4, normalise=TRUE, BCAD=FALSE, rule=1, cc.dir=NULL) {
-	
+caldist <- function(age, error, cc=1, postbomb=FALSE, thiscurve=c(), yrsteps=FALSE, cc.resample=FALSE, dist.res=200, threshold=c(), normal=TRUE, t.a=3, t.b=4, normalise=TRUE, BCAD=FALSE, rule=1, cc.dir=NULL) {
+
   if(length(thiscurve) == 0) {
     if(cc == 0) { # no ccurve needed
       xseq <- seq(age-8*error, age+8*error, length=2e3) # hard-coded values, hmmm
@@ -37,12 +37,12 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, thiscurve=c(), yrsteps=FAL
           if(!postbomb)
             if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
               stop("This appears to be a postbomb age or close to being so. Please provide a postbomb curve")
-		  cc <- glue.ccurves(cc, postbomb, cc.dir)
-	    } else
+          cc <- glue.ccurves(cc, postbomb, cc.dir)
+       } else
           cc <- ccurve(cc, postbomb=postbomb, cc.dir, resample=cc.resample)
     } else
       cc <- thiscurve
-  
+
   # calibrate; find how far age (measurement) is from cc[,2] of calibration curve
   if(normal)
     cal <- cbind(cc[,1], dnorm(cc[,2], age, sqrt(error^2+cc[,3]^2))) else
@@ -59,6 +59,9 @@ caldist <- function(age, error, cc=1, postbomb=FALSE, thiscurve=c(), yrsteps=FAL
   cal <- approx(cal[,1], cal[,2], yrsteps, rule=rule)
   # cal <- cbind(cal$x, cal$y/sum(cal$y)) # normalise
   cal <- cbind(cal$x, cal$y) 
+
+  if(length(threshold) == 0)
+    threshold <- ifelse(postbomb, 1e-90, 1e-3)
 
   if(normalise)
     cal[,2] <- cal[,2]/sum(cal[,2])

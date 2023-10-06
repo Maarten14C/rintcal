@@ -1,0 +1,31 @@
+D14C.F14C               Transform D14C into F14C
+F14C.D14C               Transform F14C into D14C
+F14C.age                Calculate C14 ages from F14C values.
+age.F14C                Calculate F14C values from C14 ages
+age.pMC                 Calculate pMC values from C14 ages
+calBP.14C               Find the 14C age and error belonging to a cal
+                        BP age.
+caldist                 Calculate calibrated distribution
+calibrate               Plot individual calibrated dates.
+ccurve                  Copy a calibration curve
+contaminate             Simulate the impact of contamination on a
+                        radiocarbon age
+copyCalibrationCurve    Copy a calibration curve
+draw.D14C               Draw d14C and the calibration curve.
+draw.ccurve             Draw a calibration curve.
+draw.contamination      Draw contamination impacts
+draw.dates              add calibrated distributions to a plot.
+glue.ccurves            Glue calibration curves
+hpd                     Calculate highest posterior density
+intcal                  IntCal20 json file
+intcal.data             plot the IntCal20 data
+intcal.data.frames      Extract from the intcal file
+intcal.read.data        Read data underlying the IntCal curves.
+intcal.write.data       Write intcal data to a file.
+l.calib                 Find the calibrated probability of a calendar
+                        age for a 14C date.
+list.ccurves            List the calibration curves
+mix.ccurves             Build a custom-made, mixed calibration curve.
+new.ccdir               Make directory and fill with calibration curves
+pMC.age                 Calculate C14 ages from pMC values.
+point.estimates         Calculate a point estimate

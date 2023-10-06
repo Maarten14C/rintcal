@@ -1,0 +1,62 @@
+<!DOCTYPE html><html><head><title>R: Address in RAM of a variable</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>address {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> Address in RAM of a variable </h2>
+
+<h3>Description</h3>
+
+<p>Returns the pointer address of its argument.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>    address(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>x</code></td>
+<td>
+<p> Anything. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Sometimes useful in determining whether a value has been copied or not, programmatically.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character vector length 1.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://stackoverflow.com/a/10913296/403310">https://stackoverflow.com/a/10913296/403310</a> (but implemented in C without using <code>.Internal(inspect())</code>)
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.8 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

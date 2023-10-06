@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><title>R: Flatten nested data frames</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>flatten {jsonlite}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='flatten'>Flatten nested data frames</h2>
+
+<h3>Description</h3>
+
+<p>In a nested data frame, one or more of the columns consist of another data
+frame. These structures frequently appear when parsing JSON data from the web.
+We can flatten such data frames into a regular 2 dimensional tabular structure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>flatten(x, recursive = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="flatten_:_x">x</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr><td><code id="flatten_:_recursive">recursive</code></td>
+<td>
+<p>flatten recursively</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>options(stringsAsFactors=FALSE)
+x &lt;- data.frame(driver = c("Bowser", "Peach"), occupation = c("Koopa", "Princess"))
+x$vehicle &lt;- data.frame(model = c("Piranha Prowler", "Royal Racer"))
+x$vehicle$stats &lt;- data.frame(speed = c(55, 34), weight = c(67, 24), drift = c(35, 32))
+str(x)
+str(flatten(x))
+str(flatten(x, recursive = FALSE))
+
+## Not run: 
+data1 &lt;- fromJSON("https://api.github.com/users/hadley/repos")
+colnames(data1)
+colnames(data1$owner)
+colnames(flatten(data1))
+
+# or for short:
+data2 &lt;- fromJSON("https://api.github.com/users/hadley/repos", flatten = TRUE)
+colnames(data2)
+
+## End(Not run)
+
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>jsonlite</em> version 1.8.7 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>

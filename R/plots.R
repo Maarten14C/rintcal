@@ -230,17 +230,20 @@ draw.ccurve <- function(cal1=c(), cal2=c(), cc1="IntCal20", cc2=NA, cc1.postbomb
 #' calibrate(age=130, error=10, BCAD=TRUE)
 #' calibrate(4450, 40, reservoir=c(100, 50))
 #' @export
-calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, ka=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, dist.float=c(.01, .01), cal.rev=FALSE, yr.steps=FALSE, threshold=0.0005, edge=TRUE, normal=TRUE, t.a=3, t.b=4, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", cc.dir=NULL, ...) {
+calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, prob=0.95, BCAD=FALSE, ka=FALSE, cal.lab=c(), C14.lab=c(), cal.lim=c(), C14.lim=c(), cc.col=rgb(0,.5,0,0.7), cc.fill=rgb(0,.5,0,0.7), date.col="red", dist.col=rgb(0,0,0,0.2), dist.fill=rgb(0,0,0,0.2), hpd.fill=rgb(0,0,0,0.3), dist.height=0.3, dist.float=c(.01, .01), cal.rev=FALSE, yr.steps=FALSE, threshold=c(), edge=TRUE, normal=TRUE, t.a=3, t.b=4, rounded=1, extend.range=.05, legend.cex=0.8, legend1.loc="topleft", legend2.loc="topright", mgp=c(2,1,0), mar=c(3,3,1,1), xaxs="i", yaxs="i", bty="l", cc.dir=NULL, ...) {
   # read the data
   age <- age-reservoir[1]
   if(length(reservoir) > 1)
     error <- sqrt(error^2 + reservoir[2]^2)
   youngest.cc <- c(95,603,118,0,0) # youngest C14 ages of IntCal20, Marine20, SHCal20, and extra entries
-  if((age - (3*error)) < youngest.cc[cc]) { # at or beyond younger IntCal limit 
+  if(is.numeric(cc))
+    youngest.cc <- youngest.cc[cc] else
+      youngest.cc <- 0
+  if((age - (3*error)) < youngest.cc) { # at or beyond younger IntCal limit
     if(!postbomb) # note that there are no postbomb curves for Marine20
       if(!(cc %in% c("nh1", "nh2", "nh3", "sh1-2", "sh3")))
         stop("This appears to be a postbomb age (or is close to being one). Please provide a postbomb curve")
-	Cc <- glue.ccurves(cc, postbomb, cc.dir) # doesn't do resample
+    Cc <- glue.ccurves(cc, postbomb, cc.dir) # doesn't do resample
   } else {
       if(postbomb > 0) # postbomb has been defined
         Cc <- glue.ccurves(cc, postbomb, cc.dir) else
@@ -268,18 +271,20 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
       stop("Cannot calibrate dates beyond calibration curve!")
   }
 
+  if(length(threshold) == 0)
+    threshold <- ifelse(postbomb, 1e-90, 1e-3)
+
   # calculate the raw and calibrated distributions
   C14.dist <- caldist(age, error, cc=0, BCAD=FALSE, postbomb=FALSE) # just to draw a normal dist
   C14.hpd <- hpd(C14.dist, return.raw=TRUE)[[1]]
   C14.hpd <- C14.hpd[which(C14.hpd[,3] == 1),1:2] # extract only the values within the hpd
   C14.hpd <- rbind(c(C14.hpd[1,1],0), C14.hpd, c(C14.hpd[nrow(C14.hpd),1],0))
-  if(BCAD)
-    dat <- caldist(age, error, cc=cc, yrsteps=yr.steps, threshold=threshold, 
-  normal=normal, t.a=t.a, t.b=t.b, BCAD=TRUE, postbomb=postbomb, cc.dir=cc.dir) else
-      dat <- caldist(age, error, thiscurve=Cc, cc=cc, yrsteps=yr.steps, threshold=threshold, 
-        normal=normal, t.a=t.a, t.b=t.b, BCAD=FALSE, postbomb=postbomb, cc.dir=cc.dir)
-
-  cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE, rounded=rounded)
+  #if(BCAD)
+  #  dat <- caldist(age, error, thiscurve=Cc, cc=cc, yrsteps=yr.steps, threshold=threshold, 
+  #normal=normal, t.a=t.a, t.b=t.b, BCAD=TRUE, postbomb=postbomb, cc.dir=cc.dir) else
+  dat <- caldist(age, error, thiscurve=Cc, cc=cc, yrsteps=yr.steps, threshold=threshold, 
+    normal=normal, t.a=t.a, t.b=t.b, BCAD=BCAD, postbomb=postbomb, cc.dir=cc.dir)
+  cal.hpd <- hpd(dat, prob=prob, return.raw=TRUE)
   hpds <- cal.hpd[[2]]
   cal.hpd <- cal.hpd[[1]]
   cal.dist <- cal.hpd[,1:2]
@@ -401,7 +406,10 @@ calibrate <- function(age=2450, error=50, cc=1, postbomb=FALSE, reservoir=0, pro
         if(cc == 3)
           cc <- "SHCal20 "
   legend(legend1.loc, legend=c(cc, paste(age, "\u00B1", error)), text.col=c(cc.col, 1),  ncol=1, bty="n", cex=legend.cex)
-  legend(legend2.loc, legend=rbind(c("from", "to", "%"), cbind(hpds)), ncol=3, bty="n", cex=legend.cex)
+  hpds <- cbind(hpds)
+  hpds[,3] <- round(hpds[,3], rounded+1) # a bit more precision is nice here
+  hpds[,1:2] <- round(hpds[,c(1,2)], rounded)
+  legend(legend2.loc, legend=rbind(c("from", "to", "%"), hpds), ncol=3, bty="n", cex=legend.cex)
 
   invisible(list(cal.dist, hpds))
 }
@@ -693,7 +701,7 @@ draw.D14C <- function(cal1=c(), cal2=c(), cc=ccurve(), BCAD=FALSE, mar=c(4,4,1,4
       cal.lab <- ifelse(kyr > 1, "kcal BC/AD", "cal BC/AD") else
         cal.lab <- ifelse(kyr > 1, "kcal BP", "cal BP")
   if(length(D14C.lab) == 0)
-    D14C.lab <- expression(Delta^14*C*" (\u{2030})") # assuming UTF8 capabilities
+    D14C.lab <- expression(Delta^14*C) # *" (\u{2030})") # osx pdf no longer supports U2030 as the permille sign
   if(length(C14.lab) == 0)
     C14.lab <- ifelse(kyr > 1, expression(""^14*C~kBP), expression(""^14*C~BP))
   if(length(D14C.lim) == 0)

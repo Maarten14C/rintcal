@@ -1,0 +1,155 @@
+<!DOCTYPE html><html><head><title>R: Draw d14C and the calibration curve.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>draw.D14C {rintcal}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2 id='draw.D14C'>Draw d14C and the calibration curve.</h2>
+
+<h3>Description</h3>
+
+<p>Draw a proxy of the atmospheric 14C concentration (d14C) as well as the calibration curve.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>draw.D14C(
+  cal1 = c(),
+  cal2 = c(),
+  cc = ccurve(),
+  BCAD = FALSE,
+  mar = c(4, 4, 1, 4),
+  mgp = c(2.5, 1, 0),
+  xaxs = "r",
+  yaxs = "r",
+  bty = "u",
+  ka = FALSE,
+  cal.lab = c(),
+  cal.rev = FALSE,
+  C14.lab = c(),
+  C14.lim = c(),
+  cc.col = rgb(0, 0.5, 0, 0.5),
+  cc.border = rgb(0, 0.5, 0, 0.5),
+  D14C.lab = c(),
+  D14C.lim = c(),
+  D14C.col = rgb(0, 0, 1, 0.5),
+  D14C.border = rgb(0, 0, 1, 0.5)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr><td><code id="draw.D14C_:_cal1">cal1</code></td>
+<td>
+<p>First calendar year for the plot. Defaults to youngest calendar age of the calibration curve</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_cal2">cal2</code></td>
+<td>
+<p>Last calendar year for the plot. Defaults to oldest calendar age of the calibration curve</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_cc">cc</code></td>
+<td>
+<p>The calibration curve to use. Defaults to IntCal20</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_BCAD">BCAD</code></td>
+<td>
+<p>The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using <code>BCAD=TRUE</code>.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_mar">mar</code></td>
+<td>
+<p>Plot margins (amount of white space along edges of axes 1-4).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_mgp">mgp</code></td>
+<td>
+<p>Axis text margins (where should titles, labels and tick marks be plotted).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_xaxs">xaxs</code></td>
+<td>
+<p>Whether or not to extend the limits of the horizontal axis. Defaults to <code>xaxs="r"</code> which extends it by R's default.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_yaxs">yaxs</code></td>
+<td>
+<p>Whether or not to extend the limits of the vertical axis. Defaults to <code>yaxs="r"</code> which extends it by R's default.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_bty">bty</code></td>
+<td>
+<p>Draw a box around the graph (&quot;n&quot; for none, and &quot;l&quot;, &quot;7&quot;, &quot;c&quot;, &quot;u&quot;, &quot;]&quot; or &quot;o&quot; for correspondingly shaped boxes).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_ka">ka</code></td>
+<td>
+<p>Use kcal BP (and C14 kBP). Defaults to FALSE.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_cal.lab">cal.lab</code></td>
+<td>
+<p>The labels for the calendar axis (default <code>age.lab="cal BP"</code> or <code>"BC/AD"</code> if <code>BCAD=TRUE</code>), or to <code>age.lab="kcal BP"</code> etc. if ka=TRUE.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_cal.rev">cal.rev</code></td>
+<td>
+<p>Reverse the calendar axis (defaults to FALSE).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_C14.lab">C14.lab</code></td>
+<td>
+<p>Label for the C-14 axis. Defaults to 14C BP (or 14C kBP if ka=TRUE).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_C14.lim">C14.lim</code></td>
+<td>
+<p>Limits for the C-14 axis. Calculated automatically by default.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_cc.col">cc.col</code></td>
+<td>
+<p>Colour of the calibration curve (fill).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_cc.border">cc.border</code></td>
+<td>
+<p>Colour of the calibration curve (border).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_D14C.lab">D14C.lab</code></td>
+<td>
+<p>Label for the D14C axis.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_D14C.lim">D14C.lim</code></td>
+<td>
+<p>Axis limits for the D14C axis. Calculated automatically by default.</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_D14C.col">D14C.col</code></td>
+<td>
+<p>Colour of the D14C curve (fill).</p>
+</td></tr>
+<tr><td><code id="draw.D14C_:_D14C.border">D14C.border</code></td>
+<td>
+<p>Colour of the D14C curve (border).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A plot of d14C and the calibration curve
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>  draw.D14C()
+  draw.D14C(30e3, 55e3, ka=TRUE)
+  draw.D14C(cc=ccurve("NH1_monthly"), BCAD=TRUE)
+</code></pre>
+
+<hr /><div style="text-align: center;">[Package <em>rintcal</em> version 0.6.3 <a href="00Index.html">Index</a>]</div>
+</div>
+</body></html>
