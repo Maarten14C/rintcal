@@ -1,3 +1,7 @@
+# rintcal 1.0.0
+* most functions have been transferred into the new R package `rice`. The `rintcal` package will become a data package
+* in mix.ccurves, errors are now calculated correctly
+
 # rintcal 0.6.4
 * mix.ccurves now doesn't fail if a provided cc.dir folder does not yet exist
 * mix.ccurves now saves the calibration curves with values separated by a single space, not by a tab

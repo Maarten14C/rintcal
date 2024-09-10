@@ -1,3 +1,5 @@
+# mix.ccurves(0.4, cc1="IntCal20", cc2="Marine20", offset=100) has a bug w offset
+
 
 # todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
@@ -266,7 +268,8 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
   cc2.error <- approx(cc2[,1], cc2[,3], cc1[,1], rule=2)$y
   cc2.error <- sqrt(cc2.error^2 + offset[,2]^2)
   mu <- proportion * cc1[,2] + (1-proportion) * cc2.mu
-  error <- proportion * cc1[,3] + (1-proportion) * cc2.error
+  # error <- proportion * cc1[,3] + (1-proportion) * cc2.error
+  error <- sqrt(proportion^2 * cc1[,3]^2 + (1-proportion)^2 * cc2.error^2) # July '24
 
   mycc <- cbind(cc1[,1], mu, error)
   if(length(round) > 0)
