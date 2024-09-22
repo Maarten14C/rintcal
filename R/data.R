@@ -12,6 +12,7 @@
 #' @param cc1 Name of the calibration curve. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13".
 #' @param cc2 Optional second calibration curve to plot. Can be "IntCal20", "Marine20", "SHCal20", or for the previous curves "IntCal13", "Marine13" or "SHCal13". Defaults to nothing, NA.
 #' @param calcurve.data Which dataset to use. Defaults to \code{calcurve.data="IntCal20"}, but can also be \code{calcurve.data="SHCal20"}. Note that Marine20 is based on IntCal20 and a marine carbon cycle model.
+#' @param realm Which 'realm' of radiocarbon to use. Defaults to \code{realm="C14"} but can also be set to \code{realm="F14C"}, \code{realm="pMC"} or \code{realm="D14C"}. Can be shorted to, respectively, "C", "F", "P" or "D" (or their lower-case equivalents).
 #' @param select.sets Which datasets to plot. Defaults to all datasets within the selected period.
 #' @param BCAD The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.
 #' @param cal.lab The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.
@@ -206,7 +207,7 @@
 #' [82] Boentgen et al. 2018 Tree rings reveal globally coherent signature of cosmogenic radiocarbon events in 774 and 993 CE. Nature Communications, 9: 3605. doi:10.1038/s41467-018-06036-0.
 #' [83] Sookdeo et al. 2020 Quality Dating: A well-defined protocol implemented at ETH Zurich for high-precision 14C dates tested on Late Glacial wood. Radiocarbon. \doi{10.1017/RDC.2019.132}
 #' @export
-intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", select.sets=c(), BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
+intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", select.sets=c(), realm="C14", BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
 
   # read the data
   if(tolower(calcurve.data) == "intcal20") {
@@ -240,6 +241,36 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   cc.1 <- cc.1[which(mindat * maxdat == 1),]
   if(ka)
     cc.1 <- cc.1/1e3
+
+  # deal with different C14 'realms' (radiocarbon age, F14C, pMC or D14C)
+  if("f" %in% tolower(realm)) {
+    F <- age.F14C(cc.1[,2], cc.1[,3])
+    cc.1[,2:3] <- F
+    F <- age.F14C(dat$c14, dat$c14sig)
+    dat$c14 <- F[,1]
+    dat$c14sig <- F[,2]
+  }
+  if("p" %in% tolower(realm)) {
+    p <- age.pMC(cc.1[,2], cc.1[,3])
+    cc.1[,2:3] <- p
+    p <- age.pMC(dat$c14, dat$c14sig)
+    dat$c14 <- p[,1]
+    dat$c14sig <- p[,2]
+  }
+  if("d" %in% tolower(realm)) {
+    F <- age.F14C(cc.1[,2], cc.1[,3])
+    Dmax <- F14C.D14C(F[,1]+F[,2], cc.1[,1])
+    D <- F14C.D14C(F[,1], cc.1[,1])
+    Dsd <- Dmax - D
+    cc.1[,2:3] <- cbind(D, Dsd)
+
+    F <- age.F14C(dat$c14, dat$c14sig)
+    Dmax <- F14C.D14C(F[,1]+F[,2], dat$cal)
+    D <- F14C.D14C(F[,1], dat$cal)
+    dat$c14 <- D
+    dat$c14sig <- Dmax - D
+  }
+
   cc1.pol <- cbind(c(cc.1[,1], rev(cc.1[,1])), c(cc.1[,2]-cc.1[,3], rev(cc.1[,2]+cc.1[,3])))
 
   if(!is.na(cc2)) {
@@ -248,6 +279,21 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
       cc.2[,1] <- 1950 - cc.2[,1]
     mindat <- cc.2[,1] >= min(cal1, cal2)
     maxdat <- cc.2[,1] <= max(cal1, cal2)
+
+    if("f" %in% tolower(realm)) {
+      F <- age.F14C(cc.2[,2], cc.2[,3])
+      cc.2[,2:3] <- F
+    }
+    if("p" %in% tolower(realm)) {
+      p <- age.pMC(cc.2[,2], cc.2[,3])
+      cc.2[,2:3] <- p
+    }
+    if("d" %in% tolower(realm)) {
+      F <- age.F14C(cc.2[,2], cc.2[,3])
+      Dmax <- F14C.D14C(F[,1]+F[,2], cc.2[,1])
+      D <- F14C.D14C(F[,1], cc.2[,1])
+      cc.2[,2:3] <- cbind(D, Dmax-D)
+    }
     cc.2 <- cc.2[which(mindat * maxdat == 1),]
     if(ka)
       cc.2 <- cc.2/1e3
@@ -290,9 +336,16 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   c14.err <- dat$c14sig
 
   if(is.na(cal.lab))
-    callab <- "cal. yr BP"
+    callab <- "cal. yr BP" else
+      callab <- cal.lab
   if(is.na(c14.lab))
-    c14lab <- expression(""^14*C~BP)
+    if("p" %in% tolower(realm))
+      c14lab <- "pMC" else
+        if("f" %in% tolower(realm))
+          c14lab <- expression(F^14*C) else
+            if("d" %in% tolower(realm))
+              c14lab <- expression(delta^14*C) else
+                c14lab <- expression(""^14*C~BP)
 
   cal.lim <- c(cal1, cal2)
   if(cal.rev)

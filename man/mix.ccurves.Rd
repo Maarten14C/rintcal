@@ -29,7 +29,7 @@ mix.ccurves(
 
 \item{save}{Save the curve in the folder specified by dir. Defaults to FALSE.}
 
-\item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row).}
+\item{offset}{Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row), e.g. \code{offset=cbind(100,0)}}
 
 \item{round}{The entries can be rounded to a specified amount of decimals. Defaults to no rounding.}
 

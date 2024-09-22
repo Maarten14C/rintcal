@@ -11,6 +11,7 @@ intcal.data(
   cc2 = NA,
   calcurve.data = "IntCal20",
   select.sets = c(),
+  realm = "C14",
   BCAD = FALSE,
   cal.lab = NA,
   cal.rev = FALSE,
@@ -45,6 +46,8 @@ intcal.data(
 \item{calcurve.data}{Which dataset to use. Defaults to \code{calcurve.data="IntCal20"}, but can also be \code{calcurve.data="SHCal20"}. Note that Marine20 is based on IntCal20 and a marine carbon cycle model.}
 
 \item{select.sets}{Which datasets to plot. Defaults to all datasets within the selected period.}
+
+\item{realm}{Which 'realm' of radiocarbon to use. Defaults to \code{realm="C14"} but can also be set to \code{realm="F14C"}, \code{realm="pMC"} or \code{realm="D14C"}. Can be shorted to, respectively, "C", "F", "P" or "D" (or their lower-case equivalents).}
 
 \item{BCAD}{The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.}
 

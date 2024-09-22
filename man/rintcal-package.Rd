@@ -6,7 +6,7 @@
 \alias{rintcal-package}
 \title{rintcal: Radiocarbon Calibration Curves}
 \description{
-The IntCal20 radiocarbon calibration curves (Reimer et al. 2020 \doi{10.1017/RDC.2020.68}) are provided as a data package, together with previous IntCal curves (IntCal13, IntCal09, IntCal04, IntCal98) and postbomb curves. Also provided are functions to copy the curves into memory, to plot the curves and their underlying data, to calibrate radiocarbon dates and to transform between different radiocarbon 'domains'.
+The IntCal20 radiocarbon calibration curves (Reimer et al. 2020 \doi{10.1017/RDC.2020.68}) are provided as a data package, together with previous IntCal curves (IntCal13, IntCal09, IntCal04, IntCal98) and postbomb curves. Also provided are functions to copy the curves into memory, and to read, query and plot the data underlying the IntCal20 curves.
 }
 \author{
 \strong{Maintainer}: Maarten Blaauw \email{maarten.blaauw@qub.ac.uk} (\href{https://orcid.org/0000-0002-5680-1515}{ORCID})

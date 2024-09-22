@@ -1,5 +1,3 @@
-# mix.ccurves(0.4, cc1="IntCal20", cc2="Marine20", offset=100) has a bug w offset
-
 
 # todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
 
@@ -239,7 +237,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
 #' @param name Name of the new calibration curve.
 #' @param cc.dir Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{cc.dir="~/ccurves"} or in your current working directory, \code{cc.dir="."}.
 #' @param save Save the curve in the folder specified by dir. Defaults to FALSE.
-#' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row).
+#' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row), e.g. \code{offset=cbind(100,0)}
 #' @param round The entries can be rounded to a specified amount of decimals. Defaults to no rounding.
 #' @param sep Separator between fields (tab by default, "\\t")
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
@@ -302,3 +300,29 @@ glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", cc.dir=c()) {
     invisible(glued[-repeated,]) else # remove any repeated years
       invisible(glued[order(glued[,1]),])
 }
+
+
+
+# making a selection of realm functions available locally, to avoid need for circular loading of `rice`
+age.pMC <- function(mn, sdev=c(), ratio=100, decimals=5, lambda=8033) {
+  if(ratio !=100)
+    warning("age.pMC expects a ratio of 100. For ratio=1, use age.F14C")
+  y <- exp(-mn / lambda)
+  if(length(sdev) == 0)
+    signif(ratio*y, decimals) else {
+    sdev <- y - exp(-(mn + sdev) / lambda)
+    signif(ratio*cbind(y, sdev), decimals)
+  }
+}
+
+age.F14C <- function(mn, sdev=c(), decimals=5, lambda=8033) {
+  y <- exp(-mn / lambda)
+  if(length(sdev) == 0)
+    signif(y, decimals) else {
+      sdev <- y - exp(-(mn + sdev) / lambda)
+      signif(cbind(y, sdev), decimals)
+    }
+}
+
+F14C.D14C <- function(F14C, t)
+  return( 1000 * ((F14C / exp(-t/8267)) - 1))

@@ -1,6 +1,7 @@
 # rintcal 1.0.0
-* most functions have been transferred into the new R package `rice`. The `rintcal` package will become a data package
+* most functions have been transferred into the new R package `rice`. The `rintcal` package will become a data package with only very few functions remaining
 * in mix.ccurves, errors are now calculated correctly
+* intcal.data can now also plot the C14 data in the 'realms' of F14C, pMC and D14C
 
 # rintcal 0.6.4
 * mix.ccurves now doesn't fail if a provided cc.dir folder does not yet exist
