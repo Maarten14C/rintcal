@@ -109,6 +109,13 @@ unique(dat$set)
 dat <- intcal.data(20e3, 25e3, select.sets=c(109, 120), data.cols=c(1,2))
 ```
 
+
+It is also possible to plot the data in other `realms` such as pMC (`p`), F<sup>14</sup>C (`F`) or &Delta;<sup>14</sup>C (`d`), e.g.:
+
+```{r, fig.width=5, fig.asp=1}
+intcal.data(20e3, 25e3, realm="d")
+```
+
 ## Manipulations
 
 You can also combine calibration curves, e.g. a 40%:60% mix of Intcal20 and Marine20 with a 100+-20 year offset for the latter. If save is set to TRUE, the resulting curve will be saved with the name mixed.14C, in a folder together with the calibration curves. The name of this folder is listed, and it can be changed by specifying the option 'cc.dir'.

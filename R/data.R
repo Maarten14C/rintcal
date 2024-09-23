@@ -40,7 +40,7 @@
 #'   # plot Suigetsu and Cariaco data only
 #'   dat <- intcal.data(20e3, 25e3)
 #'   unique(dat$set) # ordered against their appearance in the plot's legend
-#'   dat <- intcal.data(20e3, 25e3, selectsets=c(109, 120), data.cols=c(1,2))
+#'   dat <- intcal.data(20e3, 25e3, select.sets=c(109, 120), data.cols=c(1,2))
 #' @references
 #' [1]Stuiver, M, and Braziunas, TF. 1993. Sun, ocean, climate and atmospheric 14CO2: an evaluation of causal and spectral relationships. Holocene 3: 289-305.
 #'
