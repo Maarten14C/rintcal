@@ -81,4 +81,4 @@ F14C or delta14C values in the postbomb files were translated to (negative) 14C 
 
 - Stuiver M, Reimer PJ, Bard E, Beck JW, Burr GS, Hughen KA, Kromer B, McCormac FG, van der Plicht J, Spurk M, 1998a. IntCal98 radiocarbon age calibration, 24,000-0 calBP. Radiocarbon 40:1041-1083
 
-- Stuiver M, Reimer PJ, Braziunas TF, 1998b. High-precision radiocarbon age calibation for terrestrial and marine samples. Radiocarbon 40:1127-1151
+- Stuiver M, Reimer PJ, Braziunas TF, 1998b. High-precision radiocarbon age calibration for terrestrial and marine samples. Radiocarbon 40:1127-1151

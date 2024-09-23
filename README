@@ -1,4 +1,4 @@
-This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data. 
+This is a data compilation of the IntCal radiocarbon calibration curves as downloadable freely from intcal.org/curves/. It could be used to provide data to other R packages, thus requiring less replication and updating of data.
 
 For tutorials, see:
 [intro](vignettes/intro.Rmd)
@@ -72,4 +72,4 @@ Santos GM, Linares R, Lisi CS, Filho MT, 2015. Annual growth rings in a sample o
 
 Stuiver M, Reimer PJ, Bard E, Beck JW, Burr GS, Hughen KA, Kromer B, McCormac FG, van der Plicht J, Spurk M, 1998a. IntCal98 radiocarbon age calibration, 24,000-0 calBP. Radiocarbon 40:1041-1083
 
-Stuiver M, Reimer PJ, Braziunas TF, 1998b. High-precision radiocarbon age calibation for terrestrial and marine samples. Radiocarbon 40:1127-1151
+Stuiver M, Reimer PJ, Braziunas TF, 1998b. High-precision radiocarbon age calibration for terrestrial and marine samples. Radiocarbon 40:1127-1151
