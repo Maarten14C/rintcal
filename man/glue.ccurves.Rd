@@ -4,12 +4,22 @@
 \alias{glue.ccurves}
 \title{Glue calibration curves}
 \usage{
-glue.ccurves(prebomb = "IntCal20", postbomb = "NH1", cc.dir = c())
+glue.ccurves(
+  prebomb = "IntCal20",
+  postbomb = "NH1",
+  thisprebombcurve = c(),
+  thispostbombcurve = c(),
+  cc.dir = c()
+)
 }
 \arguments{
 \item{prebomb}{The prebomb curve. Defaults to "IntCal20"}
 
 \item{postbomb}{The postbomb curve. Defaults to "NH1" (Hua et al. 2013)}
+
+\item{thisprebombcurve}{As an alternative to using existing curves, a tailor-made curve can be provided for the prebomb curve (as three columns: cal BP, C14 age, error)}
+
+\item{thispostbombcurve}{As an alternative to using existing curves, a tailor-made curve can be provided for the postbomb curve (as three columns: cal BP, C14 age, error)}
 
 \item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.}
 }

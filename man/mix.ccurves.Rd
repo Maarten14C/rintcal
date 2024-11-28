@@ -8,8 +8,12 @@ mix.ccurves(
   proportion = 0.5,
   cc1 = "IntCal20",
   cc2 = "Marine20",
+  postbomb1 = FALSE,
+  postbomb2 = FALSE,
   name = "mixed.14C",
   cc.dir = c(),
+  thiscurve1 = c(),
+  thiscurve2 = c(),
   save = FALSE,
   offset = cbind(0, 0),
   round = c(),
@@ -23,9 +27,17 @@ mix.ccurves(
 
 \item{cc2}{The second calibration curve to be mixed. Defaults to the marine curve IntCal20.}
 
+\item{postbomb1}{Option to provide a postbomb curve for the first curve (defaults to FALSE).}
+
+\item{postbomb2}{Option to provide a postbomb curve for the second curve (defaults to FALSE).}
+
 \item{name}{Name of the new calibration curve.}
 
 \item{cc.dir}{Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{cc.dir="~/ccurves"} or in your current working directory, \code{cc.dir="."}.}
+
+\item{thiscurve1}{As an alternative to using curves that come with the package, a tailor-made curve can be provided for the first curve (as three columns: cal BP, C14 age, error).}
+
+\item{thiscurve2}{As an alternative to using curves that come with the package, a tailor-made curve can be provided for the second curve (as three columns: cal BP, C14 age, error).}
 
 \item{save}{Save the curve in the folder specified by dir. Defaults to FALSE.}
 

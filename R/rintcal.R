@@ -1,9 +1,7 @@
 
-# todo: write more detail as to what can be found in the intcal.data.frames, allow for draw.contaminate with contam.F14C<1, add smoothing (as in calib.org), solve bug where options are thought to be part of plotting parameters (probably to do with ", ..."), make a table function, prepare calib function with MCMC ccurve
+# todo: write more detail as to what can be found in the intcal.data.frames
 
 # done: mix.ccurves now doesn't fail if a provided cc.dir folder does not yet exist. By default mix.ccurves now saves the calibration curves with values separated by a single space, not by a tab.
-
-# todo: make package 'howmany' (or such), including accumulate (to make sediment records, with e.g. random walk, a function, reading from a file, ...), simulate dating (extrapolation, scatter, outliers, ccurves, offsets; random depths, Andres's code, equal spacing), write Bacon/clam/bchron/oxcal files, cost/benefit plots, proxy simulator
 
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server
@@ -123,6 +121,9 @@ new.ccdir <- function(cc.dir) {
 #' Reimer et al. 2020 The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62, 725-757, \doi{10.1017/RDC.2020.41}
 #'
 #' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000-0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
+#' 
+#' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
+
 #' @export
 ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
   if(postbomb) {
@@ -208,12 +209,23 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
                                                         fl <- "Santos.14C" else
                                                         if(tolower(cc) == "mixed")
                                                           fl <- "mixed.14C" else
-                                                          stop("cannot find this curve", call.=FALSE)
+                                                          if(tolower(cc) == "intcal20.14c")
+                                                            fl <- "intcal20.14c" else
+                                                            if(tolower(cc) == "marine20.14c")
+                                                              fl <- "marine20.14c" else
+                                                              if(tolower(cc) == "shcal20.14c")
+                                                                fl <- "shcal20.14c" else
+                                                                if(tolower(cc) == "notcal04")
+                                                                  fl <- "NOTCal04.14C" else
+                                                                    stop("cannot find this curve", call.=FALSE)
 
   if(length(cc.dir) == 0)
     cc <- system.file("extdata/", fl, package='rintcal') else
       cc <- file.path(cc.dir, fl)
-  cc <- fastread(cc)
+
+  if(fl %in% c("intcal20.14c", "marine20.14c", "shcal20.14c")) # separated by commas, not spaces
+    cc <- read.table(cc, sep=",") else
+      cc <- fastread(cc)
 
   if(resample > 0) {
     yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)
@@ -236,6 +248,10 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
 #' @param cc2 The second calibration curve to be mixed. Defaults to the marine curve IntCal20.
 #' @param name Name of the new calibration curve.
 #' @param cc.dir Name of the directory where to save the file. Since R does not allow automatic saving of files, this points to a temporary directory by default. Adapt to your own folder, e.g., \code{cc.dir="~/ccurves"} or in your current working directory, \code{cc.dir="."}.
+#' @param thiscurve1 As an alternative to using curves that come with the package, a tailor-made curve can be provided for the first curve (as three columns: cal BP, C14 age, error).
+#' @param thiscurve2 As an alternative to using curves that come with the package, a tailor-made curve can be provided for the second curve (as three columns: cal BP, C14 age, error).
+#' @param postbomb1 Option to provide a postbomb curve for the first curve (defaults to FALSE).
+#' @param postbomb2 Option to provide a postbomb curve for the second curve (defaults to FALSE).
 #' @param save Save the curve in the folder specified by dir. Defaults to FALSE.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row), e.g. \code{offset=cbind(100,0)}
 #' @param round The entries can be rounded to a specified amount of decimals. Defaults to no rounding.
@@ -251,7 +267,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mixed.14C", cc.dir=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ") {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ") {
   # place the IntCal curves within the same folder as the new curve:
   if(length(cc.dir) == 0)
     cc.dir <- tempdir()
@@ -260,8 +276,13 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
   curves <- list.files(system.file("extdata", package='rintcal'), pattern=".14C", full.names=TRUE)
   file.copy(curves, cc.dir)
 
-  cc1 <- ccurve(cc1)
-  cc2 <- ccurve(cc2)
+  if(length(thiscurve1) == 0)
+    cc1 <- ccurve(cc1, cc.dir=cc.dir, postbomb=postbomb1) else
+      cc1 <- thiscurve1
+  if(length(thiscurve2) == 0)
+    cc2 <- ccurve(cc2, cc.dir=cc.dir, postbomb=postbomb2) else
+      cc2 <- thiscurve2
+
   cc2.mu <- approx(cc2[,1], cc2[,2], cc1[,1], rule=2)$y + offset[,1] # interpolate cc2 to the calendar years of cc1
   cc2.error <- approx(cc2[,1], cc2[,3], cc1[,1], rule=2)$y
   cc2.error <- sqrt(cc2.error^2 + offset[,2]^2)
@@ -288,12 +309,21 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", name="mix
 #' @return The custom-made curve (invisibly)
 #' @param prebomb The prebomb curve. Defaults to "IntCal20"
 #' @param postbomb The postbomb curve. Defaults to "NH1" (Hua et al. 2013)
+#' @param thisprebombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the prebomb curve (as three columns: cal BP, C14 age, error)
+#' @param thispostbombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the postbomb curve (as three columns: cal BP, C14 age, error)
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @examples
 #' my.cc <- glue.ccurves()
 #' @export
-glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", cc.dir=c()) {
-  glued <- rbind(ccurve(prebomb, FALSE, cc.dir=cc.dir), ccurve(postbomb, TRUE, cc.dir=cc.dir))
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), cc.dir=c()) {
+  if(length(thispostbombcurve) == 0)
+    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir) else
+      postbomb <- thispostbombcurve
+  if(length(thisprebombcurve) == 0)
+    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir) else
+      prebomb <- thisprebombcurve
+
+  glued <- rbind(postbomb, prebomb)
   glued <- glued[order(glued[,1]),]
   repeated <- which(diff(glued[,1]) == 0)
   if(length(repeated) > 0)

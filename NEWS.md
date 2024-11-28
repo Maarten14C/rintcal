@@ -1,3 +1,8 @@
+# rintcal 1.1.0
+* updated the glue.ccurves and mix.ccurves functions so that tailor-made curves can be provided
+* added NOTCal04 (van der Plicht et al. 2004) as legacy curve. This curve was released 20 years ago as a warning NOT to calibrate older radiocarbon ages, because at the time the datasets were too much in disagreement - however, some did go ahead and used NOTCal04 as a calibration curve...
+* added the original plain-text files intcal20.14c, marine20.14c and shcal20.14c. These comma-separated-value files include D14C values (the IntCal20 curves were modelled in D14C space).
+
 # rintcal 1.0.0
 * most functions have been transferred into the new R package `rice`. The `rintcal` package will become a data package with only very few functions remaining (related to loading/combining curves, and plotting/querying the intcal data)
 * in mix.ccurves, errors are now calculated correctly
