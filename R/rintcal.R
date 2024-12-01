@@ -16,10 +16,10 @@
 
 
 # internal functions to speed up reading and writing files, using the data.table R package if present
-fastread <- function(fl, ...)
+fastread <- function(fl, skip=0, sep=" ", ...)
   if("data.frame" %in% (.packages())) # some Macs have problems with this package
-    as.data.frame(data.table::fread(fl), ...) else
-      read.table(fl, ...)
+    as.data.frame(data.table::fread(fl, skip=skip, sep=sep), ...) else
+      read.table(fl, skip=skip, sep=sep, ...)
 
 
 
@@ -91,6 +91,7 @@ new.ccdir <- function(cc.dir) {
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param resample The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE. 
 #' @param glue If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead
+#' @param as.F If loading a curve that contains 2 additional columns containing the D14C values, then these can be used instead of the curve's C14 ages and errors. Defaults to \code{as.F=FALSE}.
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -125,7 +126,7 @@ new.ccdir <- function(cc.dir) {
 #' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE) {
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
@@ -156,11 +157,11 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
                               stop("cannot find this postbomb curve\n", call.=FALSE)
   } else
     if(cc==1 || tolower(cc) == "intcal20")
-      fl <- "3Col_intcal20.14C" else
+      fl <- "intcal20.14c" else # was 3Col_intcal20.14C
       if(cc==2 || tolower(cc) == "marine20")
-        fl <- "3Col_marine20.14C" else
+        fl <- "marine20.14c" else # was 3Col_marine20.14C
         if(cc==3 || tolower(cc) == "shcal20")
-          fl <- "3Col_shcal20.14C" else
+          fl <- "shcal20.14c" else # was 3Col_shcal20.14C
           if(cc==4 || tolower(cc) == "mixed")
             fl <- "mixed.14C" else
             if(tolower(cc) == "intcal13")
@@ -209,23 +210,30 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE) {
                                                         fl <- "Santos.14C" else
                                                         if(tolower(cc) == "mixed")
                                                           fl <- "mixed.14C" else
-                                                          if(tolower(cc) == "intcal20.14c")
-                                                            fl <- "intcal20.14c" else
-                                                            if(tolower(cc) == "marine20.14c")
-                                                              fl <- "marine20.14c" else
-                                                              if(tolower(cc) == "shcal20.14c")
-                                                                fl <- "shcal20.14c" else
-                                                                if(tolower(cc) == "notcal04")
-                                                                  fl <- "NOTCal04.14C" else
-                                                                    stop("cannot find this curve", call.=FALSE)
+                                                          if(tolower(cc) == "notcal04")
+                                                            fl <- "NOTCal04.14C" else
+                                                              stop("cannot find this curve", call.=FALSE)
 
-  if(length(cc.dir) == 0)
+  if(length(cc.dir) == 0) # then look into the package's inst/extdata folder
     cc <- system.file("extdata/", fl, package='rintcal') else
       cc <- file.path(cc.dir, fl)
 
-  if(fl %in% c("intcal20.14c", "marine20.14c", "shcal20.14c")) # separated by commas, not spaces
-    cc <- read.table(cc, sep=",") else
-      cc <- fastread(cc)
+  if(fl %in% c("intcal20.14c", "marine20.14c", "shcal20.14c")) # skip first 11 lines and use commas 
+    cc <- fastread(cc, skip=11, sep=",") else
+      cc <- fastread(cc, skip=0, sep="\t")
+
+  # the cal BP column should be increasing, i.e. most recent ages at the top 
+  cc <- cc[order(cc[,1]),]
+  
+  # for files with D14C values (the 'official' intcal20 files ending in '14c', which have D14C and its error as their final two columns)
+  if(as.F) {
+    if(ncol(cc) != 5)
+      stop("this does not seem to be a file with 5 columns. Cannot calculate F14C values")
+	asF <- ((cc[,4]/1000) + 1) * exp(-cc[,1]/8267) # F
+    Fup <- (((cc[,4] + cc[,5])/1000) + 1) * exp(-cc[,1]/8267) # F + 1 sdev
+    cc <- cbind(cc[,1], asF, Fup-asF)
+  } else
+      cc <- cc[,1:3]
 
   if(resample > 0) {
     yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)

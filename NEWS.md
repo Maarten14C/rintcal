@@ -1,3 +1,8 @@
+# rintcal 1.1.1
+* added an option as.F to `ccurve`, to read in curves as F14C instead of as C14. Can only be used using the 'official' intcal20 .14c files
+* now reads the 'official' intcal20 .14c files instead of the 3Col_ derivatives
+* when using `ccurve`, curves will be returned with cal BP years increasing (the default 14c files return then decreasing)
+
 # rintcal 1.1.0
 * updated the glue.ccurves and mix.ccurves functions so that tailor-made curves can be provided
 * added NOTCal04 (van der Plicht et al. 2004) as legacy curve. This curve was released 20 years ago as a warning NOT to calibrate older radiocarbon ages, because at the time the datasets were too much in disagreement - however, some did go ahead and used NOTCal04 as a calibration curve...
