@@ -1,9 +1,7 @@
 ## Test environments
-* local Fedora install, R 4.4.1
-* rhub win-builder (devel and release)
+* local OSX install, R 4.4.2
+* rhub win_devel, ubuntu-latest, macos-13, macos-latest, windows-latest, cs23, clang19, gcc13, gcc14, valgrind 
 
 ## R CMD check results
 
-0 Errors | 0 Warnings | 1 Note
-
-The note about UTF-8 strings relates to international characters within data/intcal.rda. This is a json object with a number of international characters for, e.g., sites and author names, which would best be kept as-is in order to enable users to cite sites/papers correctly.
+0 Errors | 0 Warnings | 0 Notes
