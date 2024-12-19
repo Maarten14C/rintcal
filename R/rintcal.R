@@ -73,7 +73,7 @@ new.ccdir <- function(cc.dir) {
     dir.create(cc.dir)
 
   # find all calibration curves (files ending in .14C) and copy them into the new directory
-  fl <- list.files(file.path(system.file(package = 'rintcal'), "extdata"), full.names=TRUE, pattern=".14C")
+  fl <- list.files(file.path(system.file(package = 'rintcal'), "extdata"), full.names=TRUE, pattern="\\.14[Cc]$")
   file.copy(fl, cc.dir)
   message("Calibration curves placed in folder ", cc.dir)
 }
@@ -220,11 +220,11 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 
   if(fl %in% c("intcal20.14c", "marine20.14c", "shcal20.14c")) # skip first 11 lines and use commas 
     cc <- fastread(cc, skip=11, sep=",") else
-      cc <- fastread(cc, skip=0, sep="\t")
+      cc <- fastread(cc, skip=0, sep=" ")
 
   # the cal BP column should be increasing, i.e. most recent ages at the top 
   cc <- cc[order(cc[,1]),]
-  
+
   # for files with D14C values (the 'official' intcal20 files ending in '14c', which have D14C and its error as their final two columns)
   if(as.F) {
     if(ncol(cc) != 5)
@@ -233,7 +233,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
     Fup <- (((cc[,4] + cc[,5])/1000) + 1) * exp(-cc[,1]/8267) # F + 1 sdev
     cc <- cbind(cc[,1], asF, Fup-asF)
   } else
-      cc <- cc[,1:3]
+      cc <- cbind(cc[,1:3])
 
   if(resample > 0) {
     yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)
@@ -267,6 +267,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
 #' tmpdir <- tempdir()
+#' new.ccdir(tmpdir)
 #' mix.ccurves(cc.dir=tmpdir)
 #' # now assume the offset is constant but its uncertainty increases over time:
 #' cc <- ccurve()
@@ -281,7 +282,7 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
     cc.dir <- tempdir()
   if(!dir.exists(cc.dir))
     dir.create(cc.dir)
-  curves <- list.files(system.file("extdata", package='rintcal'), pattern=".14C", full.names=TRUE)
+  curves <- list.files(system.file("extdata", package='rintcal'), pattern="\\.14[Cc]$", full.names=TRUE)
   file.copy(curves, cc.dir)
 
   if(length(thiscurve1) == 0)

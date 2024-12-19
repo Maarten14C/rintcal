@@ -58,6 +58,7 @@ The proportional contribution of each of both calibration curves has to be set.
 }
 \examples{
 tmpdir <- tempdir()
+new.ccdir(tmpdir)
 mix.ccurves(cc.dir=tmpdir)
 # now assume the offset is constant but its uncertainty increases over time:
 cc <- ccurve()
