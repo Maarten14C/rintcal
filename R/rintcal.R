@@ -1,8 +1,6 @@
 
 # todo: write more detail as to what can be found in the intcal.data.frames
 
-# done: mix.ccurves now doesn't fail if a provided cc.dir folder does not yet exist. By default mix.ccurves now saves the calibration curves with values separated by a single space, not by a tab.
-
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server
 # save(intcal, file="~/Dropbox/devsoftware/rintcal/data/intcal.rda")

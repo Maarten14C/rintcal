@@ -1,3 +1,6 @@
+# rintcal 1.1.2
+* intcal.data now plots the relevant data also when BCAD=TRUE
+
 # rintcal 1.1.1
 * added an option as.F to `ccurve`, to read in curves as F14C instead of as C14. Can only be used using the 'official' intcal20 .14c files
 * now reads the 'official' intcal20 .14c files instead of the 3Col_ derivatives

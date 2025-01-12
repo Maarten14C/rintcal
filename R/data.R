@@ -226,18 +226,28 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     dat$cal <- 1950 - dat$cal
 
   # find the data corresponding to the period of interest
-  mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
-  maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
+  if(BCAD) {
+	  mindat <- dat$cal >= min(cal1, cal2)*1.01 # adding some extra space
+	  maxdat <- dat$cal <= max(cal1, cal2)/1.01 # adding some extra space	
+  } else {
+	  mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
+	  maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
+  }
+  
   dat <- dat[which( mindat * maxdat == 1),]
   if(length(select.sets) > 0)
     dat <- dat[which(dat$set %in% select.sets),]
 
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1)
-  if(BCAD)
+  if(BCAD) {
     cc.1[,1] <- 1950 - cc.1[,1]
-  mindat <- cc.1[,1] >= (min(cal1, cal2)/1.01) # adding some extra space
-  maxdat <- cc.1[,1] <= (max(cal1, cal2)*1.01) # adding some extra space
+    mindat <- cc.1[,1] >= (min(cal1, cal2)*1.01) # adding some extra space
+    maxdat <- cc.1[,1] <= (max(cal1, cal2)/1.01) # adding some extra space
+  } else {
+      mindat <- cc.1[,1] >= (min(cal1, cal2)/1.01) # adding some extra space
+      maxdat <- cc.1[,1] <= (max(cal1, cal2)*1.01) # adding some extra space
+  }
   cc.1 <- cc.1[which(mindat * maxdat == 1),]
   if(ka)
     cc.1 <- cc.1/1e3

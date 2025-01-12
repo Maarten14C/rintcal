@@ -1,7 +1,7 @@
 Package: rintcal
 Type: Package
 Title: Radiocarbon Calibration Curves 
-Version: 1.1.1
+Version: 1.1.2
 Author: Maarten Blaauw [aut, cre] (<https://orcid.org/0000-0002-5680-1515>)
 Authors@R: c(
   person("Maarten", "Blaauw", email = "maarten.blaauw@qub.ac.uk",
