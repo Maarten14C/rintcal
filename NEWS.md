@@ -1,3 +1,6 @@
+# rintcal 1.1.3
+* updated how as.F is used in `ccurve` and `intcal.data`, and added as.F to `mix.ccurves` and `glue.ccurves` 
+
 # rintcal 1.1.2
 * intcal.data now plots the relevant data also when BCAD=TRUE
 

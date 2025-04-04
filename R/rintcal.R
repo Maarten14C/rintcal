@@ -1,3 +1,7 @@
+# intcal.data has a warning Warning in min(x) : no non-missing arguments to min; returning Inf
+# Warning in max(x) : no non-missing arguments to max; returning -Inf
+# Warning: Error in plot.window: need finite 'ylim' values
+# and also still some edge data/curve missing compared to cal BP equivalent plots
 
 # todo: write more detail as to what can be found in the intcal.data.frames
 
@@ -89,7 +93,8 @@ new.ccdir <- function(cc.dir) {
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param resample The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE. 
 #' @param glue If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead
-#' @param as.F If loading a curve that contains 2 additional columns containing the D14C values, then these can be used instead of the curve's C14 ages and errors. Defaults to \code{as.F=FALSE}.
+#' @param as.F Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.
+#' @param as.D If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -124,7 +129,7 @@ new.ccdir <- function(cc.dir) {
 #' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE) {
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.D=FALSE) {
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
@@ -224,13 +229,13 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
   cc <- cc[order(cc[,1]),]
 
   # for files with D14C values (the 'official' intcal20 files ending in '14c', which have D14C and its error as their final two columns)
-  if(as.F) {
-    if(ncol(cc) != 5)
-      stop("this does not seem to be a file with 5 columns. Cannot calculate F14C values")
-	asF <- ((cc[,4]/1000) + 1) * exp(-cc[,1]/8267) # F
-    Fup <- (((cc[,4] + cc[,5])/1000) + 1) * exp(-cc[,1]/8267) # F + 1 sdev
-    cc <- cbind(cc[,1], asF, Fup-asF)
-  } else
+  if(as.D) 
+    if(ncol(cc) == 5) 
+      cc <- cbind(cc[, 1], cc[,4], cc[,5]) else
+        stop("this does not seem to be a file with 5 columns, cannot return the D14C values")
+  
+  if(as.F) 
+    cc <- cc_C14toF14C(cc) else
       cc <- cbind(cc[,1:3])
 
   if(resample > 0) {
@@ -258,6 +263,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' @param thiscurve2 As an alternative to using curves that come with the package, a tailor-made curve can be provided for the second curve (as three columns: cal BP, C14 age, error).
 #' @param postbomb1 Option to provide a postbomb curve for the first curve (defaults to FALSE).
 #' @param postbomb2 Option to provide a postbomb curve for the second curve (defaults to FALSE).
+#' @param as.F The curves can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in F14C space already.
 #' @param save Save the curve in the folder specified by dir. Defaults to FALSE.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row), e.g. \code{offset=cbind(100,0)}
 #' @param round The entries can be rounded to a specified amount of decimals. Defaults to no rounding.
@@ -274,7 +280,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ") {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, as.F=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ") {
   # place the IntCal curves within the same folder as the new curve:
   if(length(cc.dir) == 0)
     cc.dir <- tempdir()
@@ -284,10 +290,10 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
   file.copy(curves, cc.dir)
 
   if(length(thiscurve1) == 0)
-    cc1 <- ccurve(cc1, cc.dir=cc.dir, postbomb=postbomb1) else
+    cc1 <- ccurve(cc1, cc.dir=cc.dir, postbomb=postbomb1, as.F=as.F) else
       cc1 <- thiscurve1
   if(length(thiscurve2) == 0)
-    cc2 <- ccurve(cc2, cc.dir=cc.dir, postbomb=postbomb2) else
+    cc2 <- ccurve(cc2, cc.dir=cc.dir, postbomb=postbomb2, as.F=as.F) else
       cc2 <- thiscurve2
 
   cc2.mu <- approx(cc2[,1], cc2[,2], cc1[,1], rule=2)$y + offset[,1] # interpolate cc2 to the calendar years of cc1
@@ -318,16 +324,17 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
 #' @param postbomb The postbomb curve. Defaults to "NH1" (Hua et al. 2013)
 #' @param thisprebombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the prebomb curve (as three columns: cal BP, C14 age, error)
 #' @param thispostbombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the postbomb curve (as three columns: cal BP, C14 age, error)
+#' @param as.F The glued curve can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thisprebombcurve and/or thispostbombcurve, that these curves are in F14C space already.
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @examples
 #' my.cc <- glue.ccurves()
 #' @export
-glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), cc.dir=c()) {
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, cc.dir=c()) {
   if(length(thispostbombcurve) == 0)
-    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir) else
+    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F) else
       postbomb <- thispostbombcurve
   if(length(thisprebombcurve) == 0)
-    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir) else
+    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F) else
       prebomb <- thisprebombcurve
 
   glued <- rbind(postbomb, prebomb)
@@ -340,26 +347,43 @@ glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(
 
 
 
-# making a selection of realm functions available locally, to avoid need for circular loading of `rice`
-age.pMC <- function(mn, sdev=c(), ratio=100, decimals=5, lambda=8033) {
-  if(ratio !=100)
-    warning("age.pMC expects a ratio of 100. For ratio=1, use age.F14C")
-  y <- exp(-mn / lambda)
-  if(length(sdev) == 0)
-    signif(ratio*y, decimals) else {
-    sdev <- y - exp(-(mn + sdev) / lambda)
-    signif(ratio*cbind(y, sdev), decimals)
-  }
+### making a selection of realm functions available locally, to avoid need for circular loading of `rice`
+
+C14.F14C <- function(y, er, decimals=5, lambda=8033) {
+  y <- as.matrix(y)
+  er <- as.matrix(er)
+  if(length(y) != length(er))
+    stop("y and er must have the same length.")	
+  fy <- exp(-y / lambda)
+    
+  er1 <- abs(fy - exp(-(y - er) / lambda))
+  er2 <- abs(fy - exp(-(y + er) / lambda))
+  sdev <- pmax(er1, er2)
+  return(round(cbind(fy, sdev, deparse.level=0), decimals))
 }
 
-age.F14C <- function(mn, sdev=c(), decimals=5, lambda=8033) {
-  y <- exp(-mn / lambda)
-  if(length(sdev) == 0)
-    signif(y, decimals) else {
-      sdev <- y - exp(-(mn + sdev) / lambda)
-      signif(cbind(y, sdev), decimals)
-    }
-}
+
+
+C14.pMC <- function(y, er, ratio=100, decimals=5, lambda=8033) 
+  return(100*C14.F14C(y, er, decimals=decimals, lambda=lambda))
+
+
 
 F14C.D14C <- function(F14C, t)
   return( 1000 * ((F14C / exp(-t/8267)) - 1))
+
+
+
+# internal function, adapted from the rice package. Expects y and er
+cc_C14toF14C <- function(cc, decimals=5, lambda=8033) {
+  y <- cc[,2]
+  er <- cc[,3]
+  if(length(y) != length(er))
+    stop("y and er must have the same length.")	
+  fy <- exp(-y / lambda)
+ 
+  er1 <- abs(fy - exp(-(y - er) / lambda))
+  er2 <- abs(fy - exp(-(y + er) / lambda))
+  sdev <- pmax(er1, er2)
+  return(round(cbind(cc[,1], fy, sdev, deparse.level=0), decimals))
+}

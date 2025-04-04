@@ -10,7 +10,8 @@ ccurve(
   cc.dir = NULL,
   resample = 0,
   glue = FALSE,
-  as.F = FALSE
+  as.F = FALSE,
+  as.D = FALSE
 )
 }
 \arguments{
@@ -25,7 +26,9 @@ ccurve(
 
 \item{glue}{If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead}
 
-\item{as.F}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be used instead of the curve's C14 ages and errors. Defaults to \code{as.F=FALSE}.}
+\item{as.F}{Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.}
+
+\item{as.D}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.}
 }
 \value{
 The calibration curve (invisible).

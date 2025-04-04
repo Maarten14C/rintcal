@@ -228,7 +228,7 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   # find the data corresponding to the period of interest
   if(BCAD) {
 	  mindat <- dat$cal >= min(cal1, cal2)*1.01 # adding some extra space
-	  maxdat <- dat$cal <= max(cal1, cal2)/1.01 # adding some extra space	
+	  maxdat <- dat$cal <= max(cal1, cal2)/1.01 # adding some extra space
   } else {
 	  mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
 	  maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
@@ -254,27 +254,27 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
 
   # deal with different C14 'realms' (radiocarbon age, F14C, pMC or D14C)
   if("f" %in% tolower(realm)) {
-    F <- age.F14C(cc.1[,2], cc.1[,3])
+    F <- C14.F14C(cc.1[,2], cc.1[,3])
     cc.1[,2:3] <- F
-    F <- age.F14C(dat$c14, dat$c14sig)
+    F <- C14.F14C(dat$c14, dat$c14sig)
     dat$c14 <- F[,1]
     dat$c14sig <- F[,2]
   }
   if("p" %in% tolower(realm)) {
-    p <- age.pMC(cc.1[,2], cc.1[,3])
+    p <- C14.pMC(cc.1[,2], cc.1[,3])
     cc.1[,2:3] <- p
-    p <- age.pMC(dat$c14, dat$c14sig)
+    p <- C14.pMC(dat$c14, dat$c14sig)
     dat$c14 <- p[,1]
     dat$c14sig <- p[,2]
   }
   if("d" %in% tolower(realm)) {
-    F <- age.F14C(cc.1[,2], cc.1[,3])
+    F <- C14.F14C(cc.1[,2], cc.1[,3])
     Dmax <- F14C.D14C(F[,1]+F[,2], cc.1[,1])
     D <- F14C.D14C(F[,1], cc.1[,1])
     Dsd <- Dmax - D
     cc.1[,2:3] <- cbind(D, Dsd)
 
-    F <- age.F14C(dat$c14, dat$c14sig)
+    F <- C14.F14C(dat$c14, dat$c14sig)
     Dmax <- F14C.D14C(F[,1]+F[,2], dat$cal)
     D <- F14C.D14C(F[,1], dat$cal)
     dat$c14 <- D
@@ -291,15 +291,15 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     maxdat <- cc.2[,1] <= max(cal1, cal2)
 
     if("f" %in% tolower(realm)) {
-      F <- age.F14C(cc.2[,2], cc.2[,3])
+      F <- C14.F14C(cc.2[,2], cc.2[,3])
       cc.2[,2:3] <- F
     }
     if("p" %in% tolower(realm)) {
-      p <- age.pMC(cc.2[,2], cc.2[,3])
+      p <- C14.pMC(cc.2[,2], cc.2[,3])
       cc.2[,2:3] <- p
     }
     if("d" %in% tolower(realm)) {
-      F <- age.F14C(cc.2[,2], cc.2[,3])
+      F <- C14.F14C(cc.2[,2], cc.2[,3])
       Dmax <- F14C.D14C(F[,1]+F[,2], cc.2[,1])
       D <- F14C.D14C(F[,1], cc.2[,1])
       cc.2[,2:3] <- cbind(D, Dmax-D)
