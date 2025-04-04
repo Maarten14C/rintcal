@@ -227,11 +227,11 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
 
   # find the data corresponding to the period of interest
   if(BCAD) {
-	  mindat <- dat$cal >= min(cal1, cal2)*1.01 # adding some extra space
-	  maxdat <- dat$cal <= max(cal1, cal2)/1.01 # adding some extra space
+    mindat <- dat$cal >= min(cal1, cal2)*1.01 # adding some extra space
+    maxdat <- dat$cal <= max(cal1, cal2)/1.01 # adding some extra space
   } else {
-	  mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
-	  maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
+     mindat <- dat$cal >= min(cal1, cal2)/1.01 # adding some extra space
+     maxdat <- dat$cal <= max(cal1, cal2)*1.01 # adding some extra space
   }
   
   dat <- dat[which( mindat * maxdat == 1),]

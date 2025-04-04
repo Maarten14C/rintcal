@@ -10,7 +10,8 @@ glue.ccurves(
   thisprebombcurve = c(),
   thispostbombcurve = c(),
   as.F = FALSE,
-  cc.dir = c()
+  cc.dir = c(),
+  decimals = 8
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ glue.ccurves(
 \item{as.F}{The glued curve can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thisprebombcurve and/or thispostbombcurve, that these curves are in F14C space already.}
 
 \item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.}
+
+\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 5.}
 }
 \value{
 The custom-made curve (invisibly)

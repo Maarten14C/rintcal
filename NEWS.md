@@ -1,5 +1,6 @@
 # rintcal 1.1.3
 * updated how as.F is used in `ccurve` and `intcal.data`, and added as.F to `mix.ccurves` and `glue.ccurves` 
+* rounding is now done to 8 decimals by default (was 5). This will make transfers between C14 and F14C values slightly more precise. 
 
 # rintcal 1.1.2
 * intcal.data now plots the relevant data also when BCAD=TRUE

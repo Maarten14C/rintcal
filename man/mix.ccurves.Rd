@@ -18,7 +18,8 @@ mix.ccurves(
   save = FALSE,
   offset = cbind(0, 0),
   round = c(),
-  sep = " "
+  sep = " ",
+  decimals = 8
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ mix.ccurves(
 \item{round}{The entries can be rounded to a specified amount of decimals. Defaults to no rounding.}
 
 \item{sep}{Separator between fields (tab by default, "\\t")}
+
+\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 8.}
 }
 \value{
 A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.

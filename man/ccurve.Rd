@@ -11,7 +11,8 @@ ccurve(
   resample = 0,
   glue = FALSE,
   as.F = FALSE,
-  as.D = FALSE
+  as.D = FALSE,
+  decimals = 8
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ ccurve(
 \item{as.F}{Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.}
 
 \item{as.D}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.}
+
+\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 8.}
 }
 \value{
 The calibration curve (invisible).
