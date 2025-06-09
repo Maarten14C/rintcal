@@ -130,11 +130,11 @@ new.ccdir <- function(cc.dir) {
 ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.D=FALSE, decimals=8) {
   if(postbomb) {
     curves <- c(
-      "nh1" = "postbomb_NH1.14C",
-      "nh2" = "postbomb_NH2.14C",
-      "nh3" = "postbomb_NH3.14C",
-      "sh1-2" = "postbomb_SH1-2.14C",
-      "sh3" = "postbomb_SH3.14C",
+      "1" = "postbomb_NH1.14C", "nh1" = "postbomb_NH1.14C",
+      "2" = "postbomb_NH2.14C", "nh2" = "postbomb_NH2.14C",
+      "3" = "postbomb_NH3.14C", "nh3" = "postbomb_NH3.14C",
+      "4" = "postbomb_SH1-2.14C", "sh1-2" = "postbomb_SH1-2.14C",
+      "5" = "postbomb_SH3.14C", "sh3" = "postbomb_SH3.14C",
       "nh1_monthly" = "postbomb_NH1_monthly.14C",
       "nh2_monthly" = "postbomb_NH2_monthly.14C",
       "nh3_monthly" = "postbomb_NH3_monthly.14C",
@@ -144,8 +144,9 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
       "levinkromer" = "LevinKromer.14C",
       "santos" = "Santos.14C",
       "jungfraujoch" = "Jungfraujoch.14C")
-    if(tolower(cc) %in% names(curves))
-      fl <- curves[[cc]] else
+      cc.file <- tolower(as.character(cc))
+    if(cc.file %in% names(curves))
+      fl <- curves[[cc.file]] else
         stop("cannot find this curve", call. = FALSE)
   } else {
       curves <- c(
@@ -177,41 +178,42 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
         "levinkromer" = "LevinKromer.14C",
         "santos" = "Santos.14C",
         "jungfraujoch" = "Jungfraujoch.14C")
-      if(tolower(cc) %in% names(curves))
-        fl <- curves[[as.character(tolower(cc))]] else
+        cc.file <- tolower(as.character(cc))
+        if(cc.file %in% names(curves))
+        fl <- curves[[cc.file]] else
           stop("cannot find this curve", call. = FALSE)
   }
 
   if(length(cc.dir) == 0) # then look into the package's inst/extdata folder
-    Cc <- system.file("extdata/", fl, package='rintcal') else
-      Cc <- file.path(cc.dir, fl)
+    read.cc <- system.file("extdata/", fl, package='rintcal') else
+      read.cc <- file.path(cc.dir, fl)
 
   if(fl %in% c("intcal20.14c", "marine20.14c", "shcal20.14c")) # skip first 11 lines and use commas 
-    cc <- fastread(Cc, skip=11, sep=",") else
-      cc <- fastread(Cc, skip=0, sep=" ")
+    cc.dat <- fastread(read.cc, skip=11, sep=",") else
+      cc.dat <- fastread(read.cc, skip=0, sep=" ")
 
   # the cal BP column should be increasing, i.e. most recent ages at the top 
-  cc <- cc[order(cc[,1]),]
+  cc.dat <- cc.dat[order(cc.dat[,1]),]
 
   # for files with D14C values (the 'official' intcal20 files ending in '14c', which have D14C and its error as their final two columns)
   if(as.D) 
-    if(ncol(cc) == 5) 
-      cc <- cbind(cc[, 1], cc[,4], cc[,5]) else
+    if(ncol(cc.dat) == 5) 
+      cc.dat <- cbind(cc.dat[, 1], cc.dat[,4], cc.dat[,5]) else
         stop("this does not seem to be a file with 5 columns, cannot return the D14C values")
   
   if(as.F || as.pMC)
-    cc <- cc_C14toF14C(cc, decimals=decimals) else
-      cc <- cbind(cc[,1:3])
+    cc.dat <- cc_C14toF14C(cc.dat, decimals=decimals) else
+      cc.dat <- cbind(cc.dat[,1:3])
   if(as.pMC)
-    cc[,2:3] <- 100 * cc[,2:3]
+    cc.dat[,2:3] <- 100 * cc.dat[,2:3]
 
   if(resample > 0) {
-    yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)
-    mu <- approx(cc[,1], cc[,2], yr)$y
-    er <- approx(cc[,1], cc[,3], yr)$y
-    cc <- cbind(yr, mu, er)
+    yr <- seq(min(cc.dat[,1]), max(cc.dat[,1]), by=resample)
+    mu <- approx(cc.dat[,1], cc.dat[,2], yr)$y
+    er <- approx(cc.dat[,1], cc.dat[,3], yr)$y
+    cc.dat <- cbind(yr, mu, er)
   }
-  invisible(cc)
+  invisible(cc.dat)
 }
 
 
