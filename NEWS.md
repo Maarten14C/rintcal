@@ -1,6 +1,14 @@
+# rintcal 1.2.0
+* The files of all C14 curves are now separated by spaces (some postbomb curves had tabs instead)
+* new option to use as.pMC in the functions `ccurve`, `mix.ccurves` and `glue.ccurves`
+* added Prof. Christopher Bronk Ramsey as contributor (he kindly wrote much of the code to extract information from the intcal data)
+* added postbomb data 2016-2023 from Jungfraujoch (Emmenegger et al. 2024, doi:10.1017/RDC.2016.62)
+* reduced the amount of nested 'if's in the function `ccurve`. 
+* `intcal.data` now also plots data at the extremes of the age axis
+
 # rintcal 1.1.3
 * updated how as.F is used in `ccurve` and `intcal.data`, and added as.F to `mix.ccurves` and `glue.ccurves` 
-* rounding is now done to 8 decimals by default (was 5). This will make transfers between C14 and F14C values slightly more precise. 
+* rounding is now done to 8 decimals by default (was 5). This will make transfers between C14 and F14C values slightly more precise
 
 # rintcal 1.1.2
 * intcal.data now plots the relevant data also when BCAD=TRUE

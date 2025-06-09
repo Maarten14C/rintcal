@@ -1,7 +1,4 @@
-# intcal.data has a warning Warning in min(x) : no non-missing arguments to min; returning Inf
-# Warning in max(x) : no non-missing arguments to max; returning -Inf
-# Warning: Error in plot.window: need finite 'ylim' values
-# and also still some edge data/curve missing compared to cal BP equivalent plots
+# intcal.data has some edge data/curve missing compared to cal BP equivalent plots
 
 # todo: write more detail as to what can be found in the intcal.data.frames
 
@@ -94,6 +91,7 @@ new.ccdir <- function(cc.dir) {
 #' @param resample The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE. 
 #' @param glue If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead
 #' @param as.F Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.
+#' @param as.pMC Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.
 #' @param as.D If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.
 #' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 8.
 #' @examples
@@ -103,6 +101,8 @@ new.ccdir <- function(cc.dir) {
 #' marine98 <- ccurve("Marine98")
 #' pb.sh3 <- ccurve("sh3")
 #' @references
+#' Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02, ICOS RI, \url{https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY}
+#'
 #' Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100} 
 #'
 #' Heaton et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62, 779-820, \doi{10.1017/RDC.2020.68}
@@ -128,103 +128,69 @@ new.ccdir <- function(cc.dir) {
 #' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000-0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
 #' 
 #' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
-
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.D=FALSE, decimals=8) {
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.D=FALSE, decimals=8) {
   if(postbomb) {
-    if(cc==1 || tolower(cc) == "nh1")
-      fl <- "postbomb_NH1.14C" else
-      if(cc==2 || tolower(cc) == "nh2")
-        fl <- "postbomb_NH2.14C" else
-        if(cc==3 || tolower(cc) == "nh3")
-          fl <- "postbomb_NH3.14C" else
-          if(cc==4 || tolower(cc) == "sh1-2")
-            fl <- "postbomb_SH1-2.14C" else
-            if(cc==5 || tolower(cc) == "sh3")
-              fl <- "postbomb_SH3.14C" else
-              if(tolower(cc) == "nh1_monthly")
-                fl <- "postbomb_NH1_monthly.14C" else
-                if(tolower(cc) == "nh2_monthly")
-                  fl <- "postbomb_NH2_monthly.14C" else
-                  if(tolower(cc) == "nh3_monthly")
-                    fl <- "postbomb_NH3_monthly.14C" else
-                    if(tolower(cc) == "sh1-2_monthly")
-                      fl <- "postbomb_SH1-2_monthly.14C" else
-                      if(tolower(cc) == "sh3_monthly")
-                        fl <- "postbomb_SH3_monthly.14C" else
-                        if(tolower(cc) == "kure")
-                          fl <- "Kure.14C" else
-                          if(tolower(cc) == "levinkromer")
-                            fl <- "LevinKromer.14C" else
-                            if(tolower(cc) == "santos")
-                            fl <- "Santos.14C" else
-                              stop("cannot find this postbomb curve\n", call.=FALSE)
-  } else
-    if(cc==1 || tolower(cc) == "intcal20")
-      fl <- "intcal20.14c" else # was 3Col_intcal20.14C
-      if(cc==2 || tolower(cc) == "marine20")
-        fl <- "marine20.14c" else # was 3Col_marine20.14C
-        if(cc==3 || tolower(cc) == "shcal20")
-          fl <- "shcal20.14c" else # was 3Col_shcal20.14C
-          if(cc==4 || tolower(cc) == "mixed")
-            fl <- "mixed.14C" else
-            if(tolower(cc) == "intcal13")
-              fl <- "3Col_intcal13.14C" else
-              if(tolower(cc) == "marine13")
-                fl <- "3Col_marine13.14C" else
-                if(tolower(cc) == "shcal13")
-                  fl <- "3Col_shcal13.14C" else
-                  if(tolower(cc) == "intcal09")
-                    fl <- "3Col_intcal09.14C" else
-                    if(tolower(cc) == "marine09")
-                      fl <- "3Col_marine09.14C" else
-                      if(tolower(cc) == "intcal04")
-                        fl <- "3Col_intcal04.14C" else
-                        if(tolower(cc) == "marine04")
-                          fl <- "3Col_marine04.14C" else
-                          if(tolower(cc) == "intcal98")
-                            fl <- "3Col_intcal98.14C" else
-                            if(tolower(cc) == "marine98")
-                              fl <- "3Col_marine98.14C" else
-                              if(tolower(cc) == "nh1")
-                                fl <- "postbomb_NH1.14C" else
-                                if(tolower(cc) == "nh2")
-                                  fl <- "postbomb_NH2.14C" else
-                                  if(tolower(cc) == "nh3")
-                                    fl <- "postbomb_NH3.14C" else
-                                    if(tolower(cc) == "sh1-2")
-                                      fl <- "postbomb_SH1-2.14C" else
-                                      if(tolower(cc) == "sh3")
-                                        fl <- "postbomb_SH3.14C" else
-                                         if(tolower(cc) == "nh1_monthly")
-                                          fl <- "postbomb_NH1_monthly.14C" else
-                                          if(tolower(cc) == "nh2_monthly")
-                                            fl <- "postbomb_NH2_monthly.14C" else
-                                            if(tolower(cc) == "nh3_monthly")
-                                              fl <- "postbomb_NH3_monthly.14C" else
-                                              if(tolower(cc) == "sh1-2_monthly")
-                                                fl <- "postbomb_SH1-2_monthly.14C" else
-                                                if(tolower(cc) == "sh3_monthly")
-                                                  fl <- "postbomb_SH3_monthly.14C" else
-                                                  if(tolower(cc) == "kure")
-                                                    fl <- "kure.14C" else
-                                                    if(tolower(cc) == "levinkromer")
-                                                      fl <- "LevinKromer.14C" else
-                                                      if(tolower(cc) == "santos")
-                                                        fl <- "Santos.14C" else
-                                                        if(tolower(cc) == "mixed")
-                                                          fl <- "mixed.14C" else
-                                                          if(tolower(cc) == "notcal04")
-                                                            fl <- "NOTCal04.14C" else
-                                                              stop("cannot find this curve", call.=FALSE)
+    curves <- c(
+      "nh1" = "postbomb_NH1.14C",
+      "nh2" = "postbomb_NH2.14C",
+      "nh3" = "postbomb_NH3.14C",
+      "sh1-2" = "postbomb_SH1-2.14C",
+      "sh3" = "postbomb_SH3.14C",
+      "nh1_monthly" = "postbomb_NH1_monthly.14C",
+      "nh2_monthly" = "postbomb_NH2_monthly.14C",
+      "nh3_monthly" = "postbomb_NH3_monthly.14C",
+      "sh1-2_monthly" = "postbomb_SH1-2_monthly.14C",
+      "sh3_monthly" = "postbomb_SH3_monthly.14C",
+      "kure" = "Kure.14C",
+      "levinkromer" = "LevinKromer.14C",
+      "santos" = "Santos.14C",
+      "jungfraujoch" = "Jungfraujoch.14C")
+    if(tolower(cc) %in% names(curves))
+      fl <- curves[[cc]] else
+        stop("cannot find this curve", call. = FALSE)
+  } else {
+      curves <- c(
+        "1" = "intcal20.14c", "intcal20" = "intcal20.14c",
+        "2" = "marine20.14c", "marine20" = "marine20.14c",
+        "3" = "shcal20.14c", "shcal20" = "shcal20.14c",
+        "4" = "mixed.14C",
+        "mixed" = "mixed.14C",
+        "intcal13" = "3Col_intcal13.14C",
+        "marine13" = "3Col_marine13.14C",
+        "shcal13" = "3Col_shcal13.14C",
+        "intcal09" = "3Col_intcal09.14C",
+        "marine09" = "3Col_marine09.14C",
+        "intcal04" = "3Col_intcal04.14C",
+        "marine04" = "3Col_marine04.14C",
+        "intcal98" = "3Col_intcal98.14C",
+        "marine98" = "3Col_marine98.14C",
+        "nh1" = "postbomb_NH1.14C",
+        "nh2" = "postbomb_NH2.14C",
+        "nh3" = "postbomb_NH3.14C",
+        "sh1-2" = "postbomb_SH1-2.14C",
+        "sh3" = "postbomb_SH3.14C",
+        "nh1_monthly" = "postbomb_NH1_monthly.14C",
+        "nh2_monthly" = "postbomb_NH2_monthly.14C",
+        "nh3_monthly" = "postbomb_NH3_monthly.14C",
+        "sh1-2_monthly" = "postbomb_SH1-2_monthly.14C",
+        "sh3_monthly" = "postbomb_SH3_monthly.14C",
+        "kure" = "Kure.14C",
+        "levinkromer" = "LevinKromer.14C",
+        "santos" = "Santos.14C",
+        "jungfraujoch" = "Jungfraujoch.14C")
+      if(tolower(cc) %in% names(curves))
+        fl <- curves[[as.character(tolower(cc))]] else
+          stop("cannot find this curve", call. = FALSE)
+  }
 
   if(length(cc.dir) == 0) # then look into the package's inst/extdata folder
-    cc <- system.file("extdata/", fl, package='rintcal') else
-      cc <- file.path(cc.dir, fl)
+    Cc <- system.file("extdata/", fl, package='rintcal') else
+      Cc <- file.path(cc.dir, fl)
 
   if(fl %in% c("intcal20.14c", "marine20.14c", "shcal20.14c")) # skip first 11 lines and use commas 
-    cc <- fastread(cc, skip=11, sep=",") else
-      cc <- fastread(cc, skip=0, sep=" ")
+    cc <- fastread(Cc, skip=11, sep=",") else
+      cc <- fastread(Cc, skip=0, sep=" ")
 
   # the cal BP column should be increasing, i.e. most recent ages at the top 
   cc <- cc[order(cc[,1]),]
@@ -235,9 +201,11 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
       cc <- cbind(cc[, 1], cc[,4], cc[,5]) else
         stop("this does not seem to be a file with 5 columns, cannot return the D14C values")
   
-  if(as.F) 
+  if(as.F || as.pMC)
     cc <- cc_C14toF14C(cc, decimals=decimals) else
       cc <- cbind(cc[,1:3])
+  if(as.pMC)
+    cc[,2:3] <- 100 * cc[,2:3]
 
   if(resample > 0) {
     yr <- seq(min(cc[,1]), max(cc[,1]), by=resample)
@@ -265,6 +233,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' @param postbomb1 Option to provide a postbomb curve for the first curve (defaults to FALSE).
 #' @param postbomb2 Option to provide a postbomb curve for the second curve (defaults to FALSE).
 #' @param as.F The curves can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in F14C space already.
+#' @param as.pMC The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.
 #' @param save Save the curve in the folder specified by dir. Defaults to FALSE.
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row), e.g. \code{offset=cbind(100,0)}
 #' @param round The entries can be rounded to a specified amount of decimals. Defaults to no rounding.
@@ -282,7 +251,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, as.F=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ", decimals=8) {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, as.F=FALSE, as.pMC=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ", decimals=8) {
   # place the IntCal curves within the same folder as the new curve:
   if(length(cc.dir) == 0)
     cc.dir <- tempdir()
@@ -292,10 +261,10 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
   file.copy(curves, cc.dir)
 
   if(length(thiscurve1) == 0)
-    cc1 <- ccurve(cc1, cc.dir=cc.dir, postbomb=postbomb1, as.F=as.F, decimals=decimals) else
+    cc1 <- ccurve(cc1, cc.dir=cc.dir, postbomb=postbomb1, as.F=as.F, as.pMC=as.pMC, decimals=decimals) else
       cc1 <- thiscurve1
   if(length(thiscurve2) == 0)
-    cc2 <- ccurve(cc2, cc.dir=cc.dir, postbomb=postbomb2, as.F=as.F, decimals=decimals) else
+    cc2 <- ccurve(cc2, cc.dir=cc.dir, postbomb=postbomb2, as.F=as.F, as.pMC=as.pMC, decimals=decimals) else
       cc2 <- thiscurve2
 
   cc2.mu <- approx(cc2[,1], cc2[,2], cc1[,1], rule=2)$y + offset[,1] # interpolate cc2 to the calendar years of cc1
@@ -327,17 +296,18 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
 #' @param thisprebombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the prebomb curve (as three columns: cal BP, C14 age, error)
 #' @param thispostbombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the postbomb curve (as three columns: cal BP, C14 age, error)
 #' @param as.F The glued curve can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thisprebombcurve and/or thispostbombcurve, that these curves are in F14C space already.
+#' @param as.pMC The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 5.
 #' @examples
 #' my.cc <- glue.ccurves()
 #' @export
-glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, cc.dir=c(), decimals=8) {
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, cc.dir=c(), decimals=8) {
   if(length(thispostbombcurve) == 0)
-    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, decimals=decimals) else
+    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, decimals=decimals) else
       postbomb <- thispostbombcurve
   if(length(thisprebombcurve) == 0)
-    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, decimals=decimals) else
+    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, decimals=decimals) else
       prebomb <- thisprebombcurve
 
   glued <- rbind(postbomb, prebomb)

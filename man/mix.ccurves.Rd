@@ -11,6 +11,7 @@ mix.ccurves(
   postbomb1 = FALSE,
   postbomb2 = FALSE,
   as.F = FALSE,
+  as.pMC = FALSE,
   name = "mixed.14C",
   cc.dir = c(),
   thiscurve1 = c(),
@@ -34,6 +35,8 @@ mix.ccurves(
 \item{postbomb2}{Option to provide a postbomb curve for the second curve (defaults to FALSE).}
 
 \item{as.F}{The curves can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in F14C space already.}
+
+\item{as.pMC}{The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.}
 
 \item{name}{Name of the new calibration curve.}
 

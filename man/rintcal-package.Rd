@@ -11,5 +11,10 @@ The IntCal20 radiocarbon calibration curves (Reimer et al. 2020 \doi{10.1017/RDC
 \author{
 \strong{Maintainer}: Maarten Blaauw \email{maarten.blaauw@qub.ac.uk} (\href{https://orcid.org/0000-0002-5680-1515}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Christopher Bronk Ramsey \email{christopher.ramsey@arch.ox.ac.uk} (\href{https://orcid.org/0000-0002-8641-9309}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}

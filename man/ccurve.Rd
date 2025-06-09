@@ -11,6 +11,7 @@ ccurve(
   resample = 0,
   glue = FALSE,
   as.F = FALSE,
+  as.pMC = FALSE,
   as.D = FALSE,
   decimals = 8
 )
@@ -28,6 +29,8 @@ ccurve(
 \item{glue}{If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead}
 
 \item{as.F}{Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.}
+
+\item{as.pMC}{Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.}
 
 \item{as.D}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.}
 
@@ -50,6 +53,8 @@ marine98 <- ccurve("Marine98")
 pb.sh3 <- ccurve("sh3")
 }
 \references{
+Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02, ICOS RI, \url{https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY}
+
 Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100} 
 
 Heaton et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62, 779-820, \doi{10.1017/RDC.2020.68}
