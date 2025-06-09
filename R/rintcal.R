@@ -1,5 +1,3 @@
-# intcal.data has some edge data/curve missing compared to cal BP equivalent plots
-
 # todo: write more detail as to what can be found in the intcal.data.frames
 
 # during package development, the data/intcal.rda file was written as such:
