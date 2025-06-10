@@ -128,6 +128,8 @@ new.ccdir <- function(cc.dir) {
 #' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 #' @export
 ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.D=FALSE, decimals=8) {	
+  if(sum(c(as.F, as.pMC, as.D)) > 1)
+    stop("only one of as.F, as.pMC or as.D can be set to TRUE")
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
