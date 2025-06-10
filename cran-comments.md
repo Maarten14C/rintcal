@@ -6,4 +6,5 @@
 
 0 Errors | 0 Warnings | 0 Notes
 
-Reverse dependencies (to clam, rice, rbacon, rplum, coffee; all maintained by me) were tested and no issues were identified.
+The bug causing the Error in the Vignette of `rice` has been repaired. Apologies for the oversight. 
+

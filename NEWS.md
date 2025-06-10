@@ -1,3 +1,6 @@
+# rintcal 1.2.1
+* undid the un-nesting of if-loops in `ccurve` from version 1.2.0, owing to it causing a bug in `rice`.
+
 # rintcal 1.2.0
 * The files of all C14 curves are now separated by spaces (some postbomb curves had tabs instead)
 * new option to use as.pMC in the functions `ccurve`, `mix.ccurves` and `glue.ccurves`
