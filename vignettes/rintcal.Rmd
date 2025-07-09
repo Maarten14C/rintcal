@@ -122,7 +122,6 @@ firstrecord <- intcal.extract.record(1)
 intcal.plot.record(1)
 ```
 
-
 ## Manipulations
 
 You can also combine calibration curves, e.g. a 40%:60% mix of Intcal20 and Marine20 with a 100+-20 year offset for the latter. If save is set to TRUE, the resulting curve will be saved with the name mixed.14C, in a folder together with the calibration curves. The name of this folder is listed, and it can be changed by specifying the option 'cc.dir'.
