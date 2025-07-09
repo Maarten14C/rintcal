@@ -3,6 +3,7 @@
 
 #' @importFrom utils read.table write.table packageName
 #' @importFrom stats approx dnorm median weighted.mean
+#' @importFrom graphics rect
 #' @importFrom grDevices rgb extendrange grey rainbow
 #' @importFrom graphics axis par legend lines points polygon segments text mtext abline image
 #' @importFrom data.table fread fwrite

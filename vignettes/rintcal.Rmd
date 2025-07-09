@@ -109,12 +109,19 @@ unique(dat$set)
 dat <- intcal.data(20e3, 25e3, select.sets=c(109, 120), data.cols=c(1,2))
 ```
 
-
 It is also possible to plot the data in other `realms` such as pMC (`p`), F<sup>14</sup>C (`F`) or &Delta;<sup>14</sup>C (`d`), e.g.:
 
 ```{r, fig.width=5, fig.asp=1}
 intcal.data(20e3, 25e3, realm="d")
 ```
+
+Below are functions to extract and plot individual IntCal datasets, for example the first dataset within the 'intcal' dataset:
+
+```{r, fig.width=5, fig.asp=1}
+firstrecord <- intcal.extract.record(1)
+intcal.plot.record(1)
+```
+
 
 ## Manipulations
 

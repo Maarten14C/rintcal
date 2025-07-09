@@ -1,8 +1,13 @@
+# rintcal 1.3.0
+* `glue.ccurves` now has an option `as.D`.
+* new function `intcal.extract.record` which extracts a single intcal record.
+* new function `intcal.plot.record` to plot the calendar and C-14 ages of a single intcal record.
+
 # rintcal 1.2.1
 * undid the un-nesting of if-loops in `ccurve` from version 1.2.0, owing to it causing a bug in `rice`.
 
 # rintcal 1.2.0
-* The files of all C14 curves are now separated by spaces (some postbomb curves had tabs instead)
+* the files of all C14 curves are now separated by spaces (some postbomb curves had tabs instead)
 * new option to use as.pMC in the functions `ccurve`, `mix.ccurves` and `glue.ccurves`
 * added Prof. Christopher Bronk Ramsey as contributor (he kindly wrote much of the code to extract information from the intcal data)
 * added postbomb data 2016-2023 from Jungfraujoch (Emmenegger et al. 2024, doi:10.1017/RDC.2016.62)

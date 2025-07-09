@@ -11,6 +11,7 @@ glue.ccurves(
   thispostbombcurve = c(),
   as.F = FALSE,
   as.pMC = FALSE,
+  as.D = FALSE,
   cc.dir = c(),
   decimals = 8
 )
@@ -27,6 +28,8 @@ glue.ccurves(
 \item{as.F}{The glued curve can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thisprebombcurve and/or thispostbombcurve, that these curves are in F14C space already.}
 
 \item{as.pMC}{The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.}
+
+\item{as.D}{The curves can be returned as D14C values instead of the default C14. Make sure that if as.D=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in D14C space already.}
 
 \item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.}
 

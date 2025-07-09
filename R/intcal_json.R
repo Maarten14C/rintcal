@@ -20,6 +20,183 @@
 
 
 
+#' @name intcal.extract.record
+#' @title Extract an IntCal20 record
+#' @description Extract one of the 140 records contributing to the IntCal20 calibration curves 
+#' @return The most relevant information for each record (where available, the record and site names, intcal series and division number, country, longitude, latitude, taxon, dois of publications, notes, calendar information (e.g., dendrochronology) and radiocarbon data)
+#' @param i The IntCal record, in the order as they appear in the IntCal20 json file (140 entries). Must be a single integer between 1 and 140. 
+#' @examples
+#'  record_1 <- intcal.extract.record(1)
+#' @export
+intcal.extract.record <- function(i) {
+  if(!"intcal" %in% ls(.GlobalEnv))
+    intcal <- rintcal::intcal
+  if(!exists('intcal'))
+    stop("please load the intcal data first, with 'data(intcal)'")
+  
+  if(!is.numeric(i) || length(i) != 1 || i < 1 || i > 140)
+    stop("Argument 'i' must be a single integer between 1 and 140.")
+  
+  dat <- intcal$records[[i]]
+  data <- list(calendar=c(), radiocarbon=c())	
+  data$record <- dat$record
+  data$site <- dat$site
+  data$country	<- dat$country
+  data$longitude <- dat$longitude
+  data$latitude <- dat$latitude
+  data$taxon <- dat$taxon  
+  data$intcal_set <- dat$file_data$series_list[[1]]$intcal_set
+  data$intcal_division <- dat$file_data$series_list[[1]]$intcal_division
+  data$doi <- dat$file_data$series_list[[1]]$refs
+  data$notes <- dat$file_data$series_list[[1]]$notes 
+  if(length(dat$file_data$series_list) > 1)
+    data$calendar_notes <- dat$file_data$series_list[[2]]$notes else
+      data$calendar_notes <- NA
+  if(length(dat$file_data$series_list) > 2) {
+    data$calendar <- dat$file_data$series_list[[3]]$data
+    data$from <- dat$file_data$series_list[[3]]$t_from
+    data$to <- dat$file_data$series_list[[3]]$t_to
+    data$ring_count <- dat$file_data$series_list[[3]]$ring_count
+  } else {
+	  data$calendar <- NA
+	  data$from <- NA	
+	  data$to <- NA
+	  data$ring_count <- NA	  	
+    }
+  data$radiocarbon <- dat$file_data$series_list[[1]]$data
+  invisible(data)
+}
+
+
+
+#' @name intcal.plot.record
+#' @title Plot an IntCal20 record
+#' @description Plot the calendar and radiocarbon data of an IntCal20 record
+#' @return A plot of the calendar and radiocarbon ages, indicating uncertainties (error bars) and age blocks (e.g, for trees where blocks of >1 rings were dated) where relevant.
+#' @param i The IntCal record, in the order as they appear in the IntCal20 json file (140 entries). Must be a single integer between 1 and 140. 
+#' @param col Colour of the symbols. Defaults to semi-transparent blue, \code{col=rgb(0,0,1,.5)}.
+#' @param pch Symbol of the dates. Defaults to a filled circle, pch=20.
+#' @param pch.cex Size of the symbol. Defaults to 0.3.
+#' @param lwd Line width of the error bars. Defaults to 1.
+#' @param lty Line type of the error bars. Defaults to continuous, 1. 
+#' @param cal.lim Limits of the horizontal/calendar scale. Calculated automatically by default.
+#' @param C14.lim Limits of the C-14 scale. Calculated automatically by default
+#' @param add Make a new plot (default, \code{add=FALSE}). The alternative is to add to an existing plot.
+#' @param cal.lab Label of the calendar axis. Defaults to 'cal BP' or 'kcal BP'.
+#' @param C14.lab Label of the C-14 axis. Defaults to '14C BP' or '14C kBP'
+#' @param ka Whether or not to use ka (thousands of years). Defaults to FALSE (i.e., cal BP).
+#' @param as.F Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.
+#' @param as.pMC Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.
+#' @param draw.z Whether or not to plot the spread in calendar years of blocks of (mostly) tree rings. This is for tree-ring datasets where individual dates were taken on blocks of rings covering e.g. 10 or 20 years. 
+#' @param draw.calsigma Whether or not to plot the calendar age uncertainties where available.
+#' @param grid Whether or not to add a grid to the plot. 
+#' @param grid.lty Line type of the grid.
+#' @param grid.col Colour of the grid.
+#' @param draw.cc Whether or not to also plot the calibration curve. Defaults to plotting the IntCal20 calibration curve, but can also be set to 2 (Marine20), 3 (SHCal20), or NA (none).
+#' @param cc.col Colour of the calibration curve. Defaults to semi-transparent darkgreen, \code{cc.col=rgb(0,.5,0,.5)}.
+#' @param legend.loc Location of the legend. Defaults to top right. Set to NA if you don't want to plot the legend. 
+#' @param legend.cex Relative size of the font of the legend. Defaults to 0.5.
+#' @seealso \code{\link{intcal.extract.record}}
+#' @examples
+#'  record_1 <- intcal.plot.record(1)
+#'  record_10 <- intcal.plot.record(10, add=TRUE, col=rgb(1,0,0,.5), legend.loc="bottomright")
+#' @export
+intcal.plot.record <- function(i, col=rgb(0, 0, 1, .5), pch=19, pch.cex=.3, lwd=1, lty=1, cal.lim=c(), C14.lim=c(), add=FALSE, cal.lab=c(), C14.lab=c(), ka=FALSE, as.F=FALSE, as.pMC=FALSE, draw.z=TRUE, draw.calsigma=TRUE, grid=FALSE, grid.lty=2, grid.col=rgb(0,0,0,.5), draw.cc=1, cc.col=rgb(0,.5,0, .5), legend.loc="topleft", legend.cex=.5) {
+  if(!"intcal" %in% ls(.GlobalEnv))
+    intcal <- rintcal::intcal
+  if(!exists('intcal'))
+    stop("please load the intcal data first, with 'data(intcal)'")	
+
+  dat <- intcal.extract.record(i)
+  if(!is.na(draw.cc)) 
+    if(draw.cc>0 && draw.cc<4)
+      cc <- ccurve(draw.cc, as.F=as.F, as.pMC=as.pMC) else cc <- NA
+
+  if(as.F || as.pMC) {
+	translated <- C14.F14C(dat$radiocarbon$r_date, dat$radiocarbon$r_date_sigma)
+	if(as.pMC)
+      translated <- 100 * translated
+	dat$radiocarbon$r_date <- translated[,1]
+	dat$radiocarbon$r_date_sigma <- translated[,2]
+  }
+
+  if(length(cal.lim) == 0) {
+    cal.lim <- range(dat$radiocarbon$calage-dat$radiocarbon$calage_range,
+      dat$radiocarbon$calage+dat$radiocarbon$calage_range)
+	C14.lim <- range(dat$radiocarbon$r_date-dat$radiocarbon$r_date_sigma,
+      dat$radiocarbon$r_date+dat$radiocarbon$r_date_sigma)
+	
+    if(!is.na(draw.cc)) {
+        within <- min(which(cc[,1] >= min(cal.lim))):max(which(cc[,1] <= max(cal.lim)))
+        C14.lim <- range(C14.lim, cc[within,2]-cc[within,3], cc[within,2]+cc[within,3])	
+    }
+  }
+
+  if(!add) {  
+    if(length(cal.lab) == 0)
+      if(ka)
+        cal.lab <- "kcal BP" else
+          cal.lab <- "cal BP"
+    if(length(C14.lab) == 0)
+      if(ka)
+        C14.lab <- "C14 kBP" else
+          C14.lab <- "C14 BP"			 	 
+    plot(0, type="n", pch=pch, xlim=cal.lim, xlab=cal.lab, ylim=C14.lim, ylab=C14.lab)
+    if(grid)
+      grid(lty=grid.lty, col=grid.col)	 
+  }	
+  points(dat$radiocarbon$calage, dat$radiocarbon$r_date, pch=pch, col=col, cex=pch.cex)
+  
+  # check what uncertainties are present: could be z, sigma, or z and sigma
+  
+  has.z <- any(dat$radiocarbon$z_range > 0, na.rm=TRUE)
+  has.calsigma <- any(dat$radiocarbon$calage_sigmaC > 0, na.rm=TRUE)
+  
+  if(draw.z)
+    if(has.z) {
+      these <- which(dat$radiocarbon$z_range > 0)
+	  width <- dat$radiocarbon$z_range/2
+      rect(dat$radiocarbon$calage[these]-width[these], 
+        dat$radiocarbon$r_date[these]-dat$radiocarbon$r_date_sigma[these],
+        dat$radiocarbon$calage[these]+width[these],
+	    dat$radiocarbon$r_date[these]+dat$radiocarbon$r_date_sigma[these],
+        col=col, border=NA)	
+        if(length(these) < length(dat$radiocarbon$z_range))
+          segments(dat$radiocarbon$calage[-these],
+            dat$radiocarbon$r_date[-these]-dat$radiocarbon$r_date_sigma[-these], 
+            dat$radiocarbon$calage[-these],
+            dat$radiocarbon$r_date[-these]+dat$radiocarbon$r_date_sigma[-these], col=col)	
+    } else {
+      segments(dat$radiocarbon$calage, dat$radiocarbon$r_date-dat$radiocarbon$r_date_sigma,
+        dat$radiocarbon$calage, dat$radiocarbon$r_date+dat$radiocarbon$r_date_sigma, 
+        col=col, lwd=lwd, lty=lty)
+    }
+
+  if(draw.calsigma) 
+    if(has.calsigma) {
+      these <- which(dat$radiocarbon$calage_sigmaC > 0)
+  	  if(length(these) > 0)
+        segments(dat$radiocarbon$calage[these]-dat$radiocarbon$calage_sigmaC[these], 
+          dat$radiocarbon$r_date, dat$radiocarbon$calage[these]+dat$radiocarbon$calage_sigmaC[these],
+          dat$radiocarbon$r_date, col=col, lty=lty, lwd=lwd)	
+    }
+
+  if(!is.na(draw.cc)) {
+    cc.pol <- cbind(c(cc[,1], rev(cc[,1])), c(cc[,2]-cc[,3], rev(cc[,2]+cc[,3])))
+    polygon(cc.pol, col=cc.col, border=cc.col)  	
+  }	
+    
+  if(!is.na(legend.loc)) {
+    txt <- paste0(dat$record, ", ", dat$country, "\n",
+	if(dat$taxon !="") {paste(dat$taxon[1], "\n")}, dat$intcal_set, "_", dat$intcal_division, "\n")
+    legend(legend.loc, legend=txt, bty="n", cex=legend.cex, text.col=col)
+  }
+
+  invisible(dat)
+}
+
+
+
 #' @name intcal.read.data
 #' @title Read data underlying the IntCal curves.
 #' @description Download the json file that contains the IntCal20 radiocarbon calibration curves and the contributing data series.

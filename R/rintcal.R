@@ -1,11 +1,13 @@
-# todo: write more detail as to what can be found in the intcal.data.frames
+# todo: 
+
+# update Vignette, cover all functions
 
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server
 # save(intcal, file="~/Dropbox/devsoftware/rintcal/data/intcal.rda")
 # tools::resaveRdaFiles("~/Dropbox/devsoftware/rintcal/data/intcal.rda") # to compress
-# some platforms complain about non-ASCII characters in the datafilestringi::stri_enc_mark
 
+# some platforms complain about non-ASCII characters in the datafilestringi::stri_enc_mark
 # stringi::stri_enc_mark(intcal)
 # [1] "ASCII"  "native" "ASCII"  "ASCII"  "native" "ASCII" 
 # stringi::stri_enc_mark(intcal[[2]]) shows which entries contain non-ASCII chars
@@ -161,65 +163,65 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
                                 fl <- "Jungfraujoch.14C" else
                                   stop("cannot find this postbomb curve\n", call.=FALSE)
     }  else 
-	    if(cc==1 || tolower(cc) == "intcal20")
-	      fl <- "intcal20.14c" else # was 3Col_intcal20.14C
-	      if(cc==2 || tolower(cc) == "marine20")
-	        fl <- "marine20.14c" else # was 3Col_marine20.14C
-	        if(cc==3 || tolower(cc) == "shcal20")
-	          fl <- "shcal20.14c" else # was 3Col_shcal20.14C
-	          if(cc==4 || tolower(cc) == "mixed")
-	            fl <- "mixed.14C" else
-	            if(tolower(cc) == "intcal13")
-	              fl <- "3Col_intcal13.14C" else
-	              if(tolower(cc) == "marine13")
-	                fl <- "3Col_marine13.14C" else
-	                if(tolower(cc) == "shcal13")
-	                  fl <- "3Col_shcal13.14C" else
-	                  if(tolower(cc) == "intcal09")
-	                    fl <- "3Col_intcal09.14C" else
-	                    if(tolower(cc) == "marine09")
-	                      fl <- "3Col_marine09.14C" else
-	                      if(tolower(cc) == "intcal04")
-	                        fl <- "3Col_intcal04.14C" else
-	                        if(tolower(cc) == "marine04")
-	                          fl <- "3Col_marine04.14C" else
-	                          if(tolower(cc) == "intcal98")
-	                            fl <- "3Col_intcal98.14C" else
-	                            if(tolower(cc) == "marine98")
-	                              fl <- "3Col_marine98.14C" else
-	                              if(tolower(cc) == "nh1")
-	                                fl <- "postbomb_NH1.14C" else
-	                                if(tolower(cc) == "nh2")
-	                                  fl <- "postbomb_NH2.14C" else
-	                                  if(tolower(cc) == "nh3")
-	                                    fl <- "postbomb_NH3.14C" else
-	                                    if(tolower(cc) == "sh1-2")
-	                                      fl <- "postbomb_SH1-2.14C" else
-	                                      if(tolower(cc) == "sh3")
-	                                        fl <- "postbomb_SH3.14C" else
-	                                         if(tolower(cc) == "nh1_monthly")
-	                                          fl <- "postbomb_NH1_monthly.14C" else
-	                                          if(tolower(cc) == "nh2_monthly")
-	                                            fl <- "postbomb_NH2_monthly.14C" else
-	                                            if(tolower(cc) == "nh3_monthly")
-	                                              fl <- "postbomb_NH3_monthly.14C" else
-	                                              if(tolower(cc) == "sh1-2_monthly")
-	                                                fl <- "postbomb_SH1-2_monthly.14C" else
-	                                                if(tolower(cc) == "sh3_monthly")
-	                                                  fl <- "postbomb_SH3_monthly.14C" else
-	                                                  if(tolower(cc) == "kure")
-	                                                    fl <- "kure.14C" else
-	                                                    if(tolower(cc) == "levinkromer")
-	                                                      fl <- "LevinKromer.14C" else
-	                                                      if(tolower(cc) == "santos")
-	                                                        fl <- "Santos.14C" else
-                                                            if(tolower(cc) == "jungfraujoch")
-                                                              fl <- "Jungfraujoch.14C" else
-	                                                            if(tolower(cc) == "mixed")
-	                                                            fl <- "mixed.14C" else
-	                                                              if(tolower(cc) == "notcal04")
-	                                                              fl <- "NOTCal04.14C" else
-	                                                                stop("cannot find this curve", call.=FALSE)
+        if(cc==1 || tolower(cc) == "intcal20")
+          fl <- "intcal20.14c" else # was 3Col_intcal20.14C
+          if(cc==2 || tolower(cc) == "marine20")
+            fl <- "marine20.14c" else # was 3Col_marine20.14C
+            if(cc==3 || tolower(cc) == "shcal20")
+              fl <- "shcal20.14c" else # was 3Col_shcal20.14C
+              if(cc==4 || tolower(cc) == "mixed")
+                fl <- "mixed.14C" else
+                if(tolower(cc) == "nh1")
+                  fl <- "postbomb_NH1.14C" else
+                  if(tolower(cc) == "nh2")
+                    fl <- "postbomb_NH2.14C" else
+                    if(tolower(cc) == "nh3")
+                      fl <- "postbomb_NH3.14C" else
+                      if(tolower(cc) == "sh1-2")
+                        fl <- "postbomb_SH1-2.14C" else
+                        if(tolower(cc) == "sh3")
+                          fl <- "postbomb_SH3.14C" else
+                           if(tolower(cc) == "nh1_monthly")
+                            fl <- "postbomb_NH1_monthly.14C" else
+                            if(tolower(cc) == "nh2_monthly")
+                              fl <- "postbomb_NH2_monthly.14C" else
+                              if(tolower(cc) == "nh3_monthly")
+                                fl <- "postbomb_NH3_monthly.14C" else
+                                if(tolower(cc) == "sh1-2_monthly")
+                                  fl <- "postbomb_SH1-2_monthly.14C" else
+                                  if(tolower(cc) == "sh3_monthly")
+                                    fl <- "postbomb_SH3_monthly.14C" else
+                                    if(tolower(cc) == "kure")
+                                      fl <- "kure.14C" else
+                                      if(tolower(cc) == "levinkromer")
+                                       fl <- "LevinKromer.14C" else
+                                       if(tolower(cc) == "santos")
+                                         fl <- "Santos.14C" else
+                                         if(tolower(cc) == "jungfraujoch")
+                                           fl <- "Jungfraujoch.14C" else
+                                           if(tolower(cc) == "mixed")
+                                             fl <- "mixed.14C" else
+                                             if(tolower(cc) == "notcal04")
+                                               fl <- "NOTCal04.14C" else
+                                               if(tolower(cc) == "intcal13")
+                                                 fl <- "3Col_intcal13.14C" else
+                                                 if(tolower(cc) == "marine13")
+                                                   fl <- "3Col_marine13.14C" else
+                                                   if(tolower(cc) == "shcal13")
+                                                     fl <- "3Col_shcal13.14C" else
+                                                     if(tolower(cc) == "intcal09")
+                                                       fl <- "3Col_intcal09.14C" else
+                                                       if(tolower(cc) == "marine09")
+                                                         fl <- "3Col_marine09.14C" else
+                                                         if(tolower(cc) == "intcal04")
+                                                           fl <- "3Col_intcal04.14C" else
+                                                           if(tolower(cc) == "marine04")
+                                                             fl <- "3Col_marine04.14C" else
+                                                             if(tolower(cc) == "intcal98")
+                                                               fl <- "3Col_intcal98.14C" else
+                                                               if(tolower(cc) == "marine98")
+                                                                 fl <- "3Col_marine98.14C" else
+                                                                   stop("cannot find this curve", call.=FALSE)
 
   if(length(cc.dir) == 0) # then look into the package's inst/extdata folder
     read.cc <- system.file("extdata/", fl, package='rintcal') else
@@ -334,17 +336,18 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
 #' @param thispostbombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the postbomb curve (as three columns: cal BP, C14 age, error)
 #' @param as.F The glued curve can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thisprebombcurve and/or thispostbombcurve, that these curves are in F14C space already.
 #' @param as.pMC The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.
+#' @param as.D The curves can be returned as D14C values instead of the default C14. Make sure that if as.D=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in D14C space already.
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 5.
 #' @examples
 #' my.cc <- glue.ccurves()
 #' @export
-glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, cc.dir=c(), decimals=8) {
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, as.D=FALSE, cc.dir=c(), decimals=8) {
   if(length(thispostbombcurve) == 0)
-    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, decimals=decimals) else
+    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.D=as.D, decimals=decimals) else
       postbomb <- thispostbombcurve
   if(length(thisprebombcurve) == 0)
-    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, decimals=decimals) else
+    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.D=as.D, decimals=decimals) else
       prebomb <- thisprebombcurve
 
   glued <- rbind(postbomb, prebomb)
