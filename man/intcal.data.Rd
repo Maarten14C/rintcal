@@ -11,7 +11,7 @@ intcal.data(
   cc2 = NA,
   calcurve.data = "IntCal20",
   select.sets = c(),
-  realm = "C14",
+  timescale = "C14",
   BCAD = FALSE,
   cal.lab = NA,
   cal.rev = FALSE,
@@ -47,7 +47,7 @@ intcal.data(
 
 \item{select.sets}{Which datasets to plot. Defaults to all datasets within the selected period.}
 
-\item{realm}{Which 'realm' of radiocarbon to use. Defaults to \code{realm="C14"} but can also be set to \code{realm="F14C"}, \code{realm="pMC"} or \code{realm="D14C"}. Can be shorted to, respectively, "C", "F", "P" or "D" (or their lower-case equivalents).}
+\item{timescale}{Which 'timescale' of radiocarbon to use. Defaults to \code{timescale="C14"} but can also be set to \code{timescale="F14C"}, \code{timescale="pMC"} or \code{timescale="D14C"}. Can be shorted to, respectively, "C", "F", "P" or "D" (or their lower-case equivalents).}
 
 \item{BCAD}{The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.}
 
@@ -274,5 +274,6 @@ The southern hemisphere calibration curve SHCal20 is mostly modelled on IntCal20
 [81] Zimmerman et al. 2010 Extension of the Southern Hemisphere atmospheric radiocarbon curve, 2120-850 years BP: results from Tasmanian huon pine. Radiocarbon 52, 203: 887-94.
 
 [82] Boentgen et al. 2018 Tree rings reveal globally coherent signature of cosmogenic radiocarbon events in 774 and 993 CE. Nature Communications, 9: 3605. doi:10.1038/s41467-018-06036-0.
+
 [83] Sookdeo et al. 2020 Quality Dating: A well-defined protocol implemented at ETH Zurich for high-precision 14C dates tested on Late Glacial wood. Radiocarbon. \doi{10.1017/RDC.2019.132}
 }

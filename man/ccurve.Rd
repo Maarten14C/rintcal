@@ -12,13 +12,15 @@ ccurve(
   glue = FALSE,
   as.F = FALSE,
   as.pMC = FALSE,
-  as.D = FALSE,
+  as.Delta = FALSE,
   decimals = 8
 )
 }
 \arguments{
 \item{cc}{Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
-\code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{cc.dir} (see below).}
+\code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". 
+Historical curves (Arnold & Libby 1951, Stuiver and Suess 1966, Pearson and Stuiver 1986) are also provided. 
+One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{cc.dir} (see below).}
 
 \item{postbomb}{Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}}
 
@@ -32,7 +34,7 @@ ccurve(
 
 \item{as.pMC}{Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.}
 
-\item{as.D}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.}
+\item{as.Delta}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.Delta=FALSE}.}
 
 \item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 8.}
 }
@@ -53,9 +55,10 @@ marine98 <- ccurve("Marine98")
 pb.sh3 <- ccurve("sh3")
 }
 \references{
+Arnold
 Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02, ICOS RI, \url{https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY}
 
-Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100} 
+Hammer and Levin 2017, Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016. heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100}
 
 Heaton et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62, 779-820, \doi{10.1017/RDC.2020.68}
 
@@ -69,6 +72,8 @@ Hua et al. 2022 Atmospheric radiocarbon for the period 1950-2019. Radiocarbon 64
 
 Levin and Kromer 2004 The tropospheric 14CO2 level in mid latitudes of the Northern Hemisphere. Radiocarbon 46, 1261-1272
 
+Pearson GW, Stuiver M. 1986 High-precision calibration of the radiocarbon time scale, 500–2500 BC. Radiocarbon 28, 839–862.
+
 Reimer et al. 2004 IntCal04 terrestrial radiocarbon age calibration, 0-26 cal kyr BP. Radiocarbon 46, 1029-1058, \doi{10.1017/S0033822200032999}
 
 Reimer et al. 2009 IntCal09 and Marine09 radiocarbon age calibration curves, 0-50,000 years cal BP. Radiocarbon 51, 1111-1150, \doi{10.1017/S0033822200034202}
@@ -78,6 +83,8 @@ Reimer et al. 2013 IntCal13 and Marine13 radiocarbon age calibration curves 0-50
 Reimer et al. 2020 The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62, 725-757, \doi{10.1017/RDC.2020.41}
 
 Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000-0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
+
+Stuiver and Suess 1966. On the relationship between radiocarbon dates and true samples ages. Radiocarbon 8, 534-540, \doi{10.1017/S0033822200000345}
 
 van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 }

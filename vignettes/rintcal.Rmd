@@ -13,7 +13,7 @@ vignette: >
 
 # Introduction
 
-The international IntCal group provides ratified radiocarbon calibration curves such as IntCal20 (for northern hemisphere terrestrial radiocarbon dates; Reimer et al. 2020[^1]), Marine20 (for marine dates; Heaton et al. 2020[^2]) and SHCal20 (Hogg et al. 2020[^3]). This package provides these curves, as well as previous iterations (IntCal13, Marine13, SHCal13, IntCal09, Marine09, IntCal04, Marine04, SHCal04, IntCal98, Marine98), Arnold and Libby's first curve[^4], and postbomb curves (Levin and Kromer 2004[^5], Santos et al. 2015[^6], Andrews et al. 2016[^7], Hua et al. 2021[^8] and Emmenegger et al. 2024[^9]). 
+The international IntCal group provides ratified radiocarbon calibration curves such as IntCal20 (for northern hemisphere terrestrial radiocarbon dates; Reimer et al. 2020[^1]), Marine20 (for marine dates; Heaton et al. 2020[^2]) and SHCal20 (Hogg et al. 2020[^3]). This package provides these curves, as well as previous iterations (IntCal13, Marine13, SHCal13, IntCal09, Marine09, IntCal04, Marine04, SHCal04, IntCal98, Marine98), and postbomb curves (Levin and Kromer 2004[^4], Santos et al. 2015[^5], Andrews et al. 2016[^6], Hua et al. 2021[^7] and Emmenegger et al. 2024[^8]). For nostalgic or historical reasons, the curves from some seminal publications are also provided: Arnold and Libby 1951[^9], Stuiver and Suess 1966[^10] and Pearson and Stuiver 1986[^11].
 
 # Installation
 
@@ -66,10 +66,9 @@ list.ccurves()
 Legacy calibration data such as Arnold & Libby (1951) can be compared with the latest calibration curves. Only included here are those radiocarbon dates of Arnold and Libby which come with independent (historical, archaeological or dendrochronological) age estimates. Note that Arnold and Libby did not define their 'calendar years' explicitly, so the ages have to be taken with a degree of caution.
 
 ```{r, fig.width=5, fig.asp=1}
-libby <- read.table(file.path(system.file(package = 'rintcal'), "extdata/Arnold_Libby_1951.txt"), header=T, sep=",")
-plot(libby[,2], libby[,4], xlab="'cal' BP", ylab="C14 BP", pch=20) # plot the radiocarbon dates and their known calendar ages
-segments(libby[,2]-libby[,3], libby[,4], libby[,2]+libby[,3], libby[,4]) # calendar error bars (not all are quantified)
-segments(libby[,2], libby[,4]-libby[,5], libby[,2], libby[,4]+libby[,5]) # radiocarbon error bars
+libby <- ccurve("arnold_libby_1951")
+plot(libby[,1], libby[,2], xlab="'cal' BP", ylab="C14 BP", pch=20) # plot the radiocarbon dates and their known calendar ages
+segments(libby[,1], libby[,2]-libby[,3], libby[,1], libby[,2]+libby[,3]) # radiocarbon error bars
 abline(0, 1, lty=2)
 ic20 <- ccurve() # add the IntCal20 curve
 ic20.pol <- cbind(c(ic20[,1], rev(ic20[,1])), c(ic20[,2]-ic20[,3], rev(ic20[,2]+ic20[,3])))
@@ -89,10 +88,11 @@ length(IrishOaks)
 Or plot a Bristlecone Pine series, one with single-ring radiocarbon dates that show a very abrupt change in radiocarbon age (Miyake Event):
 
 ```{r, fig.width=4, fig.asp=.8}
-Bristle <- intcal.data.frames(intcal, taxon="Pinus longaeva")
-Bristle_yearly <- Bristle[[20]]$data[,c(8,14,15)]
-plot(Bristle_yearly[,1], Bristle_yearly[,2], xlab="cal BP", ylab="C14 BP")
-segments(Bristle_yearly[,1], Bristle_yearly[,2]-Bristle_yearly[,3], Bristle_yearly[,1], Bristle_yearly[,2]+Bristle_yearly[,3])
+bristle <- intcal.data.frames(intcal, taxon="Pinus longaeva")
+bristle_yearly <- bristle[[20]]$data[,c(8,14,15)]
+plot(bristle_yearly[,1], bristle_yearly[,2], xlab="cal BP", ylab="C14 BP")
+segments(bristle_yearly[,1], bristle_yearly[,2]-bristle_yearly[,3], 
+  bristle_yearly[,1], bristle_yearly[,2]+bristle_yearly[,3])
 ```
 
 The data underlying parts of the IntCal calibration curve can be visualised, for example from 500 to 0 cal BP:
@@ -101,7 +101,7 @@ The data underlying parts of the IntCal calibration curve can be visualised, for
 intcal.data(0, 500)
 ```
 
-Want to plot only some specific datasets over a period of time? 
+Want to plot only some specific datasets over a period of time? This requires several steps.
 
 ```{r, fig.width=5, fig.asp=1}
 dat <- intcal.data(20e3, 25e3)
@@ -109,10 +109,10 @@ unique(dat$set)
 dat <- intcal.data(20e3, 25e3, select.sets=c(109, 120), data.cols=c(1,2))
 ```
 
-It is also possible to plot the data in other `realms` such as pMC (`p`), F<sup>14</sup>C (`F`) or &Delta;<sup>14</sup>C (`d`), e.g.:
+It is also possible to plot the data in other time-scales such as pMC (`p`), F<sup>14</sup>C (`F`) or &Delta;<sup>14</sup>C (`Delta`), e.g.:
 
 ```{r, fig.width=5, fig.asp=1}
-intcal.data(20e3, 25e3, realm="d")
+intcal.data(20e3, 25e3, timescale="Delta")
 ```
 
 Below are functions to extract and plot individual IntCal datasets, for example the first dataset within the 'intcal' dataset:
@@ -139,21 +139,25 @@ glued <- glue.ccurves("IntCal20", "NH1")
 plot(glued[1:650,1:2], xlab="cal BP", ylab="C-14 BP", pch=".")
 ```
 
-[^1]: Reimer et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). *Radiocarbon* 62, 725-757 <http://dx.doi.org/10.1017/RDC.2020.41>
+[^1]: Reimer et al., 2020. The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). *Radiocarbon* 62, 725-757 <https://dx.doi.org/10.1017/RDC.2020.41>
 
-[^2]: Heaton et al., 2020. Marine20 - the marine radiocarbon age calibration curve (0-55,000 cal BP). *Radiocarbon* 62, 779-820 <http://dx.doi.org/10.1017/RDC.2020.68>
+[^2]: Heaton et al., 2020. Marine20 - the marine radiocarbon age calibration curve (0-55,000 cal BP). *Radiocarbon* 62, 779-820 <https://dx.doi.org/10.1017/RDC.2020.68>
 
-[^3]: Hogg et al., 2020. SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. *Radiocarbon* 62, 759-778 <http://dx.doi.org/10.1017/RDC.2020.59>
+[^3]: Hogg et al., 2020. SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. *Radiocarbon* 62, 759-778 <https://dx.doi.org/10.1017/RDC.2020.59>
 
-[^4]: Arnold & Libby, 1951. Radiocarbon dates. *Science* 113, p. 111-120 <http://dx.doi.org/10.1126/science.113.2927.111>
+[^4]: Levin & Kromer, 2004. The tropospheric 14CO2 level in mid-latitudes of the Northern Hemisphere (1959-2003), *Radiocarbon* 46, 1261-1272 <https://dx.doi.org/10.1017/S0033822200033130>
 
-[^5]: Levin & Kromer, 2004. The tropospheric 14CO2 level in mid-latitudes of the Northern Hemisphere (1959-2003), *Radiocarbon* 46, 1261-1272 <http://dx.doi.org/10.1017/S0033822200033130>
+[^5]: Santos et al., 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. *Quaternary Geochronology* 25, 96-103 <https://dx.doi.org/10.1016/j.quageo.2014.10.004>
 
-[^6]: Santos et al., 2015. Annual growth rings in a sample of Parana pine (*Araucaria angustifolia*): Toward improving the 14C calibration curve for the Southern Hemisphere. *Quaternary Geochronology* 25, 96-103 <http://dx.doi.org/10.1016/j.quageo.2014.10.004>
+[^6]: Andrews et al., 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. *Radiocarbon* 58, 531-548 <https://dx.doi.org/10.1017/RDC.2016.32>
 
-[^7]: Andrews et al., 2016. Bomb radiocarbon and the Hawaiian Archipelago: Coral, otoliths and seawater. *Radiocarbon* 58, 531-548 <http://dx.doi.org/10.1017/RDC.2016.32>
+[^7]: Hua et al., 2021. Atmospheric radiocarbon for the period 1950-2019. *Radiocarbon* 64, 723-745 <https://dx.doi.org/10.1017/RDC.2021.95>
 
-[^8]: Hua et al., 2021. Atmospheric radiocarbon for the period 1950-2019. *Radiocarbon* 64, 723-745 <http://dx.doi.org/10.1017/RDC.2021.95>
+[^8]: Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02. *ICOS RI* <https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY>
+ 
+[^9]: Arnold & Libby, 1951. Radiocarbon dates. *Science* 113, p. 111-120 <https://dx.doi.org/10.1126/science.113.2927.111>
 
-[^9]: Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02. *ICOS RI*,
- <https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY>
+[^10]: Stuiver & Suess 1966. On the relationship between radiocarbon dates and true samples ages. *Radiocarbon* 8, 534-540, <https://dx.doi.org/10.1017/S0033822200000345>
+
+[^11]: Pearson & Stuiver, 1986. High-precision calibration of the radiocarbon time scale, 500–2500 BC. *Radiocarbon* 28, 839–862, <https://doi.org/10.1017/S0033822200060173>
+ 

@@ -85,14 +85,16 @@ new.ccdir <- function(cc.dir) {
 #' @details Copy the radiocarbon calibration curve defined by cc into memory.
 #' @return The calibration curve (invisible).
 #' @param cc Calibration curve for 14C dates: \code{cc=1} for IntCal20 (northern hemisphere terrestrial), \code{cc=2} for Marine20 (marine),
-#' \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{cc.dir} (see below).
+#' \code{cc=3} for SHCal20 (southern hemisphere terrestrial). Alternatively, one can also write, e.g., "IntCal20", "Marine13". 
+#' Historical curves (Arnold & Libby 1951, Stuiver and Suess 1966, Pearson and Stuiver 1986) are also provided. 
+#' One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves()}, and load this using \code{cc=4}. In this case, it is recommended to place the custom calibration curve in its own directory, using \code{cc.dir} (see below). 
 #' @param postbomb Use \code{postbomb=TRUE} to get a postbomb calibration curve (default \code{postbomb=FALSE}). For monthly data, type e.g. \code{ccurve("sh1-2_monthly")}
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param resample The IntCal curves come at a range of 'bin sizes'; every year from 0 to 5 kcal BP, then every 5 yr until 15 kcal BP, then every 10 yr until 25 kcal BP, and every 20 year thereafter. The curves can be resampled to constant bin sizes, e.g. \code{resample=5}. Defaults to FALSE. 
 #' @param glue If a postbomb curve is requested, it can be 'glued' to the pre-bomb curve. This feature is currently disabled - please use \code{glue.ccurves} instead
 #' @param as.F Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.
 #' @param as.pMC Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.
-#' @param as.D If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.D=FALSE}.
+#' @param as.Delta If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.Delta=FALSE}.
 #' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 8.
 #' @examples
 #' intcal20 <- ccurve(1)
@@ -101,9 +103,10 @@ new.ccdir <- function(cc.dir) {
 #' marine98 <- ccurve("Marine98")
 #' pb.sh3 <- ccurve("sh3")
 #' @references
+#' Arnold
 #' Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02, ICOS RI, \url{https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY}
 #'
-#' Hammer and Levin 2017, "Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016", heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100} 
+#' Hammer and Levin 2017, Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016. heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100}
 #'
 #' Heaton et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62, 779-820, \doi{10.1017/RDC.2020.68}
 #'
@@ -117,6 +120,8 @@ new.ccdir <- function(cc.dir) {
 #'
 #' Levin and Kromer 2004 The tropospheric 14CO2 level in mid latitudes of the Northern Hemisphere. Radiocarbon 46, 1261-1272
 #'
+#' Pearson GW, Stuiver M. 1986 High-precision calibration of the radiocarbon time scale, 500–2500 BC. Radiocarbon 28, 839–862.
+#'
 #' Reimer et al. 2004 IntCal04 terrestrial radiocarbon age calibration, 0-26 cal kyr BP. Radiocarbon 46, 1029-1058, \doi{10.1017/S0033822200032999}
 #'
 #' Reimer et al. 2009 IntCal09 and Marine09 radiocarbon age calibration curves, 0-50,000 years cal BP. Radiocarbon 51, 1111-1150, \doi{10.1017/S0033822200034202}
@@ -126,12 +131,14 @@ new.ccdir <- function(cc.dir) {
 #' Reimer et al. 2020 The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62, 725-757, \doi{10.1017/RDC.2020.41}
 #'
 #' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000-0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
+#'
+#' Stuiver and Suess 1966. On the relationship between radiocarbon dates and true samples ages. Radiocarbon 8, 534-540, \doi{10.1017/S0033822200000345}
 #' 
 #' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.D=FALSE, decimals=8) {	
-  if(sum(c(as.F, as.pMC, as.D)) > 1)
-    stop("only one of as.F, as.pMC or as.D can be set to TRUE")
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, decimals=8) {
+  if(sum(c(as.F, as.pMC, as.Delta)) > 1)
+    stop("only one of as.F, as.pMC or as.Delta can be set to TRUE")
   if(postbomb) {
     if(cc==1 || tolower(cc) == "nh1")
       fl <- "postbomb_NH1.14C" else
@@ -201,27 +208,33 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
                                            fl <- "Jungfraujoch.14C" else
                                            if(tolower(cc) == "mixed")
                                              fl <- "mixed.14C" else
-                                             if(tolower(cc) == "notcal04")
-                                               fl <- "NOTCal04.14C" else
-                                               if(tolower(cc) == "intcal13")
-                                                 fl <- "3Col_intcal13.14C" else
-                                                 if(tolower(cc) == "marine13")
-                                                   fl <- "3Col_marine13.14C" else
-                                                   if(tolower(cc) == "shcal13")
-                                                     fl <- "3Col_shcal13.14C" else
-                                                     if(tolower(cc) == "intcal09")
-                                                       fl <- "3Col_intcal09.14C" else
-                                                       if(tolower(cc) == "marine09")
-                                                         fl <- "3Col_marine09.14C" else
-                                                         if(tolower(cc) == "intcal04")
-                                                           fl <- "3Col_intcal04.14C" else
-                                                           if(tolower(cc) == "marine04")
-                                                             fl <- "3Col_marine04.14C" else
-                                                             if(tolower(cc) == "intcal98")
-                                                               fl <- "3Col_intcal98.14C" else
-                                                               if(tolower(cc) == "marine98")
-                                                                 fl <- "3Col_marine98.14C" else
-                                                                   stop("cannot find this curve", call.=FALSE)
+										     if(tolower(cc) == "arnold_libby_1951")
+											   fl <- "Arnold_Libby_1951.14C" else
+                                               if(tolower(cc) == "stuiver_suess_1966")
+                                                 fl <- "Stuiver_Suess_1966.14C" else
+	                                     		 if(tolower(cc) == "pearson_stuiver_1986")
+												   fl <- "Pearson_Stuiver_1986.14C" else
+                                                   if(tolower(cc) == "notcal04")
+                                                     fl <- "NOTCal04.14C" else
+                                                     if(tolower(cc) == "intcal13")
+                                                       fl <- "3Col_intcal13.14C" else
+                                                       if(tolower(cc) == "marine13")
+                                                         fl <- "3Col_marine13.14C" else
+                                                         if(tolower(cc) == "shcal13")
+                                                           fl <- "3Col_shcal13.14C" else
+                                                           if(tolower(cc) == "intcal09")
+                                                             fl <- "3Col_intcal09.14C" else
+                                                             if(tolower(cc) == "marine09")
+                                                               fl <- "3Col_marine09.14C" else
+                                                               if(tolower(cc) == "intcal04")
+                                                                 fl <- "3Col_intcal04.14C" else
+                                                                 if(tolower(cc) == "marine04")
+                                                                   fl <- "3Col_marine04.14C" else
+                                                                   if(tolower(cc) == "intcal98")
+                                                                     fl <- "3Col_intcal98.14C" else
+                                                                     if(tolower(cc) == "marine98")
+                                                                       fl <- "3Col_marine98.14C" else
+                                                                         stop("cannot find this curve", call.=FALSE)
 
   if(length(cc.dir) == 0) # then look into the package's inst/extdata folder
     read.cc <- system.file("extdata/", fl, package='rintcal') else
@@ -235,7 +248,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
   cc.dat <- cc.dat[order(cc.dat[,1]),]
 
   # for files with D14C values (the 'official' intcal20 files ending in '14c', which have D14C and its error as their final two columns)
-  if(as.D) 
+  if(as.Delta) 
     if(ncol(cc.dat) == 5) 
       cc.dat <- cbind(cc.dat[, 1], cc.dat[,4], cc.dat[,5]) else
         stop("this does not seem to be a file with 5 columns, cannot return the D14C values")
@@ -336,18 +349,18 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
 #' @param thispostbombcurve As an alternative to using existing curves, a tailor-made curve can be provided for the postbomb curve (as three columns: cal BP, C14 age, error)
 #' @param as.F The glued curve can be returned as F14C values instead of the default C14. Make sure that if as.F=TRUE and you are using thisprebombcurve and/or thispostbombcurve, that these curves are in F14C space already.
 #' @param as.pMC The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.
-#' @param as.D The curves can be returned as D14C values instead of the default C14. Make sure that if as.D=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in D14C space already.
+#' @param as.Delta The curves can be returned as D14C values instead of the default C14. Make sure that if as.Delta=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in Delta14C space already.
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
 #' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 5.
 #' @examples
 #' my.cc <- glue.ccurves()
 #' @export
-glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, as.D=FALSE, cc.dir=c(), decimals=8) {
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, cc.dir=c(), decimals=8) {
   if(length(thispostbombcurve) == 0)
-    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.D=as.D, decimals=decimals) else
+    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.Delta=as.Delta, decimals=decimals) else
       postbomb <- thispostbombcurve
   if(length(thisprebombcurve) == 0)
-    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.D=as.D, decimals=decimals) else
+    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.Delta=as.Delta, decimals=decimals) else
       prebomb <- thisprebombcurve
 
   glued <- rbind(postbomb, prebomb)

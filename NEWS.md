@@ -1,3 +1,7 @@
+# rintcal 1.3.1
+* added historical C-14 comparison/calibration curves: Arnold & Libby 1951, Stuiver & Suess 1966, Pearson & Stuiver 1986. They can be called as in `libby <- ccurve("arnold_libby_1951")`, `stuiver_66 <- ccurve("stuiver_suess_1966")` or `pearson_1986 <- ccurve("pearson_stuiver_1986")`. 
+* renamed `as.D` options to the more correct `as.Delta`.
+
 # rintcal 1.3.0
 * `glue.ccurves` now has an option `as.D`.
 * new function `intcal.extract.record` which extracts a single intcal record.
