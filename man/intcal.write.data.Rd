@@ -12,7 +12,7 @@ intcal.write.data(data, fname)
 \item{fname}{Name of the file to be written}
 }
 \description{
-Write the intcal.json file that comes with the rintcal packages to somewhere local. This can be useful if you want to avoid repeatedly downloading the json file from intchron.org.
+Write the intcal.json file that comes with the rintcal package to somewhere local. This can be useful if you want to avoid repeatedly downloading the json file from intchron.org.
 }
 \examples{
  intcal <- intcal.read.data()

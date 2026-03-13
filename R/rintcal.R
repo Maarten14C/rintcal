@@ -1,11 +1,9 @@
 # todo: 
 
-# update Vignette, cover all functions
-
 # during package development, the data/intcal.rda file was written as such:
 # intcal <- rintcal::intcal.read.data(TRUE) # download from the server
-# save(intcal, file="~/Dropbox/devsoftware/rintcal/data/intcal.rda")
-# tools::resaveRdaFiles("~/Dropbox/devsoftware/rintcal/data/intcal.rda") # to compress
+# save(intcal, file="../data/intcal.rda")
+# tools::resaveRdaFiles("~../data/intcal.rda") # to compress
 
 # some platforms complain about non-ASCII characters in the datafilestringi::stri_enc_mark
 # stringi::stri_enc_mark(intcal)
@@ -103,38 +101,37 @@ new.ccdir <- function(cc.dir) {
 #' marine98 <- ccurve("Marine98")
 #' pb.sh3 <- ccurve("sh3")
 #' @references
-#' Arnold
-#' Emmenegger et al., 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02, ICOS RI, \url{https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY}
+#' Emmenegger, L., Leuenberger, M., Steinbacher, M. 2024. ICOS ATC 14C Release analysed by ICOS CRL from Jungfraujoch (6.0 m), 2015-09-21–2023-10-02, ICOS RI, \url{https://hdl.handle.net/11676/6c_RZ7NHc2dnZv7d84BMY_YY}
 #'
-#' Hammer and Levin 2017, Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016. heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100}
+#' Hammer, S., Levin, I. 2017. Monthly mean atmospheric D14CO2 at Jungfraujoch and Schauinsland from 1986 to 2016. heiDATA: Heidelberg Research Data Repository V2 \doi{10.11588/data/10100}
 #'
-#' Heaton et al. 2020 Marine20-the marine radiocarbon age calibration curve (0-55,000 cal BP). Radiocarbon 62, 779-820, \doi{10.1017/RDC.2020.68}
+#' Heaton, T.J., Köhler, P., Butzin, M., Bard, E., Reimer, R., Austin, W., Bronk Ramsey, C., Grootes, P, Hughen, K.A., Kromer, B., Reimer, P.J., Adkins, J., Burke, A., Cook, M., Olsen, J., Skinner, L. 2020. Marine20 - the marine radiocarbon age calibration curve (0–55,000 cal BP), \doi{10.1017/RDC.2020.68}
 #'
-#' Hogg et al. 2013 SHCal13 Southern Hemisphere Calibration, 0-50,000 Years cal BP. Radiocarbon 55, 1889-1903, \doi{10.2458/azu_js_rc.55.16783}
+#' Hogg, A.G., Hua, Q., Blackwell, P.G., Mu, N., Buck, C.E., Guilderson, T.P., Heaton, T.J., Palmer, J.G., Reimer, P.J., Reimer, R., Turney, C.S.M., Zimmerman, S.R.H. 2013. SHCal13 Southern Hemisphere Calibration, 0-50,000 Years cal BP. Radiocarbon 55, 1889-1903, \doi{10.2458/azu_js_rc.55.16783}
 #'
-#' Hogg et al. 2020 SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62, 759-778, \doi{10.1017/RDC.2020.59}
+#' Hogg, A., Heaton, T.J., Hua, Q., Palmer, P.J., Turney, C.S.M., Southon, J., Bayliss, A., Blackwell, P., Boswijk, G., Bronk Ramsey, C., Petchey, F., Reimer, P.J., Reimer, R., Wacker, L. 2020. SHCal20 Southern Hemisphere calibration, 0-55,000 years cal BP. Radiocarbon 62, 759-778, \doi{10.1017/RDC.2020.59}
 #'
-#' Hua et al. 2013 Atmospheric radiocarbon for the period 1950-2010. Radiocarbon 55(4), \doi{10.2458/azu_js_rc.v55i2.16177}
+#' Hua, Q., Barbetti, M., Rakowski, A.Z. 2013. Atmospheric radiocarbon for the period 1950-2010. Radiocarbon 55(4), \doi{10.2458/azu_js_rc.v55i2.16177}
 #' 
-#' Hua et al. 2022 Atmospheric radiocarbon for the period 1950-2019. Radiocarbon 64(4), 723-745, \doi{10.1017/RDC.2021.95}
+#' Hua, Q., Turnbull, J.C., Santos, G.M., Rakowski, A.Z., Ancapichún, S., De Pol-Holz, R., Hammer, S., Lehman, S.J., Levin, I., Miller, J.B., Palmer, J.G., Turney, C.S.M. 2022. Atmospheric radiocarbon for the period 1950-2019. Radiocarbon 64(4), 723-745, \doi{10.1017/RDC.2021.95}
 #'
-#' Levin and Kromer 2004 The tropospheric 14CO2 level in mid latitudes of the Northern Hemisphere. Radiocarbon 46, 1261-1272
+#' Levin, I., Kromer, B. 2004. The tropospheric 14CO2 level in mid latitudes of the Northern Hemisphere. Radiocarbon 46, 1261-1272, \doi{10.1017/S0033822200033130}
 #'
-#' Pearson GW, Stuiver M. 1986 High-precision calibration of the radiocarbon time scale, 500–2500 BC. Radiocarbon 28, 839–862.
+#' Pearson, G.W., Stuiver, M., 1986. High-precision calibration of the radiocarbon time scale, 500–2500 BC. Radiocarbon 28, 839–862, \doi{10.1017/S0033822200060173}
 #'
-#' Reimer et al. 2004 IntCal04 terrestrial radiocarbon age calibration, 0-26 cal kyr BP. Radiocarbon 46, 1029-1058, \doi{10.1017/S0033822200032999}
+#' Reimer, P.J., Baillie, M.G., Bard, E., Bayliss, A., Beck, J.W., Bertrand, C.J., Blackwell, P.G., Buck, C.E., Burr, G.S., Cutler, K.B., Damon, P.E., Edwards, R.L., Fairbanks, R.G., Friedrich, M., Guilderson, T.P., Hogg, A.G., Hughen, K.A., Kromer, B., McCormac, G., Manning, S.W., Ramsey, C.B., Reimer, R.W., Remmele, S., Southon, J.R., Stuiver, M., Talamo, S., Taylor, F.W., Plicht, J.V., Weyhenmeyer, C.E. 2004. Intcal04 terrestrial radiocarbon age calibration, 0–26 cal Kyr BP. Radiocarbon 46, 1029-1058, \doi{10.1017/S0033822200032999}
 #'
-#' Reimer et al. 2009 IntCal09 and Marine09 radiocarbon age calibration curves, 0-50,000 years cal BP. Radiocarbon 51, 1111-1150, \doi{10.1017/S0033822200034202}
+#' Reimer, P.J., Baillie, M.G., Bard, E., Bayliss, A., Beck, J., Blackwell, P.G., Bronk, C., Ramsey, Buck, C.E., Burr, G.S., Edwards, R., Friedrich, M., Grootes, P., T., P., Guilderson, Hajdas, I., Heaton, T.J., Hogg, A.G., Hughen, K.A., Kaiser, K.F., B., Kromer, McCormac, F.G., Manning, S.W., Reimer, R.W., Richards, D.A., Southon, J., S., Talamo, Turney, C., Plicht, J.V., Weyhenmeyer, C.E. 2009. IntCal09 and Marine09 radiocarbon age calibration curves, 0-50,000 years cal BP. Radiocarbon 51, 1111-1150, \doi{10.1017/S0033822200034202}
 #'
-#' Reimer et al. 2013 IntCal13 and Marine13 radiocarbon age calibration curves 0-50,000 years cal BP. Radiocarbon 55, 1869-1887, \doi{10.2458/azu_js_rc.55.16947}
+#' Reimer, P.J., Bard, E., Bayliss, A., Beck, J.W., Blackwell, P.G., Ramsey, C.B., Buck, C.E., Cheng, H., Edwards, R.L., Friedrich, M., Grootes, P.M., Guilderson, T.P., Haflidason, H., Hajdas, I., Hatté, C., Heaton, T.J., Hoffmann, D.L., Hogg, A.G., Hughen, K.A., Kaiser, K., Kromer, B., Manning, S.W., Niu, M., Reimer, R.W., Richards, D.A., Scott, E.M., Southon, J.R., Staff, R.A., Turney, C.S., van der Plicht, J. 2013. IntCal13 and Marine13 radiocarbon age calibration curves 0-50,000 years cal BP. Radiocarbon 55, 1869-1887, \doi{10.2458/azu_js_rc.55.16947}
 #'
-#' Reimer et al. 2020 The IntCal20 Northern Hemisphere radiocarbon age calibration curve (0-55 cal kBP). Radiocarbon 62, 725-757, \doi{10.1017/RDC.2020.41}
+#' Reimer, P.J., Austin, W.E., Bard, E., Bayliss, A., Blackwell, P.G., Bronk Ramsey, C., Butzin, M., Cheng, H., Edwards, R.L., Friedrich, M., Grootes, P.M., Guilderson, T.P., Hajdas, I., Heaton, T.J., Hogg, A.G., Hughen, K.A., Kromer, B., Manning, S.W., Muscheler, R., Palmer, J.G., Pearson, C.L., van der Plicht, J., Reimer, R.W., Richards, D.A., Scott, E.M., Southon, J.R., Turney, C.S., Wacker, L., Adolphi, F., Büntgen, U., Capano, M., Fahrni, S.M., Fogtmann-Schulz, A., Friedrich, R., Köhler, P., Kudsk, S.G., Miyake, F., Olsen, J., Reinig, F., Sakamoto, M., Sookdeo, A., Talamo, S. 2020. The IntCal20 northern hemisphere radiocarbon age calibration curve (0–55 cal kBP). Radiocarbon 62, 725-757, \doi{10.1017/RDC.2020.41}
 #'
-#' Stuiver et al. 1998 INTCAL98 radiocarbon age calibration, 24,000-0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
+#' Stuiver, M., Reimer, P.J., Bard, E., Beck, J.W., Burr, G.S., Hughen, K.A., Kromer, B., McCormac, G., Plicht, J.V., Spurk, M. 1998. INTCAL98 radiocarbon age calibration, 24,000–0 cal BP. Radiocarbon 40, 1041-1083, \doi{10.1017/S0033822200019123}
 #'
-#' Stuiver and Suess 1966. On the relationship between radiocarbon dates and true samples ages. Radiocarbon 8, 534-540, \doi{10.1017/S0033822200000345}
+#' Stuiver, Suess, H., 1966. On the relationship between radiocarbon dates and true samples ages. Radiocarbon 8, 534-540, \doi{10.1017/S0033822200000345}
 #' 
-#' van der Plicht et al. 2004. NotCal04—Comparison/Calibration 14C Records 26–50 Cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
+#' van der Plicht, J., Beck, J.W., Bard, E., Baillie, M.G.L., Blackwell, P.G., Buck, C.E., Friedrich, M., Guilderson, T.P., Hughen, K.A., Kromer, B., McCormac, F.G., Bronk Ramsey, C., Reimer, P.J., Reimer, R., Remmele, S., Richards, D.A., Southon, J.R., Stuiver, M., Weyhenmeyer, C.E., 2004. NotCal04—comparison/calibration 14C records 26–50 cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 #' @export
 ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, decimals=8) {
   if(sum(c(as.F, as.pMC, as.Delta)) > 1)
@@ -395,8 +392,20 @@ C14.pMC <- function(y, er, ratio=100, decimals=8, lambda=8033)
 
 
 
-F14C.D14C <- function(F14C, t)
+F14C.D14C <- function(F14C, t, lambda=5730/log(2))
   return( 1000 * ((F14C / exp(-t/8267)) - 1))
+
+
+
+F14C.er.D14C <- function(F14C, er, t, lambda=5730/log(2)) {
+  Deltamn <- 1000 * ((F14C/exp(cbind(-1 * t)/lambda)) - 1)
+  Fup <- F14C + er
+  Fdown <- F14C - er
+  Deltaup <- 1000 * ((Fup/exp(-t/lambda)) - 1)
+  Deltadown <- 1000 * ((Fdown/exp(-t/lambda)) - 1)
+  sdev <- pmax(abs(Deltaup-Deltamn), abs(Deltadown-Deltamn))
+  return(cbind(Deltamn, sdev))
+}
 
 
 

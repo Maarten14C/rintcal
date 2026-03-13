@@ -19,6 +19,7 @@ intcal.plot.record(
   ka = FALSE,
   as.F = FALSE,
   as.pMC = FALSE,
+  as.Delta = FALSE,
   draw.z = TRUE,
   draw.calsigma = TRUE,
   grid = FALSE,
@@ -27,7 +28,8 @@ intcal.plot.record(
   draw.cc = 1,
   cc.col = rgb(0, 0.5, 0, 0.5),
   legend.loc = "topleft",
-  legend.cex = 0.5
+  legend.cex = 0.5,
+  mgp = c(2.5, 0.8, 0)
 )
 }
 \arguments{
@@ -59,6 +61,8 @@ intcal.plot.record(
 
 \item{as.pMC}{Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.}
 
+\item{as.Delta}{Return the Delta14C values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.Delta=FALSE}.}
+
 \item{draw.z}{Whether or not to plot the spread in calendar years of blocks of (mostly) tree rings. This is for tree-ring datasets where individual dates were taken on blocks of rings covering e.g. 10 or 20 years.}
 
 \item{draw.calsigma}{Whether or not to plot the calendar age uncertainties where available.}
@@ -76,9 +80,11 @@ intcal.plot.record(
 \item{legend.loc}{Location of the legend. Defaults to top right. Set to NA if you don't want to plot the legend.}
 
 \item{legend.cex}{Relative size of the font of the legend. Defaults to 0.5.}
+
+\item{mgp}{White space around the plot. Defaults to giving a bit more than usual white space around the axis labels.}
 }
 \value{
-A plot of the calendar and radiocarbon ages, indicating uncertainties (error bars) and age blocks (e.g, for trees where blocks of >1 rings were dated) where relevant.
+A plot of the calendar and radiocarbon ages, indicating uncertainties (error bars) and age blocks where relevant (e.g., for trees where blocks of >1 rings were dated).
 }
 \description{
 Plot the calendar and radiocarbon data of an IntCal20 record

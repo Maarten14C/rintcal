@@ -1,3 +1,8 @@
+# rintcal 1.4.0
+* `intcal.data` now plots all data within the supplied timeframe. 
+* `intcal.plot.record` gains an option to plot the values on the D14C timescale.
+* cleaned up the bibliography/references.
+
 # rintcal 1.3.1
 * added historical C-14 comparison/calibration curves: Arnold & Libby 1951, Stuiver & Suess 1966, Pearson & Stuiver 1986. They can be called as in `libby <- ccurve("arnold_libby_1951")`, `stuiver_66 <- ccurve("stuiver_suess_1966")` or `pearson_1986 <- ccurve("pearson_stuiver_1986")`. 
 * renamed `as.D` options to the more correct `as.Delta`.
@@ -8,7 +13,7 @@
 * new function `intcal.plot.record` to plot the calendar and C-14 ages of a single intcal record.
 
 # rintcal 1.2.1
-* undid the un-nesting of if-loops in `ccurve` from version 1.2.0, owing to it causing a bug in `rice`.
+* undid the un-nesting of if-loops in `ccurve` from version 1.2.0, owing to it causing a bug in the `rice` package.
 
 # rintcal 1.2.0
 * the files of all C14 curves are now separated by spaces (some postbomb curves had tabs instead)
