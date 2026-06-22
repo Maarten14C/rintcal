@@ -1,6 +1,6 @@
 ## Test environments
-* local OSX install, R 4.5.2
-* rhub: windows, linux ubuntu
+* local OSX install, R 4.6.0
+* rhub: windows, mac arm64, linux fedora and ubuntu
 
 ## R CMD check results
 

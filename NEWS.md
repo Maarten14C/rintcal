@@ -1,3 +1,7 @@
+# rintcal 1.4.1
+* `intcal.data` now plots D14C correctly when `BCAD=TRUE`.
+* `intcal.data` no longer truncates the second calibration curve if activated (e.g., `cc2=2`).
+
 # rintcal 1.4.0
 * `intcal.data` now plots all data within the supplied timeframe. 
 * `intcal.plot.record` gains an option to plot the values on the D14C timescale.

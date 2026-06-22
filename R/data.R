@@ -267,14 +267,24 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   }
   if(grepl("d", tolower(timescale))) {
     F <- C14.F14C(cc.1[,2], cc.1[,3])
-    Dmax <- F14C.D14C(F[,1]+F[,2], cc.1[,1])
-    D <- F14C.D14C(F[,1], cc.1[,1])
+	if(BCAD) {
+      Dmax <- F14C.D14C(F[,1]+F[,2], 1950-cc.1[,1])
+      D <- F14C.D14C(F[,1], 1950-cc.1[,1])
+    } else {
+        Dmax <- F14C.D14C(F[,1]+F[,2], cc.1[,1])
+        D <- F14C.D14C(F[,1], cc.1[,1])		
+      }
     Dsd <- Dmax - D
     cc.1[,2:3] <- cbind(D, Dsd)
 
     F <- C14.F14C(dat$c14, dat$c14sig)
-    Dmax <- F14C.D14C(F[,1]+F[,2], dat$cal)
-    D <- F14C.D14C(F[,1], dat$cal)
+	if(BCAD) {
+      Dmax <- F14C.D14C(F[,1]+F[,2], 1950-dat$cal)
+      D <- F14C.D14C(F[,1], 1950-dat$cal)
+    } else { 
+        Dmax <- F14C.D14C(F[,1]+F[,2], dat$cal)
+        D <- F14C.D14C(F[,1], dat$cal)
+      }
     dat$c14 <- D
     dat$c14sig <- Dmax - D
   }
@@ -285,8 +295,9 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     cc.2 <- ccurve(cc2)
     if(BCAD)
       cc.2[,1] <- 1950 - cc.2[,1]
-    mindat <- cc.2[,1] >= min(cal1, cal2)
-    maxdat <- cc.2[,1] <= max(cal1, cal2)
+    mindat <- cc.1[,1] >= min.rng # adding some extra space
+    maxdat <- cc.1[,1] <= max.rng # adding some extra space
+    cc.2 <- cc.2[which(mindat * maxdat == 1),]
 
     if(grepl("f", tolower(timescale))) {
       F <- C14.F14C(cc.2[,2], cc.2[,3])
@@ -298,8 +309,13 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     }
     if(grepl("d", tolower(timescale))) {
       F <- C14.F14C(cc.2[,2], cc.2[,3])
-      Dmax <- F14C.D14C(F[,1]+F[,2], cc.2[,1])
-      D <- F14C.D14C(F[,1], cc.2[,1])
+	  if(BCAD) {
+        Dmax <- F14C.D14C(F[,1]+F[,2], 1950-cc.2[,1]) 
+		D <- F14C.D14C(F[,1], 1950-cc.2[,1])
+	  } else {
+          Dmax <- F14C.D14C(F[,1]+F[,2], cc.2[,1]) 
+          D <- F14C.D14C(F[,1], cc.2[,1])
+	    }
       cc.2[,2:3] <- cbind(D, Dmax-D)
     }
     cc.2 <- cc.2[which(mindat * maxdat == 1),]
