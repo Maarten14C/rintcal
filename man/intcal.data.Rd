@@ -13,6 +13,7 @@ intcal.data(
   select.sets = c(),
   timescale = "C14",
   BCAD = FALSE,
+  zero = FALSE,
   cal.lab = NA,
   cal.rev = FALSE,
   c14.lab = NA,
@@ -50,6 +51,8 @@ intcal.data(
 \item{timescale}{Which 'timescale' of radiocarbon to use. Defaults to \code{timescale="C14"} but can also be set to \code{timescale="F14C"}, \code{timescale="pMC"} or \code{timescale="D14C"}. Can be shorted to, respectively, "C", "F", "P" or "D" (or their lower-case equivalents).}
 
 \item{BCAD}{The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.}
+
+\item{zero}{Whether or not zero BC/AD should be included. Defaults to 'zero=FALSE’.}
 
 \item{cal.lab}{The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.}
 

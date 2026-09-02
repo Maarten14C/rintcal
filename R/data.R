@@ -15,6 +15,7 @@
 #' @param timescale Which 'timescale' of radiocarbon to use. Defaults to \code{timescale="C14"} but can also be set to \code{timescale="F14C"}, \code{timescale="pMC"} or \code{timescale="D14C"}. Can be shorted to, respectively, "C", "F", "P" or "D" (or their lower-case equivalents).
 #' @param select.sets Which datasets to plot. Defaults to all datasets within the selected period.
 #' @param BCAD The calendar scale of graphs and age output-files is in cal BP (calendar or calibrated years before the present, where the present is AD 1950) by default, but can be changed to BC/AD using \code{BCAD=TRUE}.
+#' @param zero Whether or not zero BC/AD should be included. Defaults to 'zero=FALSE’.
 #' @param cal.lab The labels for the calendar axis (default \code{age.lab="cal BP"} or \code{"BC/AD"} if \code{BCAD=TRUE}), or to \code{age.lab="kcal BP"} etc. if ka=TRUE.
 #' @param cal.rev Reverse the calendar axis.
 #' @param c14.lab Label for the C-14 axis. Defaults to 14C BP (or 14C kBP if ka=TRUE).
@@ -208,7 +209,7 @@
 #'
 #' [83] Sookdeo, A., Kromer, B., Büntgen, U., Friedrich, M., Friedrich, R., Helle, G., Pauly, M., Nievergelt, D., Reinig, F., Treydte, K., Synal, H., & Wacker, L. 2020. Quality Dating: A well-defined protocol implemented at ETH Zurich for high-precision 14C dates tested on Late Glacial wood. Radiocarbon 62, 891-899. \doi{10.1017/RDC.2019.132}
 #' @export
-intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", select.sets=c(), timescale="C14", BCAD=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
+intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCal20", select.sets=c(), timescale="C14", BCAD=FALSE, zero=FALSE, cal.lab=NA, cal.rev=FALSE, c14.lab=NA, c14.lim=NA, c14.rev=FALSE, ka=FALSE, cc1.col=rgb(0,0,1,.5), cc1.fill=rgb(0,0,1,.2), cc2.col=rgb(0,.5,0,.5), cc2.fill=rgb(0,.5,0,.2), data.cols=c(), data.pch=c(1,2,5,6,15:19), pch.cex=.5, legend.loc="topleft", legend.ncol=2, legend.cex=0.7, cc.legend="bottomright", bty="l",  ...) {
 
   # read the data
   if(tolower(calcurve.data) == "intcal20") {
@@ -224,7 +225,8 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   dat <- fastread(dat, header=TRUE, sep=" ")
 
   if(BCAD)
-    dat$cal <- 1950 - dat$cal
+    dat$cal <- BCAD.calBP(dat$cal, zero)
+    #dat$cal <- 1950 - dat$cal
 
   # add space at extremes, so that the data or curve aren't truncated
   rng <- abs(cal1-cal2)
@@ -242,7 +244,8 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   # read and narrow down the calibration curve(s)
   cc.1 <- ccurve(cc1)
   if(BCAD)
-    cc.1[,1] <- 1950 - cc.1[,1]
+    cc.1[,1] <- BCAD.calBP(cc.1[,1], zero)
+    #cc.1[,1] <- 1950 - cc.1[,1]
 
   mindat <- cc.1[,1] >= min.rng # adding some extra space
   maxdat <- cc.1[,1] <= max.rng # adding some extra space
@@ -267,20 +270,20 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   }
   if(grepl("d", tolower(timescale))) {
     F <- C14.F14C(cc.1[,2], cc.1[,3])
-	if(BCAD) {
-      Dmax <- F14C.D14C(F[,1]+F[,2], 1950-cc.1[,1])
-      D <- F14C.D14C(F[,1], 1950-cc.1[,1])
+    if(BCAD) {
+      Dmax <- F14C.D14C(F[,1]+F[,2], BCAD.calBP(cc.1[,1], zero))
+      D <- F14C.D14C(F[,1], BCAD.calBP(cc.1[,1], zero))
     } else {
         Dmax <- F14C.D14C(F[,1]+F[,2], cc.1[,1])
-        D <- F14C.D14C(F[,1], cc.1[,1])		
+        D <- F14C.D14C(F[,1], cc.1[,1])
       }
     Dsd <- Dmax - D
     cc.1[,2:3] <- cbind(D, Dsd)
 
     F <- C14.F14C(dat$c14, dat$c14sig)
-	if(BCAD) {
-      Dmax <- F14C.D14C(F[,1]+F[,2], 1950-dat$cal)
-      D <- F14C.D14C(F[,1], 1950-dat$cal)
+    if(BCAD) {
+      Dmax <- F14C.D14C(F[,1]+F[,2], BCAD.calBP(dat$cal, zero))
+      D <- F14C.D14C(F[,1], BCAD.calBP(dat$cal, zero))
     } else { 
         Dmax <- F14C.D14C(F[,1]+F[,2], dat$cal)
         D <- F14C.D14C(F[,1], dat$cal)
@@ -294,7 +297,9 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
   if(!is.na(cc2)) {
     cc.2 <- ccurve(cc2)
     if(BCAD)
-      cc.2[,1] <- 1950 - cc.2[,1]
+      cc.2[,1] <- BCAD.calBP(cc.2[,1], zero)
+      # cc.2[,1] <- 1950 - cc.2[,1]
+
     mindat <- cc.1[,1] >= min.rng # adding some extra space
     maxdat <- cc.1[,1] <= max.rng # adding some extra space
     cc.2 <- cc.2[which(mindat * maxdat == 1),]
@@ -309,13 +314,13 @@ intcal.data <- function(cal1, cal2, cc1="IntCal20", cc2=NA, calcurve.data="IntCa
     }
     if(grepl("d", tolower(timescale))) {
       F <- C14.F14C(cc.2[,2], cc.2[,3])
-	  if(BCAD) {
-        Dmax <- F14C.D14C(F[,1]+F[,2], 1950-cc.2[,1]) 
-		D <- F14C.D14C(F[,1], 1950-cc.2[,1])
-	  } else {
+      if(BCAD) {
+        Dmax <- F14C.D14C(F[,1]+F[,2], BCAD.calBP(cc.2[,1], zero))
+        D <- F14C.D14C(F[,1], BCAD.calBP(cc.2[,1], zero))
+      } else {
           Dmax <- F14C.D14C(F[,1]+F[,2], cc.2[,1]) 
           D <- F14C.D14C(F[,1], cc.2[,1])
-	    }
+        }
       cc.2[,2:3] <- cbind(D, Dmax-D)
     }
     cc.2 <- cc.2[which(mindat * maxdat == 1),]

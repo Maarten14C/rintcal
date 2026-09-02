@@ -12,30 +12,42 @@ export(intcal.write.data)
 export(list.ccurves)
 export(mix.ccurves)
 export(new.ccdir)
-importFrom(data.table,fread)
-importFrom(data.table,fwrite)
-importFrom(grDevices,extendrange)
-importFrom(grDevices,grey)
-importFrom(grDevices,rainbow)
-importFrom(grDevices,rgb)
-importFrom(graphics,abline)
-importFrom(graphics,axis)
-importFrom(graphics,image)
-importFrom(graphics,legend)
-importFrom(graphics,lines)
-importFrom(graphics,mtext)
-importFrom(graphics,par)
-importFrom(graphics,points)
-importFrom(graphics,polygon)
-importFrom(graphics,rect)
-importFrom(graphics,segments)
-importFrom(graphics,text)
-importFrom(jsonlite,fromJSON)
-importFrom(jsonlite,toJSON)
-importFrom(stats,approx)
-importFrom(stats,dnorm)
-importFrom(stats,median)
-importFrom(stats,weighted.mean)
-importFrom(utils,packageName)
-importFrom(utils,read.table)
-importFrom(utils,write.table)
+importFrom(data.table,
+  fread,
+  fwrite
+)
+importFrom(grDevices,
+  extendrange,
+  grey,
+  rainbow,
+  rgb
+)
+importFrom(graphics,
+  abline,
+  axis,
+  image,
+  legend,
+  lines,
+  mtext,
+  par,
+  points,
+  polygon,
+  rect,
+  segments,
+  text
+)
+importFrom(jsonlite,
+  fromJSON,
+  toJSON
+)
+importFrom(stats,
+  approx,
+  dnorm,
+  median,
+  weighted.mean
+)
+importFrom(utils,
+  packageName,
+  read.table,
+  write.table
+)
