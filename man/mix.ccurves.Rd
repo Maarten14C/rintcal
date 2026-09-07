@@ -20,7 +20,7 @@ mix.ccurves(
   offset = cbind(0, 0),
   round = c(),
   sep = " ",
-  decimals = 8
+  decimals = Inf
 )
 }
 \arguments{
@@ -54,7 +54,7 @@ mix.ccurves(
 
 \item{sep}{Separator between fields (tab by default, "\\t")}
 
-\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 8.}
+\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to no rounding.}
 }
 \value{
 A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.

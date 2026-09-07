@@ -34,8 +34,8 @@ intcal.extract.record <- function(i) {
   if(!exists('intcal'))
     stop("please load the intcal data first, with 'data(intcal)'")
   
-  if(!is.numeric(i) || length(i) != 1 || i < 1 || i > 140)
-    stop("Argument 'i' must be a single integer between 1 and 140.")
+  if(!is.numeric(i) || length(i) != 1 || !i %in% 1:140) 
+    stop(paste0("No IntCal record with number i=", i), call.=FALSE)
   
   dat <- intcal$records[[i]]
   data <- list(calendar=c(), radiocarbon=c())
@@ -98,20 +98,25 @@ intcal.extract.record <- function(i) {
 #' @param legend.loc Location of the legend. Defaults to top right. Set to NA if you don't want to plot the legend. 
 #' @param legend.cex Relative size of the font of the legend. Defaults to 0.5.
 #' @param mgp White space around the plot. Defaults to giving a bit more than usual white space around the axis labels.
+#' @param mar Margins around the plot. Defaults to \code{mar=c(4,4,1,1)}.
+#' @param bty Box around the plot. Defaults to L-shaped \code{bty="l"}.
 #' @seealso \code{\link{intcal.extract.record}}
 #' @examples
 #'  record_1 <- intcal.plot.record(1)
 #'  record_10 <- intcal.plot.record(10, add=TRUE, col=rgb(1,0,0,.5), legend.loc="bottomright")
 #' @export
-intcal.plot.record <- function(i, col=rgb(0, 0, 1, .5), pch=19, pch.cex=.3, lwd=1, lty=1, cal.lim=c(), C14.lim=c(), add=FALSE, cal.lab=c(), C14.lab=c(), ka=FALSE, as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, draw.z=TRUE, draw.calsigma=TRUE, grid=FALSE, grid.lty=2, grid.col=rgb(0,0,0,.5), draw.cc=1, cc.col=rgb(0,.5,0, .5), legend.loc="topleft", legend.cex=.5, mgp=c(2.5, 0.8, 0)) {
+intcal.plot.record <- function(i, col=rgb(0, 0, 1, .5), pch=19, pch.cex=.3, lwd=1, lty=1, cal.lim=c(), C14.lim=c(), add=FALSE, cal.lab=c(), C14.lab=c(), ka=FALSE, as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, draw.z=TRUE, draw.calsigma=TRUE, grid=FALSE, grid.lty=2, grid.col=rgb(0,0,0,.5), draw.cc=1, cc.col=rgb(0,.5,0, .5), legend.loc="topleft", legend.cex=.5, mgp=c(2.5, 0.8, 0), mar=c(4,4,1,1), bty="l") {
   if(!"intcal" %in% ls(.GlobalEnv))
     intcal <- rintcal::intcal
   if(!exists('intcal'))
-    stop("please load the intcal data first, with 'data(intcal)'")	
+    stop("please load the intcal data first, with 'data(intcal)'")
 
   if((as.F && as.pMC) || (as.F && as.Delta) || (as.pMC && as.Delta))
     stop("please provide only one of as.F, as.pMC or as.Delta") 
   
+  if(!is.numeric(i) || length(i) != 1 || !i %in% 1:140) 
+    stop(paste0("No IntCal record with number i=", i), call.=FALSE)
+
   dat <- intcal.extract.record(i)
   if(as.Delta) as.F <- TRUE
   if(!is.na(draw.cc)) 
@@ -143,7 +148,7 @@ intcal.plot.record <- function(i, col=rgb(0, 0, 1, .5), pch=19, pch.cex=.3, lwd=
     }
   }
 
-  if(!add) {  
+  if(!add) {
     if(length(cal.lab) == 0)
       if(ka)
         cal.lab <- "kcal BP" else
@@ -155,14 +160,13 @@ intcal.plot.record <- function(i, col=rgb(0, 0, 1, .5), pch=19, pch.cex=.3, lwd=
             if(ka)
               C14.lab <- "C14 kBP" else
                 C14.lab <- "C14 BP" # needs options for F14C, pMC, Delta14C
-    plot(0, type="n", pch=pch, xlim=cal.lim, xlab=cal.lab, ylim=C14.lim, ylab=C14.lab, mgp=mgp)
+    plot(0, type="n", pch=pch, xlim=cal.lim, xlab=cal.lab, ylim=C14.lim, ylab=C14.lab, mar=mar, mgp=mgp, bty=bty)
     if(grid)
       grid(lty=grid.lty, col=grid.col)
   }
   points(dat$radiocarbon$calage, dat$radiocarbon$r_date, pch=pch, col=col, cex=pch.cex)
   
   # check what uncertainties are present: could be z, sigma, or z and sigma
-  
   has.z <- any(dat$radiocarbon$z_range > 0, na.rm=TRUE)
   has.calsigma <- any(dat$radiocarbon$calage_sigmaC > 0, na.rm=TRUE)
   
@@ -223,10 +227,10 @@ intcal.plot.record <- function(i, col=rgb(0, 0, 1, .5), pch=19, pch.cex=.3, lwd=
 intcal.read.data <- function(from.intchron.org=FALSE, from.jsonfile=FALSE) {
   if(from.intchron.org) {
     json <- url('https://intchron.org/archive/IntCal/IntCal20/index.json') 
-    intcal <- jsonlite::fromJSON(json, simplifyDataFrame = FALSE) 
+    intcal <- jsonlite::fromJSON(json, simplifyDataFrame=FALSE)
   } else
     if(from.jsonfile > 0) 
-      intcal <- jsonlite::fromJSON(from.jsonfile, simplifyDataFrame = FALSE) else 
+      intcal <- jsonlite::fromJSON(from.jsonfile, simplifyDataFrame=FALSE) else 
         intcal <- rintcal::intcal # then read rintcal/data/intcal.rda 
 
   # internal function, only called within intcal.read.data
@@ -303,7 +307,7 @@ intcal.read.data <- function(from.intchron.org=FALSE, from.jsonfile=FALSE) {
 #'  intcal.write.data(intcal, myintcal)
 #' @export
 intcal.write.data <- function(data, fname)
-  write(jsonlite::toJSON(data, dataframe='columns', auto_unbox=TRUE, null = "null", na = "null"), fname)
+  write(jsonlite::toJSON(data, dataframe='columns', auto_unbox=TRUE, null="null", na="null"), fname)
 
 
 

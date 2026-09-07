@@ -29,7 +29,9 @@ intcal.plot.record(
   cc.col = rgb(0, 0.5, 0, 0.5),
   legend.loc = "topleft",
   legend.cex = 0.5,
-  mgp = c(2.5, 0.8, 0)
+  mgp = c(2.5, 0.8, 0),
+  mar = c(4, 4, 1, 1),
+  bty = "l"
 )
 }
 \arguments{
@@ -82,6 +84,10 @@ intcal.plot.record(
 \item{legend.cex}{Relative size of the font of the legend. Defaults to 0.5.}
 
 \item{mgp}{White space around the plot. Defaults to giving a bit more than usual white space around the axis labels.}
+
+\item{mar}{Margins around the plot. Defaults to \code{mar=c(4,4,1,1)}.}
+
+\item{bty}{Box around the plot. Defaults to L-shaped \code{bty="l"}.}
 }
 \value{
 A plot of the calendar and radiocarbon ages, indicating uncertainties (error bars) and age blocks where relevant (e.g., for trees where blocks of >1 rings were dated).

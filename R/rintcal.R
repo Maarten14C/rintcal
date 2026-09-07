@@ -127,7 +127,7 @@ new.ccdir <- function(cc.dir) {
 #' @param as.F Return the F values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.F=FALSE}.
 #' @param as.pMC Return the pMC values, calculated from the C14 ages (columns 2 and 3). Defaults to \code{as.pMC=FALSE}.
 #' @param as.Delta If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.Delta=FALSE}.
-#' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 8.
+#' @param decimals Number of decimals to report when as.F=TRUE. Defaults to no rounding (\code{decimals=Inf}).
 #' @examples
 #' intcal20 <- ccurve(1)
 #' marine20 <- ccurve(2)
@@ -174,7 +174,7 @@ new.ccdir <- function(cc.dir) {
 #' 
 #' van der Plicht, J., Beck, J.W., Bard, E., Baillie, M.G.L., Blackwell, P.G., Buck, C.E., Friedrich, M., Guilderson, T.P., Hughen, K.A., Kromer, B., McCormac, F.G., Bronk Ramsey, C., Reimer, P.J., Reimer, R., Remmele, S., Richards, D.A., Southon, J.R., Stuiver, M., Weyhenmeyer, C.E., 2004. NotCal04—comparison/calibration 14C records 26–50 cal Kyr BP. Radiocarbon 46, 1225-1238, \doi{10.1017/S0033822200033117}
 #' @export
-ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, decimals=8) {
+ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, decimals=Inf) {
   if(sum(c(as.F, as.pMC, as.Delta)) > 1)
     stop("only one of as.F, as.pMC or as.Delta can be set to TRUE")
   
@@ -193,23 +193,22 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
     intcal09="3Col_intcal09.14C", marine09="3Col_marine09.14C", 
     intcal04="3Col_intcal04.14C", marine04="3Col_marine04.14C", 
     intcal98="3Col_intcal98.14C", marine98="3Col_marine98.14C")
-	
+
   cc.id <- tolower(cc)  
+  fl <- NA
   if(cc.id %in% names(cc.files)) # if we recognise the name...
     fl <- cc.files[cc.id] else # then we take the corresponding filename
       if(is.numeric(cc)) {
         if(postbomb) {
           if(cc %in% 1:5)
             fl <- c("postbomb_NH1.14C", "postbomb_NH2.14C", "postbomb_NH3.14C",
-              "postbomb_SH1-2.14C", "postbomb_SH3.14C")[cc] else
-                stop("cannot find this curve", call.=FALSE)	
-        } else {
-             if(cc %in% 1:3)
-               fl <- c("intcal20.14c", "marine20.14c", "shcal20.14c")[cc] else
-                 stop("cannot find this curve", call.=FALSE)		 
-          }  
-      } else
-          stop("cannot find this curve", call.=FALSE)
+              "postbomb_SH1-2.14C", "postbomb_SH3.14C")[cc]
+        } else
+            if(cc %in% 1:3)
+              fl <- c("intcal20.14c", "marine20.14c", "shcal20.14c")[cc]
+      }
+  if(is.na(fl))
+    stop("cannot find this curve", call.=FALSE)
 
   if(length(cc.dir) == 0) # then look into the package's inst/extdata folder
     read.cc <- system.file("extdata/", fl, package='rintcal') else
@@ -265,7 +264,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' @param offset Any offset and error to be applied to \code{cc2} (default 0 +- 0). Entered as two columns (possibly of just one row), e.g. \code{offset=cbind(100,0)}
 #' @param round The entries can be rounded to a specified amount of decimals. Defaults to no rounding.
 #' @param sep Separator between fields (tab by default, "\\t")
-#' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 8.
+#' @param decimals Number of decimals to report when as.F=TRUE. Defaults to no rounding.
 #' @return A file containing the custom-made calibration curve, based on calibration curves \code{cc1} and \code{cc2}.
 #' @examples
 #' tmpdir <- tempdir()
@@ -278,7 +277,7 @@ ccurve <- function(cc=1, postbomb=FALSE, cc.dir=NULL, resample=0, glue=FALSE, as
 #' # clean up:
 #' unlink(tmpdir)
 #' @export
-mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, as.F=FALSE, as.pMC=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ", decimals=8) {
+mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1=FALSE, postbomb2=FALSE, as.F=FALSE, as.pMC=FALSE, name="mixed.14C", cc.dir=c(), thiscurve1=c(), thiscurve2=c(), save=FALSE, offset=cbind(0,0), round=c(), sep=" ", decimals=Inf) {
   # place the IntCal curves within the same folder as the new curve:
   if(length(cc.dir) == 0)
     cc.dir <- tempdir()
@@ -326,19 +325,22 @@ mix.ccurves <- function(proportion=.5, cc1="IntCal20", cc2="Marine20", postbomb1
 #' @param as.pMC The curves can be returned as pMC values instead of the default C14. Make sure that if as.pMC=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in pMC space already.
 #' @param as.Delta The curves can be returned as D14C values instead of the default C14. Make sure that if as.Delta=TRUE and you are using thiscurve1 and/or thiscurve2, that these curves are in Delta14C space already.
 #' @param cc.dir Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.
-#' @param decimals Number of decimals to report when as.F=TRUE. Defaults to 5.
+#' @param decimals Number of decimals to report when as.F=TRUE. Defaults to no rounding.
 #' @examples
 #' my.cc <- glue.ccurves()
 #' @export
-glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, cc.dir=c(), decimals=8) {
-  if(length(thispostbombcurve) == 0)
-    postbomb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.Delta=as.Delta, decimals=decimals) else
-      postbomb <- thispostbombcurve
-  if(length(thisprebombcurve) == 0)
-    prebomb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.Delta=as.Delta, decimals=decimals) else
-      prebomb <- thisprebombcurve
+glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(), thispostbombcurve=c(), as.F=FALSE, as.pMC=FALSE, as.Delta=FALSE, cc.dir=c(), decimals=Inf) {
+  if(is.logical(postbomb)) # has to be numeric (1 to 5) or a string
+    postbomb <- as.numeric(postbomb)
 
-  glued <- rbind(postbomb, prebomb)
+  if(length(thispostbombcurve) == 0)
+    postb <- ccurve(postbomb, TRUE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.Delta=as.Delta, decimals=decimals) else
+      postb <- thispostbombcurve
+  if(length(thisprebombcurve) == 0)
+    preb <- ccurve(prebomb, FALSE, cc.dir=cc.dir, as.F=as.F, as.pMC=as.pMC, as.Delta=as.Delta, decimals=decimals) else
+      preb <- thisprebombcurve
+
+  glued <- rbind(postb, preb)
   glued <- glued[order(glued[,1]),]
   repeated <- which(diff(glued[,1]) == 0)
   if(length(repeated) > 0)
@@ -350,11 +352,11 @@ glue.ccurves <- function(prebomb="IntCal20", postbomb="NH1", thisprebombcurve=c(
 
 ### making a selection of realm functions available locally (for intcal.data, glue.ccurves, mix.ccurves and ccurve), to avoid need for circular loading of `rice`
 
-C14.F14C <- function(y, er, decimals=8, lambda=8033) {
+C14.F14C <- function(y, er, decimals=Inf, lambda=8033) {
   y <- as.matrix(y)
   er <- as.matrix(er)
   if(length(y) != length(er))
-    stop("y and er must have the same length.")	
+    stop("y and er must have the same length.")
   fy <- exp(-y / lambda)
     
   er1 <- abs(fy - exp(-(y - er) / lambda))
@@ -365,7 +367,7 @@ C14.F14C <- function(y, er, decimals=8, lambda=8033) {
 
 
 
-C14.pMC <- function(y, er, ratio=100, decimals=8, lambda=8033)
+C14.pMC <- function(y, er, ratio=100, decimals=Inf, lambda=8033)
   return(100*C14.F14C(y, er, decimals=decimals, lambda=lambda))
 
 
@@ -388,7 +390,7 @@ F14C.er.D14C <- function(F14C, er, t, lambda=5730/log(2)) {
 
 
 # internal function, adapted from the rice package. Expects y and er
-cc_C14toF14C <- function(cc, decimals=8, lambda=8033) {
+cc_C14toF14C <- function(cc, decimals=Inf, lambda=8033) {
   y <- cc[,2]
   er <- cc[,3]
   if(length(y) != length(er))

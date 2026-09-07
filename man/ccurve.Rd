@@ -13,7 +13,7 @@ ccurve(
   as.F = FALSE,
   as.pMC = FALSE,
   as.Delta = FALSE,
-  decimals = 8
+  decimals = Inf
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ One can also make a custom-built calibration curve, e.g. using \code{mix.ccurves
 
 \item{as.Delta}{If loading a curve that contains 2 additional columns containing the D14C values, then these can be returned instead of the curve's C14 ages and errors. Defaults to \code{as.Delta=FALSE}.}
 
-\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 8.}
+\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to no rounding (\code{decimals=Inf}).}
 }
 \value{
 The calibration curve (invisible).

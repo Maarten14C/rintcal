@@ -13,7 +13,7 @@ glue.ccurves(
   as.pMC = FALSE,
   as.Delta = FALSE,
   cc.dir = c(),
-  decimals = 8
+  decimals = Inf
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ glue.ccurves(
 
 \item{cc.dir}{Directory of the calibration curves. Defaults to where the package's files are stored (system.file), but can be set to, e.g., \code{cc.dir="ccurves"}.}
 
-\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to 5.}
+\item{decimals}{Number of decimals to report when as.F=TRUE. Defaults to no rounding.}
 }
 \value{
 The custom-made curve (invisibly)
